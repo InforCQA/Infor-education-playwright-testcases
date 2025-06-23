@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Monitors creationDate="2024-03-27T18:53:52Z"
+          type="EVENTMONITOR"
+          versionNumber="2024.03.9.530c968">
+   <Monitor version="1">
+      <Id>164</Id>
+      <Name>S03_IDM_NewImageUploaded</Name>
+      <Description>Tell users when a new Image File is created</Description>
+      <MonitorType>0</MonitorType>
+      <PolicyType>2</PolicyType>
+      <AlertMessage>A new Image File has been uploaded in IDM Repository. ##idm</AlertMessage>
+      <Author>Infor User S03</Author>
+      <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;Both&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;DocumentType&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;DocumentTypeID&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Equal&lt;/ComparisonOperator&gt;&lt;Value&gt;Item_Image&lt;/Value&gt;&lt;/Subcondition&gt;&lt;Subcondition&gt;&lt;Name&gt;ActionNew&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;actionCode&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Equal&lt;/ComparisonOperator&gt;&lt;Value&gt;Add&lt;/Value&gt;&lt;/Subcondition&gt;&lt;Subcondition&gt;&lt;Name&gt;StudentID&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;Attr_Code&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Contains&lt;/ComparisonOperator&gt;&lt;Value&gt;S03&lt;/Value&gt;&lt;/Subcondition&gt;&lt;Subcondition&gt;&lt;Name&gt;All&lt;/Name&gt;&lt;Type&gt;CombinedCondition&lt;/Type&gt;&lt;Conditions&gt;DocumentType,ActionNew,StudentID&lt;/Conditions&gt;&lt;ANDOR&gt;AND&lt;/ANDOR&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+      <Rule>&lt;Rule version="1.0"&gt;&lt;Type&gt;ConditionOnly&lt;/Type&gt;&lt;AlertMultipleTime&gt;false&lt;/AlertMultipleTime&gt;&lt;RuleType&gt;&lt;RuleConditionOnly&gt;All&lt;/RuleConditionOnly&gt;&lt;/RuleType&gt;&lt;/Rule&gt;</Rule>
+      <MaxEscalationLevel>1</MaxEscalationLevel>
+      <DistributionComplexity>0</DistributionComplexity>
+      <ConditionalNounRelations>False</ConditionalNounRelations>
+      <Nouns>
+         <Noun>
+            <Name>ContentDocument</Name>
+         </Noun>
+      </Nouns>
+      <NounAttributes>
+         <NounAttribute>
+            <Id>1671</Id>
+            <Name>actionCode</Name>
+            <Path>(ContentDocument) DataArea/*/ActionCriteria/ActionExpression/@actionCode</Path>
+            <NounName>ContentDocument</NounName>
+            <DataType>1</DataType>
+            <Excluded>False</Excluded>
+         </NounAttribute>
+         <NounAttribute>
+            <Id>1672</Id>
+            <Name>Attr_Name</Name>
+            <Path>ContentDocument/DocumentMetaData/Attribute[@id="Item_Name"]/AttributeValue</Path>
+            <NounName>ContentDocument</NounName>
+            <DataType>1</DataType>
+            <ParentPathForFiltering>ContentDocument/DocumentMetaData/Attribute</ParentPathForFiltering>
+            <Excluded>False</Excluded>
+            <FilterAttributes>
+               <FilterAttribute>
+                  <Name>ContentDocument/DocumentMetaData/Attribute/@id</Name>
+                  <Value>Item_Name</Value>
+               </FilterAttribute>
+            </FilterAttributes>
+         </NounAttribute>
+         <NounAttribute>
+            <Id>1674</Id>
+            <Name>Attr_Code</Name>
+            <Path>ContentDocument/DocumentMetaData/Attribute[@id="Item_Code"]/AttributeValue</Path>
+            <NounName>ContentDocument</NounName>
+            <DataType>1</DataType>
+            <ParentPathForFiltering>ContentDocument/DocumentMetaData/Attribute</ParentPathForFiltering>
+            <Excluded>False</Excluded>
+            <FilterAttributes>
+               <FilterAttribute>
+                  <Name>ContentDocument/DocumentMetaData/Attribute/@id</Name>
+                  <Value>Item_Code</Value>
+               </FilterAttribute>
+            </FilterAttributes>
+         </NounAttribute>
+         <NounAttribute>
+            <Id>1670</Id>
+            <Name>DocumentTypeID</Name>
+            <Path>ContentDocument/DocumentMetaData/DocumentTypeID</Path>
+            <NounName>ContentDocument</NounName>
+            <DataType>1</DataType>
+            <Excluded>False</Excluded>
+         </NounAttribute>
+         <NounAttribute>
+            <Id>1673</Id>
+            <Name>Attr_Status</Name>
+            <Path>ContentDocument/DocumentMetaData/Attribute[@id="Status"]/AttributeValue</Path>
+            <NounName>ContentDocument</NounName>
+            <DataType>1</DataType>
+            <ParentPathForFiltering>ContentDocument/DocumentMetaData/Attribute</ParentPathForFiltering>
+            <Excluded>False</Excluded>
+            <FilterAttributes>
+               <FilterAttribute>
+                  <Name>ContentDocument/DocumentMetaData/Attribute/@id</Name>
+                  <Value>Status</Value>
+               </FilterAttribute>
+            </FilterAttributes>
+         </NounAttribute>
+      </NounAttributes>
+      <DistributionItems>
+         <DistributionItem>
+            <MonitorId>164</MonitorId>
+            <Type>1</Type>
+            <Identifier>54d2074e-6b2c-470f-a4bb-4cdcb1bce2a5</Identifier>
+            <Details>Purchase Officer S03</Details>
+            <SendEmail>True</SendEmail>
+         </DistributionItem>
+         <DistributionItem>
+            <MonitorId>164</MonitorId>
+            <Type>1</Type>
+            <Identifier>38477a03-c8b3-4f05-8f60-1cff711f8946</Identifier>
+            <Details>Purchase Manager S03</Details>
+            <SendEmail>True</SendEmail>
+         </DistributionItem>
+         <DistributionItem>
+            <MonitorId>164</MonitorId>
+            <Type>1</Type>
+            <Identifier>02b84a2b-d043-477e-a96e-874e17df1a0c</Identifier>
+            <Details>Infor User S03</Details>
+            <SendEmail>True</SendEmail>
+         </DistributionItem>
+      </DistributionItems>
+      <DecisionTables>
+         <DecisionTable>
+            <Id>135</Id>
+         </DecisionTable>
+      </DecisionTables>
+   </Monitor>
+</Monitors>
