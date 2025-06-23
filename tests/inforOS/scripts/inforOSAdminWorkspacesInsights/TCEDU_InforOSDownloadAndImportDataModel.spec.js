@@ -24,9 +24,9 @@ test.describe('TCEDU_InforOSDownloadAndImportDataModel', () => {
     await DocumentManagementFunctions.documentCourseFiles(docCxt.documentInfo.docuType, docCxt.documentInfo.document);
   });
 
-  //  test(' Import data model', async ({}) => {
-  //   await CloudSuite.navigateToApplication(ProductNames.OS);
-  //   await OSDocumentManagementFunctions.importDataModel(docCxt.controlCenterProperties);
-  // });
+   test(' Import data model', async ({}) => {
+    await CloudSuite.navigateToApplication(ProductNames.OS);
+    await OSDocumentManagementFunctions.importDataModel(docCxt.controlCenterProperties);
+  });
 
 });
