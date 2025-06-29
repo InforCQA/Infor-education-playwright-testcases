@@ -39,3 +39,5 @@ class InforOSCommonPage {
     // Currently active tab (OS)
     currentTab = "//portal-tab-item[contains(@id,'osp-tabh')][contains(normalize-space(),'%s')][contains(@class,'selected')]";
 }
+
+export default InforOSCommonPage;

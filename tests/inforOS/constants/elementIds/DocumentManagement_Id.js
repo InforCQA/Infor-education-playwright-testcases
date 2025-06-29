@@ -63,6 +63,16 @@ class DocumentManagement_Id {
     static PLUS_ICON_EXTEND_QUERY = "ibtn-secondary";
     static RELATED_DOC_SEARCH = "form-value-text";
     static FILE = "filename";
+    static INVOICE_AMOUNT = "Invoice_Amount";
+    static INVOICE_STATUS= "Invoice_Status";
+    static REFERENCE_ID   = "Reference_ID";
+    static ITEM_NAME= "Item_Name";
+    static ITEM_CODE= "Item_Code";
+    static ADD_DOCUMENT = "addDocumentButton";
+    static SELECT_A_DOCUMENT_TYPE_DRP = "document-type-select";
+    static INVOICE_ID    = "Invoice_ID";
+    static STATUS = "Status";
+    static SAVE = "document-action";
 }
 
 export default DocumentManagement_Id;

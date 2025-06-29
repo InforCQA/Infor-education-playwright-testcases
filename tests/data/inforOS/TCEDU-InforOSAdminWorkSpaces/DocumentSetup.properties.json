@@ -3,7 +3,12 @@
     "docuType": "Infor EDU Class Resources",
     "document": "InforOS_Workspaces.zip",
     "folderName": "Class Files",
-    "documentType": "Item Image;Item Image;Supplier Invoice;Item Image",
+    "documentType": [
+      "Item Image",
+      "Item Image",
+      "Supplier Invoice",
+      "Item Image"
+    ],
     "addDocumentTypeName": [
       "Ferrari488.jpg",
       "GamingChair.jpg",
@@ -17,10 +22,10 @@
       "Published Widgets.zip"
     ],
     "addAttachmentFilePaths": [
-      "\\Downloads\\Class Files\\Exercise 1.3\\Ferrari488.jpg",
-      "\\Downloads\\Class Files\\Exercise 1.3\\GamingChair.jpg",
-      "\\Downloads\\Class Files\\Exercise 1.3\\Supplier_Invoice.png",
-      "\\Downloads\\Class Files\\Exercise 2.5\\AlfaRomeo.jpeg"
+      "../../../files/OSFiles/Ferrari488.jpg",
+      "../../../files/OSFiles/GamingChair.jpg",
+      "../../../files/OSFiles/Supplier_Invoice.png",
+      "../../../files/OSFiles/AlfaRomeo.jpeg"
     ],
     "importAttachmentFilePaths": [
       "\\Downloads\\Class Files\\Demo 2.1\\4_widgets.zip",
@@ -41,7 +46,7 @@
       "S%s Alfa Romeo"
     ],
     "status": "Initial",
-    "invoiceAmount": 5650,
+    "invoiceAmount": "5650",
     "invoiceStatus": "Approved",
     "invoiceId": "S%s Gaming chairs",
     "referenceId": "S%s Chairs",

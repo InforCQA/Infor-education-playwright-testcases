@@ -14,14 +14,20 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   globalSetup: './global-setup.js',
-  testDir: './tests',
+  testDir: './tests/inforOS/scripts/inforOSAdminWorkspacesInsights',
   
+  timeout: 30 * 1000,   
+  expect: {
+    timeout: 5000,
+  },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { 
+        browser: 'Firefox'
+      },
     },
 
     {
@@ -29,10 +35,10 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {

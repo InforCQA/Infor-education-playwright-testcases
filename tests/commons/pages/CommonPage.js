@@ -15,6 +15,8 @@ class Homepages extends BaseClass {
   appNameV2 = "//*[local-name()='ids-text'][normalize-space()='%s']";
 
   seeMore = "//*[local-name()='ids-text'][normalize-space()='%s']/ancestor::*/following-sibling::div//*[local-name()='ids-text'][normalize-space()='See more']";
+
+  closeSelectedToolbar= "//*[contains(@id,'tab') and not(contains(@id,'more')) and contains(@class,'selected')]//*[contains(@data-osp-id,'close')]";
 }
 
 export default Homepages;

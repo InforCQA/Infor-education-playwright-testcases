@@ -19,12 +19,13 @@ class BaseClass {
   }
 
   static async getLocator(selector) {
-    return this.page.locator(selector);
+    return await this.page.locator(selector);
   }
 
   static async getDynamicElement(webElement, ...strVar) {
     const finalLocator = strVar.reduce((s, v) => s.replace('%s', v), webElement);
     const locator = this.page.locator(finalLocator);
+    await this.page.waitForLoadState('load');
     return locator;
   }
 
@@ -38,12 +39,12 @@ class BaseClass {
   }
 
   static async forceClick(locator) {
-    await locator.click({ force: true });
+      await locator.click({ force: true });
   }
 
 
   static async selectFromDropdown(locator, valueOrLabel) {
-
+    
     await locator.selectOption({ label: valueOrLabel });
   }
 
@@ -68,27 +69,33 @@ class BaseClass {
 
   static async isDynamicElementPresentWithIframe(iframe,webElement, ...strVar) {
     let finalLocator = strVar.reduce((s, v) => s.replace('%s', v), webElement);
-    if (await iframe.locator(finalLocator).isVisible())
+    
+    if (await (await iframe.locator(finalLocator)).isVisible())
       return true;
     else
       return false;
   }
 
   static async getElementWithIframe(iframe, element) {
-    return iframe.locator(element);
+    return await iframe.locator(element);
   }
 
   static async getDynamicElementWithIframe(iframe, element, ...strVar) {
     let finalLocator = strVar.reduce((s, v) => s.replace('%s', v), element);
-    let webElement = iframe.locator(finalLocator);
-    return webElement;
+    return iframe.locator(finalLocator);
   }
 
 static async type(locator, value) {
-  await locator.clear();   
-  await locator.click();   
-  await locator.fill(value); 
+   await locator.click({ clickCount: 3 });   
+   await locator.press('Backspace');         
+   await locator.type(value);   
 }
+
+  static async selectValueFromDropdown(locator, value) {
+
+    await locator.click();
+    await value.click();
+  }
 
 }
 

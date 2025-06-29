@@ -3,6 +3,7 @@ import ElementAttributes from '../constants/ElementAttributes.js';
 import DocumentManagementPage from '../pages/DocumentManagementPage.js';
 import commons from '../constants/Commons.js';
 import DocumentManagementLbl from '../constants/elementLbls/DocumentManagement_Lbl.js';
+import CloudSuite from './CloudSuite.js';
 
 class DocumentManagementFunctions extends BaseClass{
   
@@ -40,6 +41,8 @@ class DocumentManagementFunctions extends BaseClass{
     // Click download and original format
     await (await this.getElementWithIframe(iframe, docPg.download)).click();
     await (await this.getDynamicElementWithIframe(iframe, docPg.tabList, DocumentManagementLbl.ORIGINAL_FORMAT)).click();
+
+    CloudSuite.closeActiveWorkspace();
   }
 }
 
