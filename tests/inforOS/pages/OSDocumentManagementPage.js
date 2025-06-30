@@ -1,5 +1,4 @@
 import BaseClass from '../../testBase/BaseClass.js';
-import page from '../../testBase/BaseClass.js';
 
 class DocumentMangement extends BaseClass {
 

@@ -16,6 +16,8 @@ class Homepages extends BaseClass {
 
   seeMore = "//*[local-name()='ids-text'][normalize-space()='%s']/ancestor::*/following-sibling::div//*[local-name()='ids-text'][normalize-space()='See more']";
 
+  closeSelectedToolbar= "//*[contains(@id,'tab') and not(contains(@id,'more')) and contains(@class,'selected')]//*[contains(@data-osp-id,'close')]";
+
   addWorkSpace = "//*[local-name()='ids-button'][contains(@id,'add-workspace')]";
 }
 
