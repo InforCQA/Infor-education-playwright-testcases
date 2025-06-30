@@ -1,5 +1,6 @@
 import InforOsCommonPage from '../pages/InforOsCommonPage.js';
 import BaseClass from '../../testBase/BaseClass.js';
+import {expect } from '@playwright/test';
 
 class InforOsCommon extends BaseClass
 {
@@ -47,9 +48,13 @@ class InforOsCommon extends BaseClass
 
     static async validateConfirmationMessage(actionMsg, btnClose, message){
 
-        await expect(actionMsg).toHaveText(message);
-
-        await (await this.getLocator(btnClose)).click();
+       const webElement=await actionMsg;
+       
+        await expect(webElement).toBeVisible({ timeout: 10000 });
+        await expect(webElement).toContainText(message);
+ 
+        await btnClose.click();
+ 
     }
 
     static async collapseCourseMenuNavigation(iframe, menuFolders, menu) {

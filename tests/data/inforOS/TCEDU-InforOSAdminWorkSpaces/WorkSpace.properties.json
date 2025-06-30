@@ -1,0 +1,164 @@
+{
+  "workSpace": [
+    "Page NO Banner, Announcement Area",
+    "Page NO Banner, Announcement Widget",
+    "Page with Banner, Announcement Area",
+    "Page with Banner, Announcement Widget"
+  ],
+  "description": "Example Page with Banner",
+  "duration": 10,
+  "workspaceName": [
+    "S%s Main workspace",
+    "S%s Exercise 2.5",
+    "S%s Exercise 6.1"
+  ],
+  "bannerWidgets": [
+    "Image",
+    "Announcements",
+    "Web",
+    "Notes"
+  ],
+  "workspaceWidgets": [
+    "Support Quick Links",
+    "ION API Client Traffic",
+    "ION API Performance",
+    "Messages by Connection",
+    "Messages and Events",
+    "Messages by document",
+    "IDM Documents"
+  ],
+  "alignment": "Center",
+  "imageURL": [
+    "https://dam.infor.com/api/public/content/5c7f0bdafb344022b8fab85a8af39831?v=4a58d37b",
+    "https://www.wikipedia.org/",
+    "https://www.weatherbug.com"
+  ],
+  "widgetTitles": [
+    "Wikipedia",
+    "List of all alerts",
+    "New images are uploaded",
+    "Sales alerts",
+    "S%s Weather Bug",
+    "S%s Purchasing quick links",
+    "S%s Alert list widget"
+  ],
+  "widgetDescription": "S%s Alert list widget",
+  "suiteName": "OSPORTAL",
+  "timePeriod": "Past 30 days",
+  "editWorkspace": "Editing - S%s Main workspace",
+  "widgets": [
+    "IDM Documents",
+    "Alert List",
+    "Alert List",
+    "Alert List",
+    "Web",
+    "Menu"
+  ],
+  "catergory": [
+    "IDM",
+    "IDM",
+    "IDM",
+    "Sales alerts"
+  ],
+  "launchURL": "https://www.weatherbug.com",
+  "name": [
+    "Infor",
+    "Infor Support"
+  ],
+  "urls": [
+    "https://www.infor.com",
+    "https://support.infor.com"
+  ],
+  "iconName": [
+    "#icon-star-filled",
+    "#icon-edit",
+    "#icon-thumbs-up"
+  ],
+  "bookMark": [
+    "LN - Items",
+    "LN - Purchase requisitions"
+  ],
+  "folderName": "LN",
+  "backgroundColor": [
+    "rgb(218, 18, 23)",
+    "rgb(77, 204, 134)"
+  ],
+  "workspaceDescription": "This is for Exercise 2.5",
+  "accessLevel": [
+    "Disabled",
+    "View",
+    "Configure"
+  ],
+  "sortDropdown": [
+    "Newest",
+    "Changed by me",
+    "None"
+  ],
+  "announcementTitle": "S%s Announcement",
+  "announcementSummary": "Just added S%s Announcement with a description",
+  "user": "Infor User S%s",
+  "userName": "pofficers%s",
+  "password": "Infor123!",
+  "url": "https://mingle-portal.inforcloudsuite.com/v2/EDUGDENA031_AX2",
+  "publishedWorkspaces": "widget",
+  "role": [
+    "LN-User",
+    "LN-Administrator",
+    "LN"
+  ],
+  "insightName": [
+    "S%s Exercise 6.1",
+    "S%s Ex 6.1"
+  ],
+  "insightWidgets": [
+    "Alert List",
+    "Task List",
+    "IDM Documents"
+  ],
+  "insightDescription": "Exercise 6.1",
+  "workspaceFolder": "workspace Files",
+  "testcaseName": [
+    "Create a Workspace",
+    "Add widgets to a new workspace",
+    "Create an Insights Group"
+  ],
+  "widgetType": [
+    "banner widgets",
+    "ION API Performance widget"
+  ],
+  "addExceptionName": "TRN LN No Access Rule",
+  "docType": [
+    "Supplier Invoice",
+    "Item Image",
+    "Item Image"
+  ],
+  "property": [
+    "Invoice Status",
+    "Created By",
+    "Created By"
+  ],
+  "operation": [
+    "= Equal"
+  ],
+  "searchField": [
+    "Approved",
+    "Infor User S%s",
+    "Infor User S%s"
+  ],
+  "idmTitle": [
+    "Approved supplier invoices",
+    "S%s Item Images",
+    "S%s Item Images"
+  ],
+  "idmName": [
+    "Approved supplier invoices",
+    "S%s Item Images",
+    "S%s Item Images"
+  ],
+  "idmDescription": [
+    "Approved supplier invoices",
+    "S%s Item Images",
+    "S%s Item Images"
+  ],
+  "renameInsight": "S[XX] Ex %s Insights Part 2"
+}
