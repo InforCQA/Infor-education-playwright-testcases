@@ -73,6 +73,8 @@ class DocumentManagement_Id {
     static INVOICE_ID    = "Invoice_ID";
     static STATUS = "Status";
     static SAVE = "document-action";
+    static OVERWRITE_EXISTING_CHK = "osp-upload-overwrite";
+    static IMORTED_MESSAGE= "message-text";
 }
 
 export default DocumentManagement_Id;

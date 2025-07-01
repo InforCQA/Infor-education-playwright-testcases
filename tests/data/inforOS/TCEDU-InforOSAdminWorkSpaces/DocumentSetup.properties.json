@@ -28,12 +28,12 @@
       "../../../files/OSFiles/AlfaRomeo.jpeg"
     ],
     "importAttachmentFilePaths": [
-      "\\Downloads\\Class Files\\Demo 2.1\\4_widgets.zip",
-      "\\Downloads\\Class Files\\Demo 2.1\\4_pages.zip",
-      "\\Downloads\\Class Files\\Demo 2.1\\announcements.json",
-      "\\Downloads\\Class Files\\Demo 3.4\\Published Widgets.zip"
+      "../../../files/OSFiles/4_widgets.zip",
+      "../../../files/OSFiles/4_pages.zip",
+      "../../../files/OSFiles/announcements.json",
+      "../../../files/OSFiles/Published Widgets.zip"
     ],
-    "bookMarkPath": "\\Downloads\\Class Files\\Exercise 1.3\\BookMarks.xml",
+    "bookMarkPath": "../../../files/OSFiles/BookMarks.xml",
     "bookMark": "BookMarks.xml",
     "itemName": [
       "S%s Cool car",

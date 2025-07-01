@@ -32,7 +32,8 @@ class BaseClass {
 
   static async isElementPresent(locator) {
     try {
-      return await locator.isVisible();
+      await locator.waitFor({ state: 'visible', timeout: 10000 });
+      return true
     } catch (e) {
       return false;
     }
@@ -55,7 +56,7 @@ class BaseClass {
   }
 
   static async pause(seconds) {
-    await new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+    await this.page.waitForTimeout(seconds * 1000);
   }
 
 
@@ -82,7 +83,7 @@ class BaseClass {
 
   static async getDynamicElementWithIframe(iframe, element, ...strVar) {
     let finalLocator = strVar.reduce((s, v) => s.replace('%s', v), element);
-    return iframe.locator(finalLocator);
+    return await iframe.locator(finalLocator);
   }
 
 static async type(locator, value) {
