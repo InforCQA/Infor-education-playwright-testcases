@@ -4,6 +4,7 @@ import BaseClass from '../../testBase/BaseClass.js';
 import DocumentManagementPage from '../../commons/pages/DocumentManagementPage.js';
 
 const loginData=JSON.parse(JSON.stringify(require("../../commons/data/productCredentials.json")));
+import {expect } from '@playwright/test';
 
 class InforOsCommon extends BaseClass
 {
