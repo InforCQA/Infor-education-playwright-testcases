@@ -18,7 +18,6 @@ class Homepages extends BaseClass {
   // 'See More' button
   seeMore = "//*[local-name()='ids-text'][normalize-space()='%s']/ancestor::*/following-sibling::div//*[local-name()='ids-text'][normalize-space()='See more']";
 
-<<<<<<< HEAD
   // Close selected toolbar
   closeSelectedToolbar = "//*[contains(@id,'tab') and not(contains(@id,'more')) and contains(@class,'selected')]//*[contains(@data-osp-id,'close')]";
 
@@ -186,11 +185,8 @@ class Homepages extends BaseClass {
 
   /* smartPanel - Button */
 	smartPanel = "//*[@tooltip='%s']";
-=======
-  closeSelectedToolbar= "//*[contains(@id,'tab') and not(contains(@id,'more')) and contains(@class,'selected')]//*[contains(@data-osp-id,'close')]";
-
+  
   addWorkSpace = "//*[local-name()='ids-button'][contains(@id,'add-workspace')]";
->>>>>>> c84a21c8ed2c4669528d3db6f3aab2bb53e67d9e
 }
 
 export default Homepages;
