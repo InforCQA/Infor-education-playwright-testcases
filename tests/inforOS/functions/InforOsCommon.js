@@ -2,9 +2,12 @@ import {expect } from '@playwright/test';
 import InforOsCommonPage from '../pages/InforOsCommonPage.js';
 import BaseClass from '../../testBase/BaseClass.js';
 import DocumentManagementPage from '../../commons/pages/DocumentManagementPage.js';
+import workSpacePage from '../../commons/pages/WorkSpacePage.js';
+import WorkSpaces_Id from '../constants/elementIds/WorkSpaces_Id.js';
+import WorkSpaces_Lbl from '../constants/elementLbls/WorkSpaces_Lbl.js';
+import OSConfirmationMessages from '../constants/OSConfirmationMessages.js';
 
 const loginData=JSON.parse(JSON.stringify(require("../../commons/data/productCredentials.json")));
-import {expect } from '@playwright/test';
 
 class InforOsCommon extends BaseClass
 {
@@ -130,6 +133,18 @@ class InforOsCommon extends BaseClass
         const iframe = docPg.iframe();
 
         await (await this.getDynamicElementWithIframe(iframe, docPg.menuItems, toolbarMenus.toLowerCase(), uniqueId)).click();
+    }
+
+    static async addWidgetsInOS(widgetName){
+        const workSpacePg = new workSpacePage();
+
+        await (await this.getDynamicElement(workSpacePg.workspaceBtn, WorkSpaces_Id.NEW_AND_UPDATED)).click();
+        await this.type(await this.getDynamicElement(workSpacePg.textFld, WorkSpaces_Id.WORKSPACE_SEARCH), widgetName);
+        await this.page.keyboard.press('Enter');
+        await (await this.getDynamicElement(workSpacePg.addWidget, widgetName)).click();
+        // Verify the widget is added
+        await InforOsCommon.validateConfirmationMessage(await this.getLocator(workSpacePg.popupMsg), await this.getLocator(workSpacePg.btnClose), OSConfirmationMessages.ADDED_WIDGET.replace('%s', widgetName));
+   
     }
 }
 

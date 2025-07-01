@@ -14,7 +14,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   globalSetup: './global-setup.js',
-  testDir: './tests/inforOS/scripts/inforOSAdminWorkspacesInsights',
+  testDir: './tests',
   
   timeout: 30 * 1000,   
   expect: {

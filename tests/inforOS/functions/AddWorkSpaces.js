@@ -29,7 +29,13 @@ class AddWorkSpaces extends BaseClass{
 
     static async addBanner(flag, ... widgets){
 
-        
+        const workSpacePg = new workSpacePage();
+
+        await (await this.getDynamicElement(workSpacePg.widgetBtn, WorkSpaces_Lbl.ADD_BANNER_WIDGET)).click();
+       
+        for (let i = 0; i < widgets.length; i++) {
+			InforOsCommon.addWidgetsInOS(widgets[i]);
+		}
     }
 }
 
