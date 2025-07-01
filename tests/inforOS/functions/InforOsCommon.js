@@ -130,7 +130,6 @@ class InforOsCommon extends BaseClass
 
         await (await this.getDynamicElementWithIframe(iframe, docPg.menuItems, toolbarMenus.toLowerCase(), uniqueId)).click();
     }
-<<<<<<< HEAD
 
     static async addWidgetsInOS(widgetName){
         const workSpacePg = new workSpacePage();
@@ -143,9 +142,6 @@ class InforOsCommon extends BaseClass
         await InforOsCommon.validateConfirmationMessage(await this.getLocator(workSpacePg.popupMsg), await this.getLocator(workSpacePg.btnClose), OSConfirmationMessages.ADDED_WIDGET.replace('%s', widgetName));
    
     }
-}
-=======
->>>>>>> 73e1c3e7028b5e61fafda76f3fcf18838cbc29f7
 
     static async selectCheckbox(checkbox, lbl, id, iframe) {
         let element = null;
