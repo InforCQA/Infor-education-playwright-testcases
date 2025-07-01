@@ -5,6 +5,10 @@ import ProductNames from '../../../commons/constants/ProductNames.js';
 import DocumentManagementFunctions from '../../../commons/functions/DocumentManagementFunctions.js';
 import OSDocumentManagementFunctions from '../../functions/OSDocumentManagementFunctions.js';
 import IONFunctions from '../../functions/IONFunctions.js';
+import BookMarks from '../../functions/BookMarks.js';
+import PortalFunctions from '../../functions/PortalFunctions.js';
+import OSSessionNames from '../../constants/OSSessionNames.js';
+import OSConfirmationMessages from '../../constants/OSConfirmationMessages.js';
 
 // Property data for testcases
 const loginData=JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
@@ -45,6 +49,15 @@ test.describe('TCEDU_InforOSDownloadAndImportDataModel', () => {
 
   test('Add document Supplier Invoice', async ({ }) => {
     await OSDocumentManagementFunctions.addDocument(docCxt, "", "", docCxt.documentInfo.docuName[2], 2);
+  });
+
+  test('Import bookmarks', async ({ }) => {
+    await BookMarks.importBookmarks(docCxt);
+  });
+
+   test('Import widgets', async ({ }) => {
+    await CloudSuite.navigateToApplication(ProductNames.OS);
+    await PortalFunctions.importWidgets(docCxt, OSSessionNames.WIDGETS, OSSessionNames.PUBLISHED_WIDGETS, OSConfirmationMessages.IMPORTED_WIDGETS, 0);
   });
 
 });

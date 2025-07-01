@@ -74,8 +74,9 @@ class InforOsCommon extends BaseClass
     }
 
     static async collapseCourseMenuNavigation(iframe, menuFolders, menu) {
-        try {
+
             let element = null;
+
             if (iframe) {
                 element = await this.getDynamicElementWithIframe(iframe, menuFolders, menu);
             } else {
@@ -88,11 +89,6 @@ class InforOsCommon extends BaseClass
 
             await expect(element).toBeHidden();
         }
-        catch (e) {
-            console.error('Error occurred:', e);
-            throw e;
-        }
-    }
 
     static async getCompany() {
         const id= loginData.inforAdminWorkspaceUsername;
@@ -130,6 +126,23 @@ class InforOsCommon extends BaseClass
 
         await (await this.getDynamicElementWithIframe(iframe, docPg.menuItems, toolbarMenus.toLowerCase(), uniqueId)).click();
     }
-}
 
+    static async selectCheckbox(checkbox, lbl, id, iframe) {
+        let element = null;
+
+        if (iframe) {
+            element = await this.getDelementynamicElementWithIframe(iframe, checkbox, lbl, id);
+        }
+        else {
+            element = await this.getDynamicElement(checkbox, lbl, id);
+        }
+
+        if (!element.isChecked()) {
+            await element.check();
+        }
+
+        // Verify that check box is selected
+        await expect(element).toBeChecked();
+    }
+}
 export default InforOsCommon;
