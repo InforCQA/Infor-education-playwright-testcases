@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test} from '@playwright/test';
 import CloudSuite from '../../../commons/functions/CloudSuite.js';
 import BaseClass from '../../../testBase/BaseClass.js';
 import AddWorkSpaces from '../../functions/AddWorkSpaces.js';
@@ -9,6 +9,7 @@ import WorkSpaces_Id from '../../constants/elementIds/WorkSpaces_Id.js';
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
 const workSpaceCxt = JSON.parse(JSON.stringify(require("../../../data/inforOS/TCEDU-InforOSAdminWorkSpaces/WorkSpace.properties.json")));
 
+export default function TCEDU_InforOSCreateANewWorkspace() {
 test.describe('TCEDU_InforOSCreateANewWorkspace', () => {
 
   test('login',async ({}) => {
@@ -23,4 +24,9 @@ test.describe('TCEDU_InforOSCreateANewWorkspace', () => {
   test('Add a banner', async ({}) =>{
     await AddWorkSpaces.addBanner(0, workSpaceCxt.bannerWidgets);
   })
+
+   test('Add widgets to the workspace', async ({}) =>{
+    await AddWorkSpaces.addBanner(1, workSpaceCxt.workspaceWidgets);
+  })
 });
+}

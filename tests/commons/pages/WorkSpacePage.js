@@ -8,9 +8,11 @@ workspaceIcons = "//*[local-name()='ids-card'][@data-osp-id='osp-ws-is-icon']";
 popupMsg = "//*[@class='toast-message']";
 btnClose = "//button[contains(@class,'btn-close')]";
 widgetBtn = "//*[local-name()='ids-icon']/following-sibling::*[normalize-space()='%s']";
-workspaceBtn = "//*[@id='%s']";
+workspaceBtn = "//h3[normalize-space()='%s']";
 textFld = "//input[contains(@id,'%s')]";
-addWidget = "//h3[text()='%s']/parent::div/preceding-sibling::div//button[@icon='add']";
+addWidget = "(//h3[text()='%s']/parent::div/preceding-sibling::div//button[@icon='add'])[last()]";
+toolbarIcons = "//*[translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='%s']/parent::button[@data-osp-id='%s']";
+closeBtn=  "//*[text()='%s']/ancestor::*/following-sibling::*/button[@icon='close']";
 }
 
 export default workSpacePage;

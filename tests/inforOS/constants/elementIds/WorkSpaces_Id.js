@@ -8,6 +8,9 @@ class WorkSpaces_Id{
     static WIDGETS                 = "widget";
     static NEW_AND_UPDATED         = "osp-cat-ctg-new";
     static WORKSPACE_SEARCH        = "osp-cat-s-search";
+    static ADD_WIDGET = "osp-edm-secondary";
+    static SAVE_WIDGET = "osp-edm-primary";
+    static ALL        = "osp-cat-ctg-all";
 }
 
 export default WorkSpaces_Id;

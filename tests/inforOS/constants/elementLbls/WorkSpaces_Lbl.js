@@ -6,6 +6,10 @@ class WorkSpaces_Lbl{
     static CREATE                 = "Create";
     static WIDGETS                = "Widgets";
     static ADD_BANNER_WIDGET      = "Add banner Widget";
+    static ADD_WIDGET             = "Add widget";
+    static CLOSE_WIDGET_CATALOG    = "Widget Catalog";
+    static SAVE                   = "Save";
+    static ALL                    = "All";
 }
 
 export default WorkSpaces_Lbl;

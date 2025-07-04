@@ -8,8 +8,8 @@ class BaseClass {
   static playwright;
 
   static async globalSetup() {
-    this.browser = await chromium.launch({ headless: false });
-    this.context = await this.browser.newContext({ viewport: { width: 1280, height: 672 } });
+    this.browser = await chromium.launch({ headless: false});
+    this.context = await this.browser.newContext();
     this.page = await this.context.newPage();
   }
 
@@ -23,9 +23,11 @@ class BaseClass {
   }
 
   static async getDynamicElement(webElement, ...strVar) {
+    
+    
     const finalLocator = strVar.reduce((s, v) => s.replace('%s', v), webElement);
-    const locator = this.page.locator(finalLocator);
-    await this.page.waitForLoadState('load');
+    const locator = await this.page.locator(finalLocator);
+
     return locator;
   }
 
@@ -55,9 +57,12 @@ class BaseClass {
     await this.page.screenshot({ path: filePath });
   }
 
-  static async pause(seconds) {
-    await this.page.waitForTimeout(seconds * 1000);
+    static async pause(seconds) {
+    return new Promise(resolve =>
+      setTimeout(resolve, seconds * 1000)
+    );
   }
+
 
 
   static async isDynamicElementPresent(webElement, ...strVar) {
@@ -86,11 +91,12 @@ class BaseClass {
     return await iframe.locator(finalLocator);
   }
 
-static async type(locator, value) {
-   await locator.click({ clickCount: 3 });   
-   await locator.press('Backspace');         
-   await locator.type(value);   
-}
+  static async type(locator, value) {
+    await locator.click({ clickCount: 3 });
+    await locator.press('Backspace');
+    await locator.type(value);
+    await this.page.keyboard.press('Enter');
+  }
 
   static async selectValueFromDropdown(locator, value) {
 
