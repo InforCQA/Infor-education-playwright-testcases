@@ -99,6 +99,11 @@ class WorkSpaces_Id{
   static ADVANCED_INSIGHT = "menu-advanced";
   static IMPORT_INSIGHT = "menu-import";
   static EXPORT_INSIGHT = "menu-export";
+    static ADD_WIDGET             = "osp-edm-secondary";
+    static SAVE_WIDGET            = "osp-edm-primary";
+    static ALL                    = "osp-cat-ctg-all";
+    static ELLIPSE                 = "osp-w-c-menu-button";
+    static CONFIGURE               = "configure";
 }
 
 export default WorkSpaces_Id;

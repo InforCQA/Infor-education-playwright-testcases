@@ -103,6 +103,16 @@ class WorkSpaces_Lbl{
   static OK_INSIGHT = "OK";
   static EXPORT_INSIGHT = "Export";
   static ADD_INSIGHT_GROUP = "Add Insight Group";
+    static ADD_WIDGET             = "Add widget";
+    static CLOSE_WIDGET_CATALOG    = "Widget Catalog";
+    static SAVE                   = "Save";
+    static ALL                    = "All";
+    static CONFIGURE              = "Configure...";
+    static TITLE                  = "Title";
+    static CATERGORY              = "Category";
+    static WIDGET_SETTINGS        = "Widget Settings";
+    static CREATE_NEW             = "Create new";
+    static IDM_CLIENT_LINK        = "IDM client link";
 }
 
 export default WorkSpaces_Lbl;

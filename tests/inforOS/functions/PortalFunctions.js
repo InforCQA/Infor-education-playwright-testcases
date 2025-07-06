@@ -23,28 +23,28 @@ class PortalFunctions extends BaseClass{
             await InforOsCommon.courseMenuNavigation(false, portalPg.expandPanel, session.toLowerCase(), subSession.toLowerCase());
         }
 
-        await (await this.getDynamicElement(portalPg.toolBar, Portal_Id.IMPORT)).click();
+        await (await this.getDynamicElement(portalPg.toolBar, Portal_Id.IMPORT)).click({ delay: 1000 });
 
         await (await this.getDynamicElement(portalPg.fileUpload, Portal_Id.FILE_UPLOAD)).setInputFiles(path.join(docCxt.documentInfo.importAttachmentFilePaths[flag]));
 
         // Verify that file is uploaded
-        const fileName= await this.getDynamicElement(portalPg.textFld, DocumentManagement_Id.FILE);
+        const fileName = await this.getDynamicElement(portalPg.textFld, DocumentManagement_Id.FILE);
         await expect(fileName).toHaveValue(docCxt.documentInfo.importDocumentTypeName[flag]);
 
-        if(flag==2){
-          await  InforOsCommon.selectCheckbox(portalPg.checkbox, DocumentManagement_Lbl.OVERWRITE_EXISTING_CHK,
-					DocumentManagement_Id.OVERWRITE_EXISTING_CHK, false);
+        if (flag == 2) {
+            await InforOsCommon.selectCheckbox(portalPg.checkbox, DocumentManagement_Lbl.OVERWRITE_EXISTING_CHK,
+                DocumentManagement_Id.OVERWRITE_EXISTING_CHK, false);
         }
 
-       await (await this.getLocator(portalPg.okBtn)).click();
-       
-       // Verify the uploaded file is imported successfully
-       const text = await this.getDynamicElement(portalPg.title, DocumentManagement_Id.IMORTED_MESSAGE);
-       await expect(text).toContainText(verify);
+        await InforOsCommon.toolbarIcons(await this.getLocator(portalPg.okBtn));
 
-       await (await this.getDynamicElement(portalPg.actionMsg, OSCommons.OK.toLowerCase())).click();
+        // Verify the uploaded file is imported successfully
+        const text = await this.getDynamicElement(portalPg.title, DocumentManagement_Id.IMORTED_MESSAGE);
+        await expect(text).toContainText(verify);
 
-       await InforOsCommon.collapseCourseMenuNavigation(false, portalPg.expandedPanel, session.toLowerCase());
+        await InforOsCommon.toolbarIcons(await this.getDynamicElement(portalPg.actionMsg, OSCommons.OK.toLowerCase()));
+
+        await InforOsCommon.collapseCourseMenuNavigation(false, portalPg.expandedPanel, session.toLowerCase());
     }
 }
 

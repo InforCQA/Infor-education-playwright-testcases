@@ -2,6 +2,7 @@
 import Homepages from '../pages/CommonPage.js';
 import BaseClass from '../../testBase/BaseClass.js';
 import Commons from  '../constants/Commons.js';
+import { setBrowserZoom, testWithZoomExtension } from "playwright-zoom";
 
 /* --------------------------------------------------------
 	 * Objective : Login to Cloudsuite

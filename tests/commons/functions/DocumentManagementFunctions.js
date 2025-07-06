@@ -4,6 +4,7 @@ import DocumentManagementPage from '../pages/DocumentManagementPage.js';
 import commons from '../constants/Commons.js';
 import DocumentManagementLbl from '../constants/elementLbls/DocumentManagement_Lbl.js';
 import CloudSuite from './CloudSuite.js';
+import {setBrowserZoom} from 'playwright-zoom';
 
 class DocumentManagementFunctions extends BaseClass{
   
@@ -12,6 +13,8 @@ class DocumentManagementFunctions extends BaseClass{
     // Intializing the page
     const docPg = new DocumentManagementPage();
     const iframe = docPg.iframe();
+
+    await setBrowserZoom(this.page, 70);
 
     // Click advanced search if closed
     if ((await (await this.getElementWithIframe(iframe, docPg.searchDrp)).getAttribute(ElementAttributes.CLASS))?.includes(commons.CLOSED)) {

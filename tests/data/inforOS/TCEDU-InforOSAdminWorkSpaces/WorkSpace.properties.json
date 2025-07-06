@@ -19,13 +19,13 @@
     "Notes"
   ],
   "workspaceWidgets": [
+    "IDM Documents",
     "Support Quick Links",
     "ION API Client Traffic",
     "ION API Performance",
     "Messages by Connection",
     "Messages and Events",
-    "Messages by document",
-    "IDM Documents"
+    "Messages by document"
   ],
   "alignment": "Center",
   "imageURL": [
