@@ -22,5 +22,17 @@ test.describe('TCEDU_InforOSCreateANewWorkspace', () => {
 
   test('Add a banner', async ({}) =>{
     await AddWorkSpaces.addBanner(0, workSpaceCxt.bannerWidgets);
-  })
+  });
+
+  test('Add all widgets to workspace', async ({}) => {
+  await AddWorkSpaces.addBanner(1, workSpaceCxt.workspaceWidgets);
+  });
+
+  test('Configure the Banner Widgets', async () => {
+    await AddWorkSpaces.configureBannerWidgets(workSpaceCxt, WorkSpaces_Lbl.IMAGE, WorkSpaces_Lbl.CONFIGURE_WIDGET, workSpaceCxt.widgetType[0], 1);
+  });
+  
+  test('Configure the ION API Performance Widget', async () => {
+    await AddWorkSpaces.configureBannerWidgets(workSpaceCxt, WorkSpaces_Lbl.ION_API_PERFORMANCE, WorkSpaces_Lbl.WIDGET_SETTINGS, workSpaceCxt.widgetType[1], 0);
+  });
 });

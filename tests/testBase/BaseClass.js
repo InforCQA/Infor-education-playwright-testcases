@@ -25,7 +25,6 @@ class BaseClass {
   static async getDynamicElement(webElement, ...strVar) {
     const finalLocator = strVar.reduce((s, v) => s.replace('%s', v), webElement);
     const locator = this.page.locator(finalLocator);
-    await this.page.waitForLoadState('load');
     return locator;
   }
 
