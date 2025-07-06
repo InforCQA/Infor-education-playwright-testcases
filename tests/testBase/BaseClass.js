@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-import path from 'path';
+import path from 'path' 
 
 class BaseClass {
   static page;
@@ -8,9 +8,17 @@ class BaseClass {
   static playwright;
 
   static async globalSetup() {
-    this.browser = await chromium.launch({ headless: false});
-    this.context = await this.browser.newContext();
-    this.page = await this.context.newPage();
+    const extPath = `${process.cwd()}/../../node_modules/playwright-zoom/dist/lib/zoom-extension`;
+
+    this.context = await chromium.launchPersistentContext('', {
+      headless: false,
+      args: [
+        `--disable-extensions-except=${extPath}`,
+        `--load-extension=${extPath}`
+      ],
+    });
+    const [page] = this.context.pages();
+    this.page = page;
   }
 
   static async globalTeardown() {
@@ -95,7 +103,6 @@ class BaseClass {
     await locator.click({ clickCount: 3 });
     await locator.press('Backspace');
     await locator.type(value);
-    await this.page.keyboard.press('Enter');
   }
 
   static async selectValueFromDropdown(locator, value) {

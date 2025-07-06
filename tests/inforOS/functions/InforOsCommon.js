@@ -85,7 +85,7 @@ class InforOsCommon extends BaseClass
             }
 
             if (await this.isElementPresent(element)) {
-                await element.click();
+                await element.click({ delay: 1000 });
             }
 
             await expect(element).toBeHidden();
@@ -131,9 +131,10 @@ class InforOsCommon extends BaseClass
     static async addWidgetsInOS(widgetName){
         const workSpacePg = new workSpacePage();
         
-        await (await this.getDynamicElement(workSpacePg.workspaceBtn, WorkSpaces_Lbl.ALL)).click();
+        await (await this.getDynamicElement(workSpacePg.workspaceBtn, WorkSpaces_Lbl.ALL)).click({ delay: 1000 });
         await this.type(await this.getDynamicElement(workSpacePg.textFld, WorkSpaces_Id.WORKSPACE_SEARCH), widgetName);
-        await (await this.getDynamicElement(workSpacePg.addWidget, widgetName)).click();
+        await this.page.keyboard.press('Enter');
+        await (await this.getDynamicElement(workSpacePg.addWidget, widgetName)).click({ delay: 1000 });
         
         //Verify the widget is added
         await InforOsCommon.validateConfirmationMessage(await this.getLocator(workSpacePg.popupMsg), await this.getLocator(workSpacePg.btnClose), OSConfirmationMessages.ADDED_WIDGET.replace('%s', widgetName));

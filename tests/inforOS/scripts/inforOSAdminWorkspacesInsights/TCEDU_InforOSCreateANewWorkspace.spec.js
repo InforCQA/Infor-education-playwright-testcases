@@ -22,11 +22,11 @@ test.describe('TCEDU_InforOSCreateANewWorkspace', () => {
   });
 
   test('Add a banner', async ({}) =>{
-    await AddWorkSpaces.addBanner(0, workSpaceCxt.bannerWidgets);
+    await AddWorkSpaces.addBanner(0, workSpaceCxt.widgets);
   })
 
-   test('Add widgets to the workspace', async ({}) =>{
-    await AddWorkSpaces.addBanner(1, workSpaceCxt.workspaceWidgets);
+   test('Configure Alert list widgets', async ({}) =>{
+    await AddWorkSpaces.configureAlertListWidgets(workSpaceCxt, workSpaceCxt.widgets[1]);
   })
 });
 }

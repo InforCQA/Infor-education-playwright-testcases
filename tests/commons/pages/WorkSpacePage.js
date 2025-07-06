@@ -13,6 +13,16 @@ textFld = "//input[contains(@id,'%s')]";
 addWidget = "(//h3[text()='%s']/parent::div/preceding-sibling::div//button[@icon='add'])[last()]";
 toolbarIcons = "//*[translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='%s']/parent::button[@data-osp-id='%s']";
 closeBtn=  "//*[text()='%s']/ancestor::*/following-sibling::*/button[@icon='close']";
+widgetTitle = "(//div[contains(@class,'widget-title')][normalize-space()='%s'])[1]";
+ellipseIcon= "(//*[translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='%s']/following-sibling::*//button[@data-osp-id='%s'])[1]";
+ellipseOptions="//*[contains(@class,'open')]//*[contains(@data-osp-id,'%s')][normalize-space()='%s']";
+lockIcon= "//*[contains(@href,'icon-locked')]";
+inputData= "//label[translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='%s']/following-sibling::input";
+inputField="//label[normalize-space()='%s']/following-sibling::*//input";
+button= "//*[translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='%s']";
+configBtn= "//div[contains(translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'%s')]/following-sibling::*/div/div/following-sibling::div/button[normalize-space()='%s']";
+hyperText="//label[translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='%s']/following-sibling::*/a[normalize-space()='%s']";
+hyperLink="//*[@class='hyperlink'][translate(normalize-space(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='%s']";
 }
 
 export default workSpacePage;

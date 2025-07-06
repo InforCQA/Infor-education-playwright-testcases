@@ -10,6 +10,12 @@ class WorkSpaces_Lbl{
     static CLOSE_WIDGET_CATALOG    = "Widget Catalog";
     static SAVE                   = "Save";
     static ALL                    = "All";
+    static CONFIGURE              = "Configure...";
+    static TITLE                  = "Title";
+    static CATERGORY              = "Category";
+    static WIDGET_SETTINGS        = "Widget Settings";
+    static CREATE_NEW             = "Create new";
+    static IDM_CLIENT_LINK        = "IDM client link";
 }
 
 export default WorkSpaces_Lbl;
