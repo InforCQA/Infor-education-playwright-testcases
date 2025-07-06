@@ -37,3 +37,4 @@ test.describe('TCEDU_InforOSCreateANewWorkspace', () => {
     await AddWorkSpaces.configureBannerWidgets(workSpaceCxt, WorkSpaces_Lbl.ION_API_PERFORMANCE, WorkSpaces_Lbl.WIDGET_SETTINGS, workSpaceCxt.widgetType[1], 0);
   });
 });
+}

@@ -29,29 +29,19 @@ class AddWorkSpaces extends BaseClass{
         await (await this.getDynamicElement(workSpacePg.labelField, parameters[1].toLowerCase(), parameters[2])).click();
         await (await this.getDynamicElement(workSpacePg.toolbarBtn, WorkSpaces_Lbl.CONTINUE.toLowerCase(), WorkSpaces_Id.CONTINUE)).click();
         await (await this.getLocator(workSpacePg.workspaceIcons)).nth(3).click();
-        await (await this.getDynamicElement(workSpacePg.toolbarBtn, WorkSpaces_Lbl.CREATE.toLowerCase(), WorkSpaces_Id.CREATE)).click({ delay: 1000 });
+        await (await this.getDynamicElement(workSpacePg.toolbarBtn, WorkSpaces_Lbl.CREATE.toLowerCase(), WorkSpaces_Id.CREATE)).click();
         await InforOsCommon.validateConfirmationMessage(await this.getLocator(workSpacePg.popupMsg), await this.getLocator(workSpacePg.btnClose), OSConfirmationMessages.CREATED_WORKSPACE.replace('%s', workspaceName));
     
         console.log(`=========>>>>> Create a work space completed <<<<<=========`);
     }
 
     static async addBanner(flag, widgets) {
-
-    static async addBanner(flag, widgets){
-         console.log(`=========>>>>> Add a banner Started <<<<<=========`);
-        const workSpacePg = new workSpacePage();
-
-        await setBrowserZoom(this.page, 50);
-
-        if (flag ==0) {
-            await (await this.getDynamicElement(workSpacePg.widgetBtn, WorkSpaces_Lbl.ADD_BANNER_WIDGET)).click({ force: true });
-
-        } else {
-            await (await this.getDynamicElement(workSpacePg.toolbarIcons, WorkSpaces_Lbl.ADD_WIDGET.toLowerCase(), WorkSpaces_Id.ADD_WIDGET)).click({ delay: 1000 });
-        }
-
  
-        if (flag == 0) {
+        const workSpacePg = new workSpacePage();
+ 
+        await setBrowserZoom(this.page, 50);
+ await this.pause(3);
+        if (flag ==0) {
             await (await this.getDynamicElement(workSpacePg.widgetBtn, WorkSpaces_Lbl.ADD_BANNER_WIDGET)).click({ force: true });
  
         } else {
@@ -61,7 +51,7 @@ class AddWorkSpaces extends BaseClass{
         for (let i = 0; i < widgets.length; i++) {
             await InforOsCommon.addWidgetsInOS(widgets[i]);
         }
-
+ 
         if (flag ==1) {
             await (await this.getDynamicElement(workSpacePg.closeBtn, WorkSpaces_Lbl.CLOSE_WIDGET_CATALOG)).click();
             await InforOsCommon.toolbarIcons(await this.getDynamicElement(workSpacePg.toolbarIcons, WorkSpaces_Lbl.SAVE.toLowerCase(), WorkSpaces_Id.SAVE_WIDGET));
@@ -97,15 +87,14 @@ class AddWorkSpaces extends BaseClass{
         await (await this.getDynamicElement(workSpacePg.textBtn,  WorkSpaces_Lbl.CREATE_NEW)).click();
         await( await this.getDynamicElement(workSpacePg.hyperText, WorkSpaces_Lbl.SELECT_DOCUMENT_TYPE_DRP.toLowerCase(),WorkSpaces_Lbl.ADVANCED)).click();
         await( await this.getDynamicElement(workSpacePg.hyperLink, WorkSpaces_Lbl.IDM_CLIENT_LINK.toLowerCase())).click();
-    }
+    
             await InforOsCommon.addWidgetsInOS(widgets[i]);
-        }
+        
  
         if (flag == 1) {
             await (await this.getDynamicElement(workSpacePg.closeBtn, WorkSpaces_Lbl.CLOSE_WIDGET_CATALOG)).click();
             await (await this.getDynamicElement(workSpacePg.toolbarIcons, WorkSpaces_Lbl.SAVE.toLowerCase(), WorkSpaces_Id.SAVE_WIDGET)).click();
         }
-         console.log(`=========>>>>> Add a banner Completed <<<<<=========`);
     }
 
     static async configureBannerWidgets(workspaceContext,widget, configWidget, widgetName, flag) {
@@ -136,7 +125,7 @@ class AddWorkSpaces extends BaseClass{
              await this.getDynamicElement(workSpacePg.inputData, WorkSpaces_Lbl.IMAGE_URL.toLowerCase()),
              workspaceContext.imageURL[0]);
         
-         await (await this.getDynamicElement(workSpacePg.workspaceBtn, WorkSpaces_Id.SAVE_SETTING)).click();
+         await (await this.getDynamicElement(workSpacePg.workspace, WorkSpaces_Id.SAVE_SETTING)).click();
 
          await this.configureWebWidget(workspaceContext.widgetTitles[0],workspaceContext.imageURL[1],workspaceContext.launchURL);
 		 }
