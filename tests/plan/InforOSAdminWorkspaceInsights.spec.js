@@ -5,6 +5,6 @@ import TCEDU_InforOSCreateWorkspaceToAddSecurityRoles from '../inforOS/scripts/i
 
 test.describe('InforOSAdminWorkspaceInsights', () => {
     // TCEDU_InforOSDownloadAndImportDataModel();
-    // TCEDU_InforOSCreateANewWorkspace();
-    TCEDU_InforOSCreateWorkspaceToAddSecurityRoles();
+     TCEDU_InforOSCreateANewWorkspace();
+   // TCEDU_InforOSCreateWorkspaceToAddSecurityRoles();
 });
