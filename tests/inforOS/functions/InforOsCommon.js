@@ -131,10 +131,10 @@ class InforOsCommon extends BaseClass
     static async addWidgetsInOS(widgetName){
         const workSpacePg = new workSpacePage();
         
-        await (await this.getDynamicElement(workSpacePg.workspaceBtn, WorkSpaces_Lbl.ALL)).click({ delay: 1000 });
+        await (await this.getDynamicElement(workSpacePg.workspaceBtn, WorkSpaces_Lbl.ALL)).click();
         await this.type(await this.getDynamicElement(workSpacePg.textFld, WorkSpaces_Id.WORKSPACE_SEARCH), widgetName);
         await this.page.keyboard.press('Enter');
-        await (await this.getDynamicElement(workSpacePg.addWidget, widgetName)).click({ delay: 1000 });
+        await (await this.getDynamicElement(workSpacePg.addWidget, widgetName)).click();
         
         //Verify the widget is added
         await InforOsCommon.validateConfirmationMessage(await this.getLocator(workSpacePg.popupMsg), await this.getLocator(workSpacePg.btnClose), OSConfirmationMessages.ADDED_WIDGET.replace('%s', widgetName));
