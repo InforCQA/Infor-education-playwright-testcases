@@ -187,6 +187,8 @@ class Homepages extends BaseClass {
 	smartPanel = "//*[@tooltip='%s']";
   
   addWorkSpace = "//*[local-name()='ids-button'][contains(@id,'add-workspace')]";
+
+  appNameTitle = () => this.page.locator("//*[contains(@id,'tab') and not(contains(@id,'more')) and contains(@class,'selected')]");
 }
 
 export default Homepages;

@@ -1,0 +1,26 @@
+{
+  "entity": "United States",
+  "sites": [
+    "ATLANTA",
+    "BOSTON"
+  ],
+  "offices": {
+    "0": [
+      "[SLS] Atlanta Sales Office",
+      "[WRH] Atlanta Warehouse"
+    ],
+    "1": [
+      "[PUR] Boston Purchase Office",
+      "[SLS] Boston Sales Office",
+      "[WRH] Boston Warehouse"
+    ]
+  },
+  "addresses": [
+    "Georgia",
+    "Massachusetts"
+  ],
+  "deptType": "Sales Office",
+  "scenario": "External Material Delivery Sales",
+  "priceOrigin": "Sales Order Price (Gross)",
+  "purchaseOffice": "Purchase Office"
+}
