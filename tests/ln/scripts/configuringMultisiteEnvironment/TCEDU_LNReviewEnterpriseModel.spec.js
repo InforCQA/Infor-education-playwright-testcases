@@ -16,11 +16,17 @@ export default function TCEDU_LNReviewEnterpriseModel() {
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
 
-        test('Select a map provider', async ({ }) => {
+        test('Review the enterprise model in Infor LN', async ({ }) => {
 
             await CloudSuite.navigateToApplication(ProductNames.LN);
 
             await LNMasterData.reviewEnterpriseModelInInforLN(enterpriseMdlCnxt);
+
+        });
+
+        test('Review a site in Infor LN', async ({ }) => {
+
+            await LNMasterData.reviewASiteInInforLN(enterpriseMdlCnxt);
 
         });
     })

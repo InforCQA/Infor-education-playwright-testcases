@@ -6,6 +6,11 @@ import EnterpriseModelWorkbench_Lbl from "../constants/elementLbls/EnterpriseMod
 import LNCommons from "../constants/LNCommons";
 import {expect} from '@playwright/test';
 import { setBrowserZoom } from 'playwright-zoom';
+import LNPage from "../pages/LNPage";
+import EnterpriseModelWorkbench_Id from "../constants/elementIds/EnterpriseModelWorkbench_Id";
+import LNSessionCodes from "../constants/LNSessionCodes";
+import LNTabs from "../constants/LNTabs";
+import ElementAttributes from "../../commons/constants/ElementAttributes";
 
 class LNMasterData extends BaseClass {
 
@@ -74,7 +79,7 @@ class LNMasterData extends BaseClass {
 
         const pushpins = await emwPg.pushPins().nth(0);
         await pushpins.dispatchEvent('mouseover');
-        await this.page.waitForTimeout(9000);
+        
         // Click on site on Enterprise structure pane
         await emwPg.offices(enterpriseMdlCnxt.sites[1]).click();
 
@@ -87,6 +92,117 @@ class LNMasterData extends BaseClass {
         // Verify the Details pane
         expect(await this.isElementPresent(await emwPg.paneOptionLabel(enterpriseMdlCnxt.purchaseOffice))).toBeTruthy();
     }
+
+    static async reviewASiteInInforLN(enterpriseMdlCnxt) {
+
+        // Intializing the page
+        const lnPg = new LNPage();
+        const emwPg = new EnterpriseModelWorkbenchPage();
+
+        // Filter the site
+        await this.type(await emwPg.siteFilter(EnterpriseModelWorkbench_Lbl.SITE), enterpriseMdlCnxt.sites[1]);
+        await this.page.keyboard.press('Enter');
+
+        // Move to Element and Drilldown
+        await (await emwPg.bostonDrilldown()).hover();
+        await (await emwPg.bostonDrilldown()).click();
+
+        await LNCommon.verifySessionTab(LNSessionTabs.SITE);
+
+        const siteValue = await (await LNCommon.getTextField(
+            EnterpriseModelWorkbench_Lbl.SITE,
+            EnterpriseModelWorkbench_Id.SITE,
+            LNSessionCodes.SITE
+        )).inputValue();
+        expect(siteValue).toBe(enterpriseMdlCnxt.sites[1]);
+
+        await LNCommon.selectHeaderTab(LNTabs.GENERAL, LNSessionCodes.SITE);
+
+        const entUnitValue = await (await LNCommon.getTextField(
+            EnterpriseModelWorkbench_Lbl.ENTERPRISE_UNIT,
+            EnterpriseModelWorkbench_Id.ENTERPRISE_UNIT,
+            LNSessionCodes.SITE
+        )).inputValue();
+        expect(entUnitValue).toBe(enterpriseMdlCnxt.sites[1]);
+
+        await LNCommon.selectGridTab(LNTabs.WAREHOUSES, LNSessionCodes.SITE);
+
+        expect(await this.isElementPresent(
+            await LNCommon.getDataCell(
+                EnterpriseModelWorkbench_Lbl.WAREHOUSE_GRID,
+                EnterpriseModelWorkbench_Id.WAREHOUSE_GRID,
+                LNSessionCodes.WAREHOUSES_SITE
+            )
+        )).toBeTruthy();
+
+        expect(await (
+           await lnPg.selectRequiredRecord(
+                LNSessionCodes.WAREHOUSES_SITE,
+                LNCommons.SECOND_RECORD
+            )
+        ).isVisible()).toBeFalsy();
+
+        await LNCommon.selectGridTab(LNTabs.DEPARTMENTS, LNSessionCodes.SITE);
+
+        const departments = await lnPg.gridCell(
+            LNSessionCodes.DEPARTMENTS_SITE,
+            EnterpriseModelWorkbench_Id.DEPARTMENT_TYPE_DRP_GRID
+        ).count();
+        expect(departments).toBe(Number(LNCommons.RECORD_TWO));
+
+        for (let i = 0; i < departments; i++) {
+            const value = await LNCommon.getRequiredValueFromTheGrid(
+                LNSessionCodes.DEPARTMENTS_SITE,
+                EnterpriseModelWorkbench_Lbl.ENTERPRISE_UNIT_GRID,
+                EnterpriseModelWorkbench_Id.ENTERPRISE_UNIT_GRID,
+                i
+            );
+            expect(value).toBe(enterpriseMdlCnxt.sites[1]);
+        }
+
+        await LNCommon.selectGridTab(LNTabs.ASSEMBLY_LINES, LNSessionCodes.SITE);
+
+        expect(await (
+            await lnPg.gridCell(
+                LNSessionCodes.ASSEMBLY_LINES,
+                EnterpriseModelWorkbench_Id.ASSEMBLY_LINE_GRID
+            )
+        ).isVisible()).toBeFalsy();
+
+        await LNCommon.selectGridTab(LNTabs.SERVICE_LOCATIONS, LNSessionCodes.SITE);
+
+        expect(await (
+            await lnPg.gridCell(
+                LNSessionCodes.SERVICE_LOCATIONS_SITE,
+                EnterpriseModelWorkbench_Id.LOCATION_GRID
+            )
+        ).isVisible()).toBeFalsy();
+
+        await LNCommon.selectHeaderTab(LNTabs.SETTINGS, LNSessionCodes.SITE);
+
+        const settingsLbl = [
+            EnterpriseModelWorkbench_Lbl.PROCUREMENT_RDN,
+            EnterpriseModelWorkbench_Lbl.SALES_RDN,
+            EnterpriseModelWorkbench_Lbl.WAREHOUSING_RDN
+        ];
+        const settingsId = [
+            EnterpriseModelWorkbench_Id.PROCUREMENT_RDN,
+            EnterpriseModelWorkbench_Id.SALES_RDN,
+            EnterpriseModelWorkbench_Id.WAREHOUSING_RDN
+        ];
+
+        for (let i = 0; i < settingsLbl.length; i++) {
+            await this.page.waitForTimeout(1000);
+            const classAttr = await (await lnPg.hyperlinkText(
+                settingsLbl[i], settingsId[i], LNSessionCodes.SITE
+            )).getAttribute(ElementAttributes.CLASS);
+
+            expect(classAttr).toContain(LNCommons.CHECKED);
+        }
+
+        await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+    }
+
 }
 
 export default LNMasterData;

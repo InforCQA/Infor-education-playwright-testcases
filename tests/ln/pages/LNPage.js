@@ -458,7 +458,7 @@ class LNPage extends BaseClass {
     /* selectRequiredRecord */
     selectRequiredRecord = (id1, id2) =>
         this.iframe().locator(
-            `(//div[contains(@class,'Checkbox')][contains(@id,'${id}')][contains(@id,'select-n${idx}')])[last()]`
+            `(//div[contains(@class,'Checkbox')][contains(@id,'${id1}')][contains(@id,'select-n${id2}')])[last()]`
         );
 
     /* drilldownRequiredRecord */
@@ -1141,15 +1141,12 @@ class LNPage extends BaseClass {
         );
 
     /* gridCell - based on element id and session code */
-    gridCell = (
-        p1, p2,
-        p3, p4
-    ) =>
+    gridCell = (p1, p2) =>
         this.iframe()
             .locator(
                 `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')]//input[not(@aria-hidden='true')]` +
                 ` | ` +
-                `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'DataCell')][contains(@id,'${p3}')][contains(@id,'${p4}')]//label[not(@aria-hidden='true')]`
+                `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')]//label[not(@aria-hidden='true')]`
             );
 
     /* searchInputlookupBtn - LookupBtn */

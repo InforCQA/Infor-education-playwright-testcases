@@ -42,11 +42,11 @@ class BaseClass {
 
   static async isElementPresent(locator) {
     try {
-
+      
       await locator.waitFor({ state: 'visible', timeout: 30000 });
       return true
     } catch (e) {
-      return false;
+        return false;
     }
   }
 

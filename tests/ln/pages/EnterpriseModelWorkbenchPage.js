@@ -61,8 +61,8 @@ class EnterpriseModelWorkbenchPage extends BaseClass {
         this.iframe().locator(`//*[local-name()='svg'][@iconid='icon-zoom-in']`);
 
     /* siteFilter - Input */
-    siteFilter = () =>
-        this.iframe().locator(`(//div[@class='FilterControl']//input[@class='TextInputField'])[last()]`);
+    siteFilter = (labelText) =>
+        this.iframe().locator(`(//label[normalize-space()='${labelText}']/ancestor::*[@class='Row ColumnHeaderRow']/following-sibling::*//input[contains(@class,'TextInputField')])[1]`);
 }
 
 export default EnterpriseModelWorkbenchPage;
