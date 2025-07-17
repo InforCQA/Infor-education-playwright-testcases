@@ -11,6 +11,10 @@ import EnterpriseModelWorkbench_Id from "../constants/elementIds/EnterpriseModel
 import LNSessionCodes from "../constants/LNSessionCodes";
 import LNTabs from "../constants/LNTabs";
 import ElementAttributes from "../../commons/constants/ElementAttributes";
+import Addresses_Lbl from "../../ln/constants/elementLbls/Addresses_Lbl";
+import Addresses_Id from "../../ln/constants/elementIds/Addresses_Id";
+import LNMenuActions_Id from "../../ln/constants/elementIds/LNMenuActions_Id";
+import LNMenuActions_Lbl from "../../ln/constants/elementLbls/LNMenuActions_Lbl";
 
 class LNMasterData extends BaseClass {
 
@@ -201,6 +205,71 @@ class LNMasterData extends BaseClass {
         }
 
         await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+    }
+    // Create an address
+    static async  createAnAddress(structureCnxt) {
+        console.log('=========>>>>> Create an address started <<<<<=========');
+
+        // Navigating to Master Data ---> Addresses ---> Addresses
+        await LNCommon.navigateToLNModule( LNSessionTabs.MASTER_DATA, LNSessionTabs.ADDRESSES, LNSessionTabs.ADDRESSES);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
+
+        // Filter by name
+        await LNCommon.filterRequiredRecord(Addresses_Lbl.NAME_GRID,Addresses_Id.NAME_GRID, LNSessionCodes.ADDRESS, structureCnxt.name);
+
+        // Check if address already exists
+        const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ADDRESS, Addresses_Lbl.NAME_GRID,Addresses_Id.NAME_GRID,structureCnxt.name);
+
+        if (!isPresent) {
+            await LNCommon.clickMainMenuItem(LNSessionCodes.ADDRESS, LNMenuActions_Id.NEW);
+
+            await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
+
+            await LNCommon.triggerInputField(
+                await LNCommon.getTextField(Addresses_Lbl.NAME, Addresses_Id.NAME, LNSessionCodes.ADDRESSES), structureCnxt.name );
+
+            await LNCommon.triggerInputField(
+                await LNCommon.getTextField(Addresses_Lbl.COUNTRY, Addresses_Id.COUNTRY, LNSessionCodes.ADDRESSES),structureCnxt.country );
+
+            await LNCommon.getTextboxLookUpIcon( Addresses_Lbl.CITY, Addresses_Id.CITY,LNSessionCodes.ADDRESSES ).click();
+
+            await LNCommon.verifyDialogBoxWindow(LNSessionTabs.CITIES_BY_COUNTRY);
+
+            await LNCommon.filterAndSelectFirstRecord( Addresses_Lbl.CITY_ZOOM_GRID, Addresses_Id.CITY_ZOOM_GRID,structureCnxt.city,LNSessionCodes.CITIES_BY_COUNTRY);
+
+            await LNCommon.clickTextMenuItem( LNSessionCodes.CITIES_BY_COUNTRY, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+            await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
+
+            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.STREET, Addresses_Id.STREET, LNSessionCodes.ADDRESSES),structureCnxt.street);
+
+            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.HOUSE_NUMBER, Addresses_Id.HOUSE_NUMBER, LNSessionCodes.ADDRESSES),structureCnxt.houseNum );
+
+            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LATITUDE, Addresses_Id.GPS_LATITUDE, LNSessionCodes.ADDRESSES),structureCnxt.latitude );
+
+            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LONGITUDE, Addresses_Id.GPS_LONGITUDE, LNSessionCodes.ADDRESSES), structureCnxt.longitude);
+
+            await LNCommon.clickMainMenuItem(LNSessionCodes.ADDRESSES, LNMenuActions_Id.SAVE);
+        } else {
+            const rowNum = await LNCommon.selectRequiredRecord( LNSessionCodes.ADDRESS, Addresses_Lbl.NAME_GRID,Addresses_Id.NAME_GRID, structureCnxt.name );
+
+            await LNCommon.drilldownRequiredRecord( LNSessionCodes.ADDRESS,rowNum.toString() );
+        }
+
+        // Get Address Code
+        structureCnxt.addressCode = await (await LNCommon.getTextField( Addresses_Lbl.ADDRESS_CODE, Addresses_Id.ADDRESS_CODE, LNSessionCodes.ADDRESSES )).inputValue();
+
+        console.log(`=========>>>>> The Address Code is ${structureCnxt.addressCode} <<<<<=========`);
+
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ADDRESSES, LNMenuActions_Id.SAVE_AND_EXIT);
+        await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ADDRESS, LNMenuActions_Id.SAVE_AND_EXIT);
+
+        await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+        console.log('=========>>>>> Create an address completed successfully <<<<<=========');
     }
 
 }

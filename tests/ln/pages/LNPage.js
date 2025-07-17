@@ -456,10 +456,10 @@ class LNPage extends BaseClass {
         );
 
     /* selectRequiredRecord */
-    selectRequiredRecord = (id1, id2) =>
-        this.iframe().locator(
+    selectRequiredRecord = async(id1, id2) =>{
+        return await this.iframe().locator(
             `(//div[contains(@class,'Checkbox')][contains(@id,'${id1}')][contains(@id,'select-n${id2}')])[last()]`
-        );
+    )};
 
     /* drilldownRequiredRecord */
     drilldownRequiredRecord = (id1, id2) =>
@@ -667,9 +667,9 @@ class LNPage extends BaseClass {
         this.page.locator(`//li[@id='rNavEC']`);
 
     /* filterInput */
-    filterInput = (id1, id2) =>
-        this.iframe().locator(
-            `(//div[contains(@class,'GridMenuButton') and contains(@id,'${id1}') and contains(@id,'${id2}')]/following-sibling::input[contains(@id,'filter-value')])[last()]`);
+    filterInput = async(id1, id2) =>{
+        return await this.iframe().locator(
+            `(//div[contains(@class,'GridMenuButton') and contains(@id,'${id1}') and contains(@id,'${id2}')]/following-sibling::input[contains(@id,'filter-value')])[last()]`)};
 
     /* personalizationPopup */
     personalizationPopup = () =>

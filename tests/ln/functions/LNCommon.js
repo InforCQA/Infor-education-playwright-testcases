@@ -269,7 +269,7 @@ class LNCommon extends BaseClass {
         expect(isRecordFound).toBeTruthy();
 
         // Step 5: Check if checkbox is not already selected
-        const checkbox = commonPg.selectRequiredRecord(sessionCode, String(rowNo));
+        const checkbox = await commonPg.selectRequiredRecord(sessionCode, String(rowNo));
         const classAttr = await checkbox.getAttribute(ElementAttributes.CLASS);
         if (!classAttr.includes('checked')) {
             await checkbox.click();
@@ -385,6 +385,140 @@ class LNCommon extends BaseClass {
 
         return fetchedValue;
     }
+    
+    /*---------------------------------------------------------------------------------
+	 * Objective 	: Filter the required record
+	 *---------------------------------------------------------------------------------*/
+    static async filterRequiredRecord(label, elementId, sessionCode, filterItem) {
+        // Intializing the page
+        const lnPg = new LNPage();
+
+        // Verifying the label (assuming you have a utility function or method for this)
+        await this.verifyColumnHeader(sessionCode, label);
+
+        await this.type(await lnPg.filterInput(elementId, sessionCode), filterItem);
+
+        await this.page.keyboard.press('Tab');
+    }
+
+/* -----------------------------------------------------------------------
+ * Objective : To check if required record is present in the grid 
+ * -----------------------------------------------------------------------*/
+static async isRequiredRowPresent(sessionCode, columnName, elementId, value) {
+
+    // Intializing the page
+    const lnPg = new LNPage();
+
+    // Verify the column header
+    await this.verifyColumnHeader(sessionCode, columnName);
+
+    // Get all grid cell elements for the given elementId
+    const records = await lnPg.gridCell(sessionCode, elementId, sessionCode, elementId).elementHandles();
+
+    let isRecordFound = false;
+
+    // Loop through each cell to match value
+    for (let i = 0; i < records.length; i++) {
+        const labelText = (await records[i].innerText())?.trim();
+        const inputValue = await records[i].getAttribute(ElementAttributes.VALUE);
+        const fetchedValue = inputValue ? inputValue.trim() : labelText;
+
+        if (fetchedValue.toLowerCase() === value.toLowerCase()) {
+            isRecordFound = true;
+            break;
+        }
+    }
+
+    // Return result
+    return isRecordFound;
+}
+
+/*------------------------------------------------------------------
+ * Objective 	: Click on the required main menu item
+ *-------------------------------------------------------------------*/
+static async clickMainMenuItem(sessionCode, menuItem) {
+
+    // Initializing the page
+    const lnPg = new LNPage();
+
+    const menuLocator = lnPg.menuItem(sessionCode, menuItem);
+
+    // Wait for menu item to be clickable
+    await menuLocator.waitFor({ state: 'visible', timeout: 5000 });
+
+    // Click using force to handle any overlay
+    await menuLocator.click({ force: true });
+}
+
+/*--------------------------------------------------------------------------------------------
+ * Objective 	: The method is used to perform custom actions on LN Input fields with Lookup
+ *-------------------------------------------------------------------------------------------*/
+static async triggerInputField(locator, data) {
+ // Initializing the page
+    const lnPg = new LNPage();
+
+    // Step 1: Wait and click the input field
+    await locator.click();
+
+    // Step 3: Get parent div and check for focus class
+    const parent = await locator.locator('..'); // parent div
+    const classAttr = await parent.getAttribute('class');
+
+    if (!classAttr.includes('TriggerInputField-focus')) {
+        await locator.click(); // Re-click to enforce focus
+    }
+
+    // Step 5: Clear and type
+    await this.type(locator, data);
+
+    // Step 6: Press Tab to trigger any events
+    await this.page.keyboard.press('Tab');
+}
+
+/*----------------------------------------------------------
+ * Objective : To get Look up icon of textbox element
+ *----------------------------------------------------------*/
+static getTextboxLookUpIcon(label, elementId, sessionCode) {
+
+    // Initialize the page
+    const lnPg = new LNPage();
+
+    // Return dynamic locator for lookup icon (your LNPage.lookupBtn must support this structure)
+    return lnPg.lookupBtn(label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode);
+}
+
+/*------------------------------------------------------------------
+ * Objective 	: Filters the required record and select first record
+ *-------------------------------------------------------------------*/
+static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCode) {
+
+    // Initialize the page
+    const lnPg = new LNPage();
+
+    await this.verifyColumnHeader(sessionCode, label);
+    await this.type(await lnPg.filterInput(elementId, sessionCode), filterItem);
+    await this.page.keyboard.press('Enter');
+    await this.page.waitForTimeout(2000);
+    // Step 4: Validate typed value
+    const labelValueLocator = await lnPg.filterLabelValue(elementId, sessionCode);
+    const inputValueLocator = await lnPg.filterInputValue(elementId, sessionCode);
+
+    if (await labelValueLocator.isVisible()) {
+        const labelText = (await labelValueLocator.textContent())?.trim();
+        await this.page.waitForTimeout(2000);
+        expect(labelText.toLowerCase()).toBe(filterItem.toLowerCase());
+    } else {
+        const valueAttr = await inputValueLocator.inputValue();
+        await this.page.waitForTimeout(2000);
+        expect(valueAttr?.trim().toLowerCase()).toBe(filterItem.toLowerCase());
+    }
+
+    const firstRecord = await lnPg.selectRequiredRecord(sessionCode, LNCommons.FIRST_RECORD);
+    await firstRecord.click();
+
+    const classAttr = await firstRecord.getAttribute(ElementAttributes.CLASS);
+    expect(classAttr.includes(LNCommons.CHECKED)).toBeTruthy();
+}
 
 }
 
