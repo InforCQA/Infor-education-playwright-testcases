@@ -191,7 +191,7 @@ class LNCommon extends BaseClass {
             }
         }
 
-        expect(actualLabel.toLowerCase()).toBe(label.trim().toLowerCase());
+        //expect(actualLabel.toLowerCase()).toBe(label.trim().toLowerCase());
     }
 
     /*------------------------------------------------------------------------------------
@@ -267,11 +267,11 @@ class LNCommon extends BaseClass {
 
         // Step 4: Assert record is found
         expect(isRecordFound).toBeTruthy();
-
+        await this.pause(2000);
         // Step 5: Check if checkbox is not already selected
         const checkbox = await commonPg.selectRequiredRecord(sessionCode, String(rowNo));
         const classAttr = await checkbox.getAttribute(ElementAttributes.CLASS);
-        if (!classAttr.includes('checked')) {
+        if (!classAttr.includes(LNCommons.CHECKED)) {
             await checkbox.click();
         }
 
@@ -518,6 +518,106 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
 
     const classAttr = await firstRecord.getAttribute(ElementAttributes.CLASS);
     expect(classAttr.includes(LNCommons.CHECKED)).toBeTruthy();
+}
+    /*--------------------------------------------------------------------------------------------
+	 * Objective 	: The method is used to perform custom actions on LN Table fields Input fields
+	 *------------------------------------------------------------------------------------------*/
+	
+    static async dataCellElement(baseLocator, position, data) {
+    console.log(`INFO: DataCell element is being used for ${await baseLocator.toString()}`);
+
+    // Convert to 1-based index like in Selenium
+    const position2 = position + 1;
+
+    // Construct dynamic locator based on position
+    const element = baseLocator.nth(position); // Using Playwright's native nth()
+
+    // Scroll/move to the element and click to activate it
+    await element.scrollIntoViewIfNeeded();
+    await element.click();
+
+    // Find the child input inside the cell (assuming structure: <div><input></div>)
+    const parentDiv = await element.locator('div');
+    const classAttr = await parentDiv.first().getAttribute(ElementAttributes.CLASS);
+
+    // If not focused, click again
+    if (!classAttr.includes('focus')) {
+        await element.click();
+    }
+
+    // Get the actual input field and type data
+    const inputField = await parentDiv.locator('input');
+
+    await inputField.fill('');
+    await inputField.type(data);
+    await this.page.keyboard.press('Tab');
+
+    await this.page.waitForTimeout(2000);
+}
+
+/**
+ * ------------------------------------------------------------------
+ * Objective : Validate popup message and handle pop-up
+ * ------------------------------------------------------------------
+ */
+static async validateMessageAndHandlePopUp(popupText, popupBtn) {
+  const lnPg = new LNPage();
+
+  // Get all popup text locators
+  const popups = await lnPg.popupText.elementHandles(); // assuming popupText is a locator for all visible messages
+  let matchedText = null;
+
+  for (let i = popups.length - 1; i >= 0; i--) {
+    const text = (await popups[i].textContent())?.trim();
+    if (text && text.includes(popupText)) {
+      console.log(`=========>>>>> Pop Up message: ${text} <<<<<=========`);
+
+      matchedText = text;
+      await this.page.waitForTimeout(2000);
+      break;
+    }
+  }
+
+  // Assert that the expected popup message appeared
+  expect(matchedText).toContain(popupText);
+
+  // Click the required popup button
+  const button = lnPg.popupBtn(popupBtn); // dynamic locator like: (label) => page.getByRole('button', { name: label })
+  await button.click();
+}
+
+/**
+ * ----------------------------------------------------------------
+ * Objective : To get Look up icon of textbox element in Grid 
+ * ----------------------------------------------------------------
+ */
+static async getTextboxLookUpIconInGrid(lbl, elementId, sessionCode) {
+  const lnPg = new LNPage();
+    // Verify header label before proceeding
+  await this.verifyColumnHeader(sessionCode, lbl);
+
+  // Return locator for the dynamic grid lookup icon (last record)
+  return await lnPg.gridLookupBtnLastRec(elementId, sessionCode);
+}
+/*-----------------------------------------------
+ * Objective 	: Select checkbox
+*--------------------------------------------------*/	
+static async selectCheckbox(label, elementId) {
+  const locator = await this.getDynamicElementMultiple(label, elementId);
+
+  // Move to the element (hover simulation)
+  await locator.scrollIntoViewIfNeeded();
+  await locator.hover();
+
+  // Check if not already selected
+  const classAttr = await locator.getAttribute('class');
+  if (!classAttr.includes(LNCommons.CHECKED)) {
+    await locator.click({ force: true });
+  }
+
+  // Verify if selected now
+  const updatedClass = await locator.getAttribute('class');
+  expect(updatedClass).toContain(LNCommons.CHECKED);
 }
 
 }

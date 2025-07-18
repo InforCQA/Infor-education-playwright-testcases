@@ -731,11 +731,11 @@ class LNPage extends BaseClass {
     ) =>
         this.iframe()
             .locator(
-                `//label[normalize-space()="${p1}:"]/parent::td/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+                `//label[contains(normalize-space(),"${p1}:")]/parent::td/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
                 ` | ` +
-                `//label[normalize-space()="${p1}:"]/parent::td/preceding-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+                `//label[contains(normalize-space(),"${p1}:")]/parent::td/preceding-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
                 ` | ` +
-                `//label[normalize-space()="${p1}:"]/ancestor::td[contains(@style,'vertical-align')]/following-sibling::td//input[contains(@id,'${p2}')][contains(@id,'${p3}')]`
+                `//label[normalize-space()="${p1}:"]/ancestor::td[contains(@style,'vertical-align')]/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]`
             );
 
     /* selectCheckbox - Button */

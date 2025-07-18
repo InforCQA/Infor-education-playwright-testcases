@@ -6,7 +6,7 @@
   "houseNum": "8",
   "latitude": "30.273819",
   "longitude": "-97.742402",
-  "enterpriseUnit": "AUS_",
+  "enterpriseUnit": "AUS_%s",
   "enterpriseUnitDesc": "Student %s Enterprise Unit",
   "financeCompany": "ABC (US)",
   "planningCluster": "S",
@@ -20,5 +20,6 @@
   "warehouseDesc": "Student %s Warehouse",
   "entity": "United States",
   "offices": ["SLS", "WRH"],
-  "addressCode":""
+  "addressCode":"",
+  "logisticCompany":""
 }
