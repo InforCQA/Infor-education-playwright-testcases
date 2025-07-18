@@ -2,9 +2,9 @@ import BaseClass from "../../testBase/BaseClass";
 
 class EnterpriseModelWorkbenchPage extends BaseClass {
 
-    constructor() {
+    constructor(page) {
         super();
-        this.page = BaseClass.page;
+        this.page = page;
     }
 
     // Iframes for Enterprise Model Workbench
@@ -39,10 +39,10 @@ class EnterpriseModelWorkbenchPage extends BaseClass {
         this.iframe().locator(`//label[contains(normalize-space(),'${labelText}')]`);
 
     /* bostonDrilldown - Button */
-    bostonDrilldown = () =>
-        this.iframe().locator(
+    bostonDrilldown = async() =>{
+        return await this.iframe().locator(
             `((//label[contains(normalize-space(),'BOSTON')]/ancestor::div[contains(@class,'DataGrid')]//div[contains(@class,'DataSection')])[2]//*[local-name()='svg'][@iconid='icon-drilldown'])[1]`
-        );
+        )};
 
     /* headerLayoutPanel - Label */
     headerLayoutPanel = (labelText) =>
@@ -61,8 +61,8 @@ class EnterpriseModelWorkbenchPage extends BaseClass {
         this.iframe().locator(`//*[local-name()='svg'][@iconid='icon-zoom-in']`);
 
     /* siteFilter - Input */
-    siteFilter = (labelText) =>
-        this.iframe().locator(`(//label[normalize-space()='${labelText}']/ancestor::*[@class='Row ColumnHeaderRow']/following-sibling::*//input[contains(@class,'TextInputField')])[1]`);
-}
+    siteFilter = async(labelText) =>{
+        return await this.iframe().locator(`(//label[normalize-space()='${labelText}']/ancestor::*[@class='Row ColumnHeaderRow']/following-sibling::*//input[contains(@class,'TextInputField')])[1]`);
+}};
 
 export default EnterpriseModelWorkbenchPage;

@@ -1,16 +1,16 @@
 import { defaultMaxListeners } from "events";
 import BaseClass from "../../testBase/BaseClass";
+import { assert } from "console";
 
-class LNPage extends BaseClass {
+class LNPage {
 
 
-    constructor() {
-        super();
-        this.page = BaseClass.page;
+    constructor(page) {
+        this.page = page;
     }
 
     // Iframe for LN
-    iframe = () => this.page.frameLocator("//iframe[contains(@name,'LN_')]");
+    iframe = async() =>{ return await this.page.frameLocator("//iframe[contains(@name,'LN_')]")};
 
     /* processIndicator -- Text */
     processIndicator = () =>
@@ -102,28 +102,28 @@ class LNPage extends BaseClass {
         );
 
     /* inforLNSubModules - DynamicLink */
-    inforLNSubModule = (param1, param2) =>
-        this.iframe().locator(
+    inforLNSubModule = async(param1, param2) =>{
+        return await(await this.iframe()).locator(
             `(//*[local-name()='svg'][@iconid='icon-document']/parent::div/following-sibling::label[text()='${param1}'][@aria-level='${param2}'])[last()]`
-        );
+        )};
 
     /* inforLNSubModuleEnd - DynamicLink */
-    inforLNSubModuleEnd = (param1, param2) =>
-        this.iframe().locator(
+    inforLNSubModuleEnd = async(param1, param2) =>{
+        return await (await this.iframe()).locator(
             `(//*[local-name()='svg'][@id='icon-launch']/parent::div/following-sibling::label[text()='${param1}'][@aria-level='${param2}'])[last()]`
-        );
+        )};
 
     /* inforMainModules - DynamicLink */
-    inforMainModules = (param) =>
-        this.iframe().locator(`//label[text()='${param}'][@aria-level='1']`);
+    inforMainModules = async(param) =>{
+        return await(await this.iframe()).locator(`//label[text()='${param}'][@aria-level='1']`)};
 
     /* inforLNSubModulesLast - DynamicLink */
     inforLNSubModulesLast = (text) =>
         this.iframe().locator(`(//label[text()='${text}'])[last()]`);
 
     /* collapseAll - Button */
-    collapseAll = () =>
-        this.iframe().locator(`//label[text()='Collapse All']`);
+    collapseAll = async() =>{
+        return await (await this.iframe()).locator(`//label[text()='Collapse All']`)};
 
     /* popupOKButton - Button */
     popupOKButton = () =>
@@ -238,14 +238,15 @@ class LNPage extends BaseClass {
         );
 
     /* currentTab */
-    currentTab = (name) =>
-        this.iframe().locator(
+    currentTab = async(name) =>{
+        return await(await this.iframe()).locator(
             `(//label[contains(@id,'session') and text()='${name}'])[last()]`
         );
+    };
 
     /* closeTab */
-    closeTab = () =>
-        this.iframe().locator(`//label[contains(text(),'Close session')]`);
+    closeTab = async() =>{
+        return await(await this.iframe()).locator(`(//label[contains(text(),'Close session')])[1]`)};
 
     /* closeAllSessions */
     closeAllSessions = () =>
@@ -457,15 +458,15 @@ class LNPage extends BaseClass {
 
     /* selectRequiredRecord */
     selectRequiredRecord = async(id1, id2) =>{
-        return await this.iframe().locator(
+        return await(await this.iframe()).locator(
             `(//div[contains(@class,'Checkbox')][contains(@id,'${id1}')][contains(@id,'select-n${id2}')])[last()]`
-    )};
+        )};
 
     /* drilldownRequiredRecord */
-    drilldownRequiredRecord = (id1, id2) =>
-        this.iframe().locator(
+    drilldownRequiredRecord = async(id1, id2) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@style,'visibility: visible') and not(@aria-hidden='true')]//div[contains(@id,'${id1}')][contains(@id,'drilldown-n${id2}')]`
-        );
+        )};
 
     /* selectGridCheckbox */
     selectGridCheckbox = (lbl, id1, id2) =>
@@ -507,10 +508,10 @@ class LNPage extends BaseClass {
         );
 
     /* selectListItem */
-    selectListItem = (text) =>
-        this.iframe().locator(
+    selectListItem = async(text) =>{
+        return await (await this.iframe()).locator(
             `(//div[contains(@class,'ListItem')]//label[normalize-space()='${text}'])[last()]`
-        );
+        )};
 
     /* dropdownValueGrid */
     dropdownValueGrid = (id) =>
@@ -550,10 +551,10 @@ class LNPage extends BaseClass {
         );
 
     /* moreButton */
-    moreButton = (id) =>
-        this.iframe().locator(
+    moreButton = async(id) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@style,'visibility: visible') and not(@aria-hidden='true')]//div[contains(@id,'${id}') and contains(@class,'ToolbarOverflowButton')][contains(@id,'left') and contains(@id,'REGULAR')]`
-        );
+        )};
 
     /* referencesMenuItem */
     referencesMenuItem = (id) =>
@@ -714,22 +715,22 @@ class LNPage extends BaseClass {
         );
 
     /* dropdownValueLabel */
-    dropdownValueLabel = (lbl, id) =>
-        this.iframe().locator(
+    dropdownValueLabel = async(lbl, id) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}:']/parent::td/following-sibling::td//label[contains(@class,'Label')][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@id,'grid'))] | //label[normalize-space()='${lbl}']/parent::td/following-sibling::td//label[contains(@class,'Label')][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@id,'grid'))] | //div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}:']//parent::div/child::div//label[contains(@class,'Label')][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@id,'grid'))] | //div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}']/ancestor::tr/following-sibling::tr//label[contains(@class,'Label')]`
-        );
+        )};
 
     /* clickDropdownLabel */
-    clickDropdownLabel = (lbl, id) =>
-        this.iframe().locator(
-            `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}:']/parent::td/following-sibling::td//div/following-sibling::div[contains(@class,'TriggerButton') and not(contains(@class,'disabled'))][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@class,'readonly'))]/div/*[local-name()='svg'][@iconid='icon-dropdown'] | //label[normalize-space()='${lbl}:']/parent::td/following-sibling::td//div/following-sibling::div[contains(@class,'Button TriggerButton') and not(contains(@class,'disabled'))][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@class,'readonly'))]/div/*[local-name()='svg'][@iconid='icon-dropdown'] | //div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}:']/parent::div/div[contains(@class,'Dropdown') and contains(@id,'${id}')]//*[local-name()='svg'][@iconid='icon-dropdown'] | //div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}:']/parent::td/following-sibling::td//div/following-sibling::div[contains(@class,'TriggerButton') and not(contains(@class,'disabled'))][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@class,'readonly'))]/div/*[local-name()='svg'][@iconid='icon-dropdown']`
-        );
+    clickDropdownLabel = async(lbl, id) =>{
+       return await (await this.iframe()).locator(
+            `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}:']/parent::td/following-sibling::td//div/following-sibling::div[contains(@class,'TriggerButton') and not(contains(@class,'disabled'))][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@class,'readonly'))]/div/*[local-name()='svg'][@iconid='icon-dropdown'] | //label[normalize-space()='${lbl}']/parent::td/following-sibling::td//div/following-sibling::div[contains(@class,'Button TriggerButton') and not(contains(@class,'disabled'))][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@class,'readonly'))]/div/*[local-name()='svg'][@iconid='icon-dropdown'] | //div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}:']/parent::div/div[contains(@class,'Dropdown') and contains(@id,'${id}')]//*[local-name()='svg'][@iconid='icon-dropdown'] | //div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${lbl}']/parent::td/following-sibling::td//div/following-sibling::div[contains(@class,'TriggerButton') and not(contains(@class,'disabled'))][contains(@id,'${id}') and not(contains(@id,'filter-value')) and not(contains(@class,'readonly'))]/div/*[local-name()='svg'][@iconid='icon-dropdown']`
+        )};
 
     /* textLabel - Button */
-    textLabel = (
+    textLabel = async(
         p1, p2, p3
-    ) =>
-        this.iframe()
+    ) =>{
+        return await (await this.iframe())
             .locator(
                 `//label[contains(normalize-space(),"${p1}:")]/parent::td/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
                 ` | ` +
@@ -739,17 +740,17 @@ class LNPage extends BaseClass {
             );
 
     /* selectCheckbox - Button */
-    selectCheckboxLabel = (
+    selectCheckboxLabel = async(
         p1, p2
-    ) =>
-        this.iframe()
+    ) =>{
+      return await(await this.iframe())
             .locator(
                 `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()="${p1}"]/ancestor::td//div[contains(@class,'Checkbox')][contains(@id,'${p2}')]` +
                 ` | ` +
                 `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()="${p1}"]/ancestor::div[contains(@class,'Checkbox')][contains(@id,'${p2}')]` +
                 ` | ` +
                 `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()="${p1}"]/ancestor::div/div[contains(@class,'Checkbox')][contains(@id,'${p2}')]`
-            );
+    )};
 
     /* columnName - Button */
     columnName = (p1) =>
@@ -762,10 +763,10 @@ class LNPage extends BaseClass {
         );
 
     /* textForDataCell - Button */
-    textForDataCell = (p1, p2) =>
-        this.iframe().locator(
+    textForDataCell = async(p1, p2) =>{
+        return await(await this.iframe()).locator(
             `(//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')])[last()]`
-        );
+        )};
 
     /* filterTextInput -- Button */
     filterInputLabel = (p1, p2, p3) =>
@@ -790,22 +791,22 @@ class LNPage extends BaseClass {
         );
 
     /* textMenu - Button */
-    textMenu = (p1, p2, p3) =>
-        this.iframe().locator(
+    textMenu = async(p1, p2, p3) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'Button')][contains(@id,'${p1}') and contains(@id,'${p2}')]//label[text()='${p3}']`
-        );
+        )};
 
     /* drpValueGridFilter - Dropdown */
-    drpValueGridFilter = (p1) =>
-        this.iframe().locator(
+    drpValueGridFilter = async(p1) =>
+       await (await this.iframe()).locator(
             `(//div[contains(@class,'TriggerButton') and not(contains(@class,'disabled'))][contains(@id,'${p1}') and contains(@id,'filter-value') and not(contains(@class,'readonly'))]/div/*[local-name()='svg'][@iconid='icon-dropdown'])[last()]`
         );
 
     /* dropdownStsValue - Button */
-    dropdownStsValue = (p1) =>
-        this.iframe().locator(
+    dropdownStsValue = async(p1) =>{
+        return await (await this.iframe()).locator(
             `(//div[contains(@id,'${p1}') and contains(@id,'filter')][contains(@class,'Trigger') and not(contains(@class,'Button')) and not(contains(@class,'Widget')) and not(contains(@class,'search'))])[last()]`
-        );
+        )};
 
     /* fltrTriggerInput - Text */
     fltrTriggerInput = (p1, p2) =>
@@ -820,16 +821,16 @@ class LNPage extends BaseClass {
         );
 
     /* referenceMenuItem -- Button */
-    referenceMenuItem = (p1) =>
-        this.iframe().locator(
+    referenceMenuItem = async(p1) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@style,'visibility: visible') and not(@aria-hidden='true')]//label[contains(@id,'${p1}') and contains(@id,'std:reference-label') and normalize-space()='References']`
-        );
+        )};
 
     /* referenceMenuOption -- Button */
-    referenceMenuOption = (p1, p2) =>
-        this.iframe().locator(
+    referenceMenuOption = async(p1, p2) =>{
+        return await (await this.iframe()).locator(
             `(//label[normalize-space()='${p1}' and contains(@id,'std:reference') and contains(@id,'${p2}') and contains(@id,'label')])[last()]`
-        );
+        )};
 
     /* actionMenuItem -- Button */
     actionMenuItem = (p1) =>
@@ -884,20 +885,20 @@ class LNPage extends BaseClass {
         );
 
     /* dropdownValueField - Button */
-    dropdownValueField = (p1) =>
-        this.iframe().locator(`(//label[contains(@id,'${p1}') and contains(@id,'filter')])[last()]`);
+    dropdownValueField = async(p1) =>{
+        return await (await this.iframe()).locator(`(//label[contains(@id,'${p1}') and contains(@id,'filter')])[last()]`)};
 
     /* currentActiveTab - active session tab */
-    currentActiveTab = (text) =>
-        this.iframe().locator(
+    currentActiveTab = async(text) =>{
+        return await(await this.iframe()).locator(
             `//div[contains(@class,'Selected')]//label[contains(@id,'session') and translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = '${text}']`
-        );
+        )};
 
     /* dialogWindowTab - active dialog window tab */
-    dialogWindowTab = (p1) =>
-        this.iframe().locator(
+    dialogWindowTab = async(p1) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'TitleBar')]//label[normalize-space()='${p1}']`
-        );
+        )};
 
     /* gridInputField - WebElement */
     gridInputField = (p1, p2, p3) =>
@@ -972,10 +973,10 @@ class LNPage extends BaseClass {
         );
 
     /* referenceOverflow -- Button */
-    referenceOverflow = (p1) =>
-        this.iframe().locator(
+    referenceOverflow = async(p1) =>{
+        return await (await this.iframe()).locator(
             `(//label[contains(@id,'${p1}') and contains(@id,'reference') and normalize-space()='References'])[last()]`
-        );
+        )};
 
     /* viewOverflow -- Button */
     viewOverflow = (p1) =>
@@ -984,11 +985,11 @@ class LNPage extends BaseClass {
         );
 
     /* selectHeaderTab - Button */
-    selectHeaderTab = (p1, p2) =>
-        this.iframe().locator(
+    selectHeaderTab = async(p1, p2) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[@class='Tab']/div//label[text()='${p1}' and contains(@id,'${p2}-pages')]`
         );
-
+    };
     /* moreHeaderBtn - Button */
     moreHeaderBtn = (p1) =>
         this.iframe().locator(
@@ -996,10 +997,10 @@ class LNPage extends BaseClass {
         );
 
     /* selectFooterTab - Button */
-    selectFooterTab = (p1, p2) =>
-        this.iframe().locator(
+    selectFooterTab = async(p1, p2) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[@class='Tab']/div//label[text()='${p1}' and contains(@id,'${p2}-satellites')]`
-        );
+        )};
 
     /* moreGridBtn - Button */
     moreGridBtn = (p1) =>
@@ -1014,10 +1015,10 @@ class LNPage extends BaseClass {
         );
 
     /* hyperlinkText - text */
-    hyperlinkText = (p1, p2, p3) =>
-        this.iframe().locator(
+    hyperlinkText = async(p1, p2, p3) =>{
+        return await(await this.iframe()).locator(
             `//a[normalize-space()='${p1}' and contains(@id,'${p2}') and contains(@id,'${p3}')]`
-        );
+        )};
 
     /* searchInputField - Button */
     searchInputField = (p1, p2, p3) =>
@@ -1038,10 +1039,10 @@ class LNPage extends BaseClass {
         );
 
     /* gridHeader - Header */
-    gridHeader = (p1) =>
-        this.iframe().locator(
+    gridHeader = async(p1) =>{
+       return await (await this.iframe()).locator(
             `//div[contains(@class,'ColumnHeader')][contains(@id,'${p1}')]/div[contains(@class,'ERPColumnHeader')]/label`
-        );
+        )};
 
     /* personalizationBtn - Button */
     personalizationBtn = (p1) =>
@@ -1141,13 +1142,13 @@ class LNPage extends BaseClass {
         );
 
     /* gridCell - based on element id and session code */
-    gridCell = (p1, p2) =>
-        this.iframe()
+    gridCell = async(p1, p2) =>{
+        return await (await this.iframe())
             .locator(
                 `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')]//input[not(@aria-hidden='true')]` +
                 ` | ` +
                 `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')]//label[not(@aria-hidden='true')]`
-            );
+            )};
 
     /* searchInputlookupBtn - LookupBtn */
     searchInputlookupBtn = (p1, p2) =>
@@ -1290,8 +1291,8 @@ class LNPage extends BaseClass {
         this.iframe().locator(`//div[contains(@id,'button-SAVE_AND_CLOSE')]`);
 
     /* closeButton - Button */
-    closeButton = (p1) =>
-        this.iframe().locator(`//div[contains(@class,'Button')][contains(@id,'${p1}')][contains(@id,'close')]`);
+    closeButton = async(p1) =>{
+        return await (await this.iframe()).locator(`(//div[contains(@class,'Button')][contains(@id,'${p1}')][contains(@id,'close')])[1]`)};
 
     /* textMenuWithoutLabel -- Button */
     textMenuWithoutLabel = (p1, p2) =>

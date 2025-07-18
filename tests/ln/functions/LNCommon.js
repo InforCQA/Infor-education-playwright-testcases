@@ -12,24 +12,24 @@ class LNCommon extends BaseClass {
     static async navigateToLNModule(module, ...subModules) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Using condition to verify whether it is displaying or not
         if (await this.isElementPresent(await lnPg.inforMainModules(module))) {
-            await lnPg.inforMainModules(module).click();
+           await(await lnPg.inforMainModules(module)).click();
 
             // Using loop to navigate to expand and use multiple sub modules
             for (let i = 0; i < subModules.length; i++) {
 
                 const subModule = subModules[i];
                 if (!(i == subModules.length - 1)) {
-                    await lnPg.inforLNSubModule(subModule, i + 2).waitFor({ state: 'visible' });
-                    await lnPg.inforLNSubModule(subModule, i + 2).hover();
-                    await lnPg.inforLNSubModule(subModule, i + 2).click();
+                    await(await lnPg.inforLNSubModule(subModule, i + 2)).waitFor({ state: 'visible' });
+                    await(await lnPg.inforLNSubModule(subModule, i + 2)).hover();
+                    await(await lnPg.inforLNSubModule(subModule, i + 2)).click();
                 } else {
-                    await lnPg.inforLNSubModuleEnd(subModule, i + 2).waitFor({ state: 'visible' });
-                    await lnPg.inforLNSubModuleEnd(subModule, i + 2).hover();
-                    await lnPg.inforLNSubModuleEnd(subModule, i + 2).click();
+                    await(await lnPg.inforLNSubModuleEnd(subModule, i + 2)).waitFor({ state: 'visible' });
+                    await(await lnPg.inforLNSubModuleEnd(subModule, i + 2)).hover();
+                    await(await lnPg.inforLNSubModuleEnd(subModule, i + 2)).click();
                 }
             }
         }
@@ -41,9 +41,14 @@ class LNCommon extends BaseClass {
     static async verifySessionTab(tabName) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
-        expect(await this.isElementPresent(await lnPg.currentActiveTab(tabName.toLowerCase()))).toBeTruthy();
+        await expect(async () => {
+           const currentActiveTab= await lnPg.currentActiveTab(tabName.toLowerCase());
+           await currentActiveTab.waitFor({ state: 'visible', timeout: 30000 });
+        }).toPass({ timeout: 30000 });
+        
+       // expect(await this.isElementPresent(await lnPg.currentActiveTab(tabName.toLowerCase()))).toBeTruthy();
     }
 
     /*------------------------------------------------------------------
@@ -52,13 +57,19 @@ class LNCommon extends BaseClass {
     static async clickAndSelectDropdownField(label, elementId, listItem) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
-        await lnPg.clickDropdownLabel(label, elementId).click();
-        await lnPg.selectListItem(listItem).click();
+        await expect(async () => {
+            await (await lnPg.clickDropdownLabel(label, elementId)).waitFor({ state: 'visible', timeout: 5000 });
+            await (await lnPg.clickDropdownLabel(label, elementId)).hover();
+            await (await lnPg.clickDropdownLabel(label, elementId)).click();
+        }).toPass({ timeout: 10000 });
+       
+        await (await lnPg.selectListItem(listItem)).waitFor({ state: 'visible', timeout: 5000 });
+        await (await lnPg.selectListItem(listItem)).click();
 
-        const drpValue = (await lnPg.dropdownValueLabel(label, elementId).textContent())?.trim();
-        expect(drpValue).toBe(listItem);
+        const drpValue = await (await lnPg.dropdownValueLabel(label, elementId)).textContent();
+        expect(drpValue.trim()).toBe(listItem);
     }
 
     /*------------------------------------------------------------------
@@ -67,10 +78,12 @@ class LNCommon extends BaseClass {
     static async clickTextMenuItem(sessionCode, id, label) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         try {
-            await lnPg.textMenu(sessionCode, id, label).click();
+            await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'visible', timeout: 1000 });
+            await (await lnPg.textMenu(sessionCode, id, label)).hover();
+            await (await lnPg.textMenu(sessionCode, id, label)).click();
         } catch (e) {
             await lnPg.moreButton(sessionCode).click();
             await lnPg.textMenuOverflow(sessionCode, id, label).click();
@@ -83,10 +96,10 @@ class LNCommon extends BaseClass {
     static async collapseLNModule(module) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
-        await lnPg.inforMainModules(module).click({ button: 'right' });
-        await lnPg.collapseAll().click();
+        await (await lnPg.inforMainModules(module)).click({ button: 'right' });
+        await (await lnPg.collapseAll()).click();
 
         // Verifying whether module is collapsed or not
         await expect(await lnPg.inforMainModules(module)).toHaveAttribute(ElementAttributes.ARIA_EXPANDED, 'false');
@@ -98,26 +111,11 @@ class LNCommon extends BaseClass {
     static async selectHeaderTab(tabName, sessionCode) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Used try catch method to select tabs
-        try {
-
-            await lnPg.selectHeaderTab(tabName, sessionCode).hover();
-            await lnPg.selectHeaderTab(tabName, sessionCode).click();
-        } catch (error) {
-
-            // Expand more tab options
-            const moreBtn = await lnPg.moreHeaderBtn(sessionCode);
-            const classAttr = await moreBtn.getAttribute(ElementAttributes.CLASS);
-
-            // Expand more tab options
-            if (!classAttr.includes(LNCommons.IS_ACTIVE)) {
-                await moreBtn.click();
-            }
-
-            await (await lnPg.selectTabInMore(tabName)).click();
-        }
+      const selectHeaderTab= await (await lnPg.selectHeaderTab(tabName, sessionCode));
+      await (await (selectHeaderTab)).dblclick();
     }
 
     /*-----------------------------------------------
@@ -126,15 +124,16 @@ class LNCommon extends BaseClass {
     static async selectGridTab(tabName, sessionCode) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Used try catch method to select tabs
         try {
             
     
-            await lnPg.selectFooterTab(tabName, sessionCode).hover();
-            await lnPg.selectFooterTab(tabName, sessionCode).click({ force: true });
-            await this.page.waitForTimeout(3000);
+            const selectFooterTab= await lnPg.selectFooterTab(tabName, sessionCode);
+            await selectFooterTab.hover();
+            await selectFooterTab.click({ force: true });
+        
         } catch (error) {
             // Expand more tab options
             const moreBtn = await lnPg.moreGridBtn(sessionCode);
@@ -152,9 +151,10 @@ class LNCommon extends BaseClass {
      * Objective 	: Verifying the column header
      *-------------------------------------------------------------------*/
     static async verifyColumnHeader(sessionCode, label) {
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
-        const headers = await lnPg.gridHeader(sessionCode).elementHandles(); // Assuming it returns Locator list
+        await this.page.waitForLoadState('load');
+        const headers = await (await lnPg.gridHeader(sessionCode)).elementHandles();
 
         let actualLabel = "";
 
@@ -182,7 +182,7 @@ class LNCommon extends BaseClass {
                 labels = labels.replaceAll('<li>', '');
 
             } else if (liElements.length === 1) {
-                labels = (await liElements[0].innerHTML()).trim();
+                labels = await (await liElements[0].innerHTML()).trim();
             }
 
             if (labels.trim().toLowerCase() === label.trim().toLowerCase()) {
@@ -190,7 +190,8 @@ class LNCommon extends BaseClass {
                 break;
             }
         }
-
+        
+        await this.page.waitForLoadState('load');
         //expect(actualLabel.toLowerCase()).toBe(label.trim().toLowerCase());
     }
 
@@ -200,38 +201,41 @@ class LNCommon extends BaseClass {
     static async clickAndSelectDropdownFieldGridFilter(elementId, listItem, label, sessionCode) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Verifying the label
         await this.verifyColumnHeader(sessionCode, label); // Assuming this is implemented
 
         // Wait for the dropdown to be clickable
-        await lnPg.drpValueGridFilter(elementId).waitFor();
+        const drpValueGridFilter= await (await lnPg.drpValueGridFilter(elementId));
+        await (drpValueGridFilter).click();
 
         // Using condition to verify the list item is already selected or not
-        const currentValue = await lnPg.dropdownValueField(elementId).innerText();
-        if (currentValue.trim() !== listItem) {
-            await lnPg.drpValueGridFilter(elementId).click();
+        const currentValue = await (await lnPg.dropdownValueField(elementId)).textContent();
+        if (currentValue.trim() != listItem) {
+            const drpValueGridFilter= await lnPg.drpValueGridFilter(elementId);
+            await drpValueGridFilter.click();
 
             // Verifying whether dropdown field is in active or not
             for (let count = 0; count < 4; count++) {
-                const classAttr = await lnPg.dropdownStsValue(elementId).getAttribute('class');
-                if (!classAttr.includes('is-active')) {
-                    await lnPg.drpValueGridFilter(elementId).click();
+                const classAttr = await (await lnPg.dropdownStsValue(elementId)).getAttribute('class');
+                if (!classAttr.includes(LNCommons.IS_ACTIVE)) {
+                    await (await lnPg.drpValueGridFilter(elementId)).waitFor({ state: 'visible', timeout: 1000 });
+                    await (await lnPg.drpValueGridFilter(elementId)).click();
                 } else {
                     break;
                 }
             }
 
             // Hover and click on the desired list item
-            const itemToSelect = lnPg.selectListItem(listItem);
+            const itemToSelect = await lnPg.selectListItem(listItem);
             await itemToSelect.hover();
             await itemToSelect.waitFor({ state: 'visible', timeout: 1000 });
             await itemToSelect.click();
         }
 
         // Verifying the value
-        const finalValue = await lnPg.dropdownValueField(elementId).innerText();
+        const finalValue = await (await lnPg.dropdownValueField(elementId)).innerText();
         expect(finalValue.trim()).toBe(listItem);
     }
 
@@ -241,13 +245,13 @@ class LNCommon extends BaseClass {
     static async selectRequiredRecord(sessionCode, columnName, elementId, value) {
 
         // Intializing the page
-        const commonPg = new LNPage();
+        const commonPg = new LNPage(this.page);
 
         // Step 1: Verify column header
         await this.verifyColumnHeader(sessionCode, columnName);
 
         // Step 2: Fetch all grid cell elements
-        const records = await commonPg.gridCell(sessionCode, elementId, sessionCode, elementId).elementHandles();
+        const records = await (await commonPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
 
         let rowNo = -1;
         let isRecordFound = false;
@@ -284,9 +288,9 @@ class LNCommon extends BaseClass {
     static async drilldownRequiredRecord(sessionCode, recordNum) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
-        const drilldownBtn = lnPg.drilldownRequiredRecord(sessionCode, recordNum);
+        const drilldownBtn = await lnPg.drilldownRequiredRecord(sessionCode, recordNum);
 
         // Wait until it's visible and enabled (similar to ExpectedConditions.elementToBeClickable)
         await drilldownBtn.waitFor({ state: 'visible', timeout: 1000 });
@@ -299,24 +303,25 @@ class LNCommon extends BaseClass {
     static async navigateToLNReferences(sessionCode, ...menuOptions) {
 
         // Intializing the page   
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Using if condition if references is under overflow button
         const isRefMenuVisible = await this.isElementPresent(await lnPg.referenceMenuItem(sessionCode));
 
         if (!isRefMenuVisible) {
-            await lnPg.moreButton(sessionCode).click();
-            await lnPg.referenceOverflow(sessionCode).click();
-            await this.pause(2000);
+            await (await lnPg.moreButton(sessionCode)).click();
+            await (await lnPg.referenceOverflow(sessionCode)).click();
         } else {
-            await lnPg.referenceMenuItem(sessionCode).click();
+            await (await lnPg.referenceMenuItem(sessionCode)).click();
         }
 
 
         // Using loop to click on multiple navigations
         for (const menuOption of menuOptions) {
-            await lnPg.referenceMenuOption(menuOption, sessionCode).hover();
-            await lnPg.referenceMenuOption(menuOption, sessionCode).click();
+            await expect(async () => {
+                await (await lnPg.referenceMenuOption(menuOption, sessionCode)).hover();
+                await (await lnPg.referenceMenuOption(menuOption, sessionCode)).click();
+            }).toPass({ timeout: 10000 });
         }
     }
 
@@ -326,7 +331,7 @@ class LNCommon extends BaseClass {
     static async verifyDialogBoxWindow(tabName) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Verifying the dialog window Tab
         expect(await this.isElementPresent(await lnPg.dialogWindowTab(tabName))).toBeTruthy();
@@ -338,7 +343,7 @@ class LNCommon extends BaseClass {
     static async getTextField(label, elementId, sessionCode) {
 
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         return await lnPg.textLabel(label, elementId, sessionCode);
     }
@@ -349,10 +354,10 @@ class LNCommon extends BaseClass {
     static async getDataCell(label, elementId, sessionCode) {
 
         // Initializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Verifying the label
-        await this.verifyColumnHeader(sessionCode, label);
+        //await this.verifyColumnHeader(sessionCode, label);
 
         // Returning the data cell element
         return await lnPg.textForDataCell(elementId, sessionCode);
@@ -365,13 +370,13 @@ class LNCommon extends BaseClass {
     static async getRequiredValueFromTheGrid(sessionCode, columnName, elementId, rowNum, page) {
 
         // Initializing the page
-        const lnPg = new LNPage(page);
+        const lnPg = new LNPage(this.page);
 
         // Verify the column header (you should define this function)
         await LNCommon.verifyColumnHeader(sessionCode, columnName);
 
         // Get the target row element
-        const target = await lnPg.gridCell(sessionCode, elementId).nth(rowNum);
+        const target = await(await lnPg.gridCell(sessionCode, elementId)).nth(rowNum);
 
         let fetchedValue = null;
         const labelText = await target.textContent();
