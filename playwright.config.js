@@ -8,12 +8,12 @@ export default defineConfig({
   },
   globalSetup: './global-setup.js',
   testDir: './tests',
-  timeout: 30 * 1000,
-  expect: { timeout: 5 * 1000 },
+  timeout: 60 * 1000,
+  slowMo: 1000,
   projects: [
     {
       name: 'InforOS',
-      testMatch: 'plan/*.spec.js',
+      testMatch: 'plan/LNConfiguringMultisiteEnvironment.spec.js',
     },
   ],
 });

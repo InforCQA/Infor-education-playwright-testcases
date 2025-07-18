@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import path from 'path' 
+const playwright = require('playwright');
 
 class BaseClass {
   static page;
@@ -8,17 +9,21 @@ class BaseClass {
   static playwright;
 
   static async globalSetup() {
-    const extPath = `${process.cwd()}/../../node_modules/playwright-zoom/dist/lib/zoom-extension`;
+    const extPath = `${process.cwd()}/node_modules/playwright-zoom/dist/lib/zoom-extension`;
 
     this.context = await chromium.launchPersistentContext('', {
       headless: false,
+      screenshot: 'only-on-failure',
+      video: 'retain-on-failure',
       args: [
         `--disable-extensions-except=${extPath}`,
         `--load-extension=${extPath}`
       ],
     });
-    const [page] = this.context.pages();
-    this.page = page;
+
+    const pages = this.context.pages();
+    
+    this.page = this.context.pages()[0];
   }
 
   static async globalTeardown() {
@@ -42,11 +47,16 @@ class BaseClass {
 
   static async isElementPresent(locator) {
     try {
-      
-      await locator.waitFor({ state: 'visible', timeout: 30000 });
-      return true
+
+      await this.page.waitForLoadState('domcontentloaded');
+      await locator.waitFor({
+        state: 'visible'
+      });
+    return true
     } catch (e) {
+      if (e instanceof playwright.errors.TimeoutError) {
         return false;
+      }
     }
   }
 
@@ -67,9 +77,8 @@ class BaseClass {
   }
 
     static async pause(seconds) {
-    return new Promise(resolve =>
-      setTimeout(resolve, seconds * 1000)
-    );
+
+      await this.page.waitForTimeout(seconds* 1000);
   }
 
 
