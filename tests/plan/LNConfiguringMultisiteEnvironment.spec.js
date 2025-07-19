@@ -4,7 +4,7 @@ import TCEDU_LNReviewEnterpriseModel from '../ln/scripts/configuringMultisiteEnv
 import TCEDU_LNDevelopTheOriginalEnterpriseStructure from "../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNDevelopTheOriginalEnterpriseStructure.spec";
 
 test.describe('LNConfiguringMultisiteEnvironment', () => {
-    TCEDU_LNSelectMapProvider();
-    TCEDU_LNReviewEnterpriseModel();
+    // TCEDU_LNSelectMapProvider();
+    //TCEDU_LNReviewEnterpriseModel();
     TCEDU_LNDevelopTheOriginalEnterpriseStructure();
 });

@@ -552,6 +552,7 @@ class LNMasterData extends BaseClass {
 
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.STREET, Addresses_Id.STREET, LNSessionCodes.ADDRESSES), structureCnxt.street);
 
+            structureCnxt.houseNum=structureCnxt.houseNum.replace('%s', '04');
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.HOUSE_NUMBER, Addresses_Id.HOUSE_NUMBER, LNSessionCodes.ADDRESSES), structureCnxt.houseNum);
 
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LATITUDE, Addresses_Id.GPS_LATITUDE, LNSessionCodes.ADDRESSES), structureCnxt.latitude);
@@ -587,28 +588,30 @@ class LNMasterData extends BaseClass {
     await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNITS);
 
     // Filter and check if already present
-    const enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', "04");
-    await LNCommon.filterRequiredRecord(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, LNSessionCodes.ENTERPRISE_UNITS, enterpriseUnit);
+    structureCnxt.enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', "04");
+    await LNCommon.filterRequiredRecord(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, LNSessionCodes.ENTERPRISE_UNITS, structureCnxt.enterpriseUnit);
 
-    const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ENTERPRISE_UNITS, EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, enterpriseUnit);
+    const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ENTERPRISE_UNITS, EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, structureCnxt.enterpriseUnit);
 
     if (!isPresent) {
         // Click New
         await LNCommon.clickMainMenuItem(LNSessionCodes.ENTERPRISE_UNITS, LNMenuActions_Id.NEW);
 
         // Set Enterprise Unit
-        await LNCommon.dataCellElement(await LNCommon.getDataCell(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID,EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID,LNSessionCodes.ENTERPRISE_UNITS), 0, enterpriseUnit);
+        await LNCommon.dataCellElement(await LNCommon.getDataCell(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID,EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID,LNSessionCodes.ENTERPRISE_UNITS), 0, structureCnxt.enterpriseUnit);
 
         // Set Description
-        await LNCommon.dataCellElement(await LNCommon.getDataCell( EnterpriseUnits_Lbl.DESCRIPTION_GRID,EnterpriseUnits_Id.DESCRIPTION_GRID, LNSessionCodes.ENTERPRISE_UNITS), 0, enterpriseUnit);
+        structureCnxt.enterpriseUnitDesc= structureCnxt.enterpriseUnitDesc.replace('%s', '04');
+        await LNCommon.dataCellElement(await LNCommon.getDataCell( EnterpriseUnits_Lbl.DESCRIPTION_GRID, EnterpriseUnits_Id.DESCRIPTION_GRID, LNSessionCodes.ENTERPRISE_UNITS), 0, structureCnxt.enterpriseUnitDesc);
 
         // Verify Logistic Company
-        structureCnxt.logisticCompany = await LNCommon.getRequiredValueFromTheGrid(
-         LNSessionCodes.ENTERPRISE_UNITS,EnterpriseUnits_Lbl.LOGISTIC_COMPANY_GRID,EnterpriseUnits_Id.LOGISTIC_COMPANY_GRID,0);
+        const logisticCompany= await LNCommon.getRequiredValueFromTheGrid(
+        LNSessionCodes.ENTERPRISE_UNITS,EnterpriseUnits_Lbl.LOGISTIC_COMPANY_GRID,EnterpriseUnits_Id.LOGISTIC_COMPANY_GRID,0);
 
         expect(logisticCompany.trim()).toBe(structureCnxt.logisticCompany);
 
         await this.page.keyboard.press('Tab');
+
         // Click lookup for Financial Company
         await(await LNCommon.getTextboxLookUpIconInGrid( EnterpriseUnits_Lbl.FINANCIAL_COMPANY_GRID,EnterpriseUnits_Id.FINANCIAL_COMPANY_GRID, LNSessionCodes.ENTERPRISE_UNITS)).click();
 
@@ -622,11 +625,12 @@ class LNMasterData extends BaseClass {
         await this.page.keyboard.press('Tab');
         await LNCommon.dataCellElement(
         await LNCommon.getDataCell(EnterpriseUnits_Lbl.SITE_GRID,EnterpriseUnits_Id.SITE_GRID,LNSessionCodes.ENTERPRISE_UNITS),0, "");
+
         // Go to Details
         await LNCommon.drilldownRequiredRecord(LNSessionCodes.ENTERPRISE_UNITS,LNCommons.FIRST_RECORD);
 
         // Handle pop-up
-        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT.replace('%s', enterpriseUnit),LNCommons.OK);
+        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT.replace('%s', structureCnxt.enterpriseUnit),LNCommons.OK);
 
         await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNIT);
 
@@ -683,12 +687,16 @@ static async createPlanningCluster(planningClusters, planningClusterDescs) {
 static async createSite(structureCnxt) {
   console.log("=========>>>>> Create a site started <<<<<=========");
 
+  // Initializing page elements
+  const lnPg = new LNPage(this.page);
+
   // Navigate to Master Data > Enterprise Model > Enterprise Structure > Sites
   await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA,LNSessionTabs.ENTERPRISE_MODEL,LNSessionTabs.ENTERPRISE_STRUCTURE,LNSessionTabs.SITES);
 
   // Verify Session Tab
   await LNCommon.verifySessionTab(LNSessionTabs.SITES);
 
+  structureCnxt.site+="04";
   await LNCommon.filterRequiredRecord( Sites_Lbl.SITE_GRID,Sites_Id.SITE_GRID,LNSessionCodes.SITES,structureCnxt.site);
 
   const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.SITES, Sites_Lbl.SITE_GRID, Sites_Id.SITE_GRID,structureCnxt.site);
@@ -698,7 +706,8 @@ static async createSite(structureCnxt) {
     await LNCommon.verifySessionTab(LNSessionTabs.SITE);
 
     await LNCommon.decoratorInputField( await LNCommon.getTextField(Sites_Lbl.SITE, Sites_Id.SITE, LNSessionCodes.SITE),structureCnxt.site);
-
+    
+    structureCnxt.siteDesc=structureCnxt.siteDesc.replace('%s', '04');
     await LNCommon.decoratorInputField(await LNCommon.getTextField(Sites_Lbl.SITE, Sites_Id.SITE_DESCRIPTION, LNSessionCodes.SITE),structureCnxt.siteDesc);
 
     structureCnxt.logisticCompany="3270";
@@ -712,8 +721,10 @@ static async createSite(structureCnxt) {
           expect(streetName).toBe(structureCnxt.street);
       }).toPass({ timeout: 10000 });
 
+    structureCnxt.planningCluster= structureCnxt.planningCluster.replace('%s', '04');
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.PLANNING_CLUSTER, Sites_Id.PLANNING_CLUSTER, LNSessionCodes.SITE),structureCnxt.planningCluster );
 
+    structureCnxt.enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', '04');
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.ENTERPRISE_UNIT, Sites_Id.ENTERPRISE_UNIT, LNSessionCodes.SITE),structureCnxt.enterpriseUnit);
 
     await LNCommon.clickMainMenuItem(LNSessionCodes.SITE, LNMenuActions_Id.SAVE_AND_EXIT);
@@ -730,21 +741,21 @@ static async createSite(structureCnxt) {
   // Click Settings tab
   await LNCommon.selectHeaderTab(LNTabs.SETTINGS, LNSessionCodes.SITE);
 
-  const warehousingElement = await LNCommon.getDynamicElement(Sites_Lbl.WAREHOUSING_RDN,Sites_Id.WAREHOUSING_RDN,LNSessionCodes.SITE);
+  const warehousingElement = await lnPg.hyperlinkText(Sites_Lbl.WAREHOUSING_RDN,Sites_Id.WAREHOUSING_RDN,LNSessionCodes.SITE);
 
-  const warehousingClass = await warehousingElement.getAttribute('class');
+  const warehousingClass = await warehousingElement.getAttribute(ElementAttributes.CLASS);
 
   if (!warehousingClass.includes(LNCommons.CHECKED)) {
     await warehousingElement.click();
 
     await LNCommon.validateMessageAndHandlePopUp(
-      `Warehousing settings are not present for site ${structureCnxt.site}. Do you want to create them?`,
+      LNPopupMsg.WAREHOUSING_SETINGS_ARE_NOT_PRESENT_FOR_SITE_DO_YOU_WANT_TO_CREATE_THEM.replace('%s',  structureCnxt.site),
       LNCommons.YES
     );
 
     await LNCommon.verifySessionTab(LNSessionTabs.WAREHOUSING_SETTINGS_BY_SITE);
     await LNCommon.selectHeaderTab(LNTabs.GENERAL, LNSessionCodes.WAREHOUSING_SETTINGS_BY_SITE);
-    await LNCommon.selectCheckbox( Sites_Lbl.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK,Sites_Id.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK );
+    await LNCommon.selectCheckbox( Sites_Lbl.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK, Sites_Id.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK );
     await LNCommon.clickMainMenuItem(LNSessionCodes.WAREHOUSING_SETTINGS_BY_SITE, LNMenuActions_Id.SAVE_AND_EXIT);
     await LNCommon.verifySessionTab(LNSessionTabs.SITE);
   }
@@ -752,9 +763,8 @@ static async createSite(structureCnxt) {
   const classFinal = await warehousingElement.getAttribute('class');
   expect(classFinal).toContain(LNCommons.CHECKED);
 
-  await screenshot("Create a site");
   await LNCommon.clickMainMenuItem(LNSessionCodes.SITE, LNMenuActions_Id.SAVE_AND_EXIT);
-  await LNCommon.verifySessionTab(LNSessionTabs.SITES, page);
+  await LNCommon.verifySessionTab(LNSessionTabs.SITES);
   await LNCommon.clickMainMenuItem(LNSessionCodes.SITES, LNMenuActions_Id.SAVE_AND_EXIT);
   await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
