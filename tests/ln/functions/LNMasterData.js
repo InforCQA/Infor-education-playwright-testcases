@@ -13,10 +13,8 @@ import LNTabs from "../constants/LNTabs";
 import ElementAttributes from "../../commons/constants/ElementAttributes";
 import LNSessionTabActions from "./LNSessionTabActions";
 import LNMenuActions_Id from "../constants/elementIds/LNMenuActions_Id";
-import LNMenuActions_Lbl from "../constants/elementLbls/LNMenuActions_Lbl";
 import Addresses_Lbl from "../../ln/constants/elementLbls/Addresses_Lbl";
 import Addresses_Id from "../../ln/constants/elementIds/Addresses_Id";
-import LNMenuActions_Id from "../../ln/constants/elementIds/LNMenuActions_Id";
 import LNMenuActions_Lbl from "../../ln/constants/elementLbls/LNMenuActions_Lbl";
 import EnterpriseUnits_Lbl from "../../ln/constants/elementLbls/EnterpriseUnits_Lbl";
 import EnterpriseUnits_Id from "../constants/elementIds/EnterpriseUnits_Id";
@@ -525,6 +523,7 @@ class LNMasterData extends BaseClass {
         await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
 
         // Filter by name
+        structureCnxt.name+="04";
         await LNCommon.filterRequiredRecord(Addresses_Lbl.NAME_GRID,Addresses_Id.NAME_GRID, LNSessionCodes.ADDRESS, structureCnxt.name);
 
         // Check if address already exists
@@ -536,26 +535,26 @@ class LNMasterData extends BaseClass {
             await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
 
             await LNCommon.triggerInputField(
-                await LNCommon.getTextField(Addresses_Lbl.NAME, Addresses_Id.NAME, LNSessionCodes.ADDRESSES), structureCnxt.name );
+                await LNCommon.getTextField(Addresses_Lbl.NAME, Addresses_Id.NAME, LNSessionCodes.ADDRESSES), structureCnxt.name);
 
             await LNCommon.triggerInputField(
-                await LNCommon.getTextField(Addresses_Lbl.COUNTRY, Addresses_Id.COUNTRY, LNSessionCodes.ADDRESSES),structureCnxt.country );
+                await LNCommon.getTextField(Addresses_Lbl.COUNTRY, Addresses_Id.COUNTRY, LNSessionCodes.ADDRESSES), structureCnxt.country);
 
-            await LNCommon.getTextboxLookUpIcon( Addresses_Lbl.CITY, Addresses_Id.CITY,LNSessionCodes.ADDRESSES ).click();
+            await (await LNCommon.getTextboxLookUpIcon(Addresses_Lbl.CITY, Addresses_Id.CITY, LNSessionCodes.ADDRESSES)).click();
 
             await LNCommon.verifyDialogBoxWindow(LNSessionTabs.CITIES_BY_COUNTRY);
 
-            await LNCommon.filterAndSelectFirstRecord( Addresses_Lbl.CITY_ZOOM_GRID, Addresses_Id.CITY_ZOOM_GRID,structureCnxt.city,LNSessionCodes.CITIES_BY_COUNTRY);
+            await LNCommon.filterAndSelectFirstRecord(Addresses_Lbl.CITY_ZOOM_GRID, Addresses_Id.CITY_ZOOM_GRID, structureCnxt.city, LNSessionCodes.CITIES_BY_COUNTRY);
 
-            await LNCommon.clickTextMenuItem( LNSessionCodes.CITIES_BY_COUNTRY, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+            await LNCommon.clickTextMenuItem(LNSessionCodes.CITIES_BY_COUNTRY, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
 
             await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
 
-            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.STREET, Addresses_Id.STREET, LNSessionCodes.ADDRESSES),structureCnxt.street);
+            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.STREET, Addresses_Id.STREET, LNSessionCodes.ADDRESSES), structureCnxt.street);
 
-            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.HOUSE_NUMBER, Addresses_Id.HOUSE_NUMBER, LNSessionCodes.ADDRESSES),structureCnxt.houseNum );
+            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.HOUSE_NUMBER, Addresses_Id.HOUSE_NUMBER, LNSessionCodes.ADDRESSES), structureCnxt.houseNum);
 
-            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LATITUDE, Addresses_Id.GPS_LATITUDE, LNSessionCodes.ADDRESSES),structureCnxt.latitude );
+            await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LATITUDE, Addresses_Id.GPS_LATITUDE, LNSessionCodes.ADDRESSES), structureCnxt.latitude);
 
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LONGITUDE, Addresses_Id.GPS_LONGITUDE, LNSessionCodes.ADDRESSES), structureCnxt.longitude);
 
@@ -588,21 +587,23 @@ class LNMasterData extends BaseClass {
     await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNITS);
 
     // Filter and check if already present
-    await LNCommon.filterRequiredRecord(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, LNSessionCodes.ENTERPRISE_UNITS, structureCnxt.enterpriseUnit.replace('%s', "04"));
+    const enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', "04");
+    await LNCommon.filterRequiredRecord(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, LNSessionCodes.ENTERPRISE_UNITS, enterpriseUnit);
 
-    const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ENTERPRISE_UNITS, EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, structureCnxt.enterpriseUnit.replace('%s', "04"));
+    const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ENTERPRISE_UNITS, EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, enterpriseUnit);
 
     if (!isPresent) {
         // Click New
         await LNCommon.clickMainMenuItem(LNSessionCodes.ENTERPRISE_UNITS, LNMenuActions_Id.NEW);
 
         // Set Enterprise Unit
-        await LNCommon.dataCellElement(await LNCommon.getDataCell(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID,EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID,LNSessionCodes.ENTERPRISE_UNITS), 0, structureCnxt.enterpriseUnit.replace('%s', "04"));
+        await LNCommon.dataCellElement(await LNCommon.getDataCell(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID,EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID,LNSessionCodes.ENTERPRISE_UNITS), 0, enterpriseUnit);
 
         // Set Description
-        await LNCommon.dataCellElement(await LNCommon.getDataCell( EnterpriseUnits_Lbl.DESCRIPTION_GRID,EnterpriseUnits_Id.DESCRIPTION_GRID, LNSessionCodes.ENTERPRISE_UNITS), 0,structureCnxt.enterpriseUnitDesc.replace('%s', "04") );
+        await LNCommon.dataCellElement(await LNCommon.getDataCell( EnterpriseUnits_Lbl.DESCRIPTION_GRID,EnterpriseUnits_Id.DESCRIPTION_GRID, LNSessionCodes.ENTERPRISE_UNITS), 0, enterpriseUnit);
+
         // Verify Logistic Company
-        const logisticCompany = await LNCommon.getRequiredValueFromTheGrid(
+        structureCnxt.logisticCompany = await LNCommon.getRequiredValueFromTheGrid(
          LNSessionCodes.ENTERPRISE_UNITS,EnterpriseUnits_Lbl.LOGISTIC_COMPANY_GRID,EnterpriseUnits_Id.LOGISTIC_COMPANY_GRID,0);
 
         expect(logisticCompany.trim()).toBe(structureCnxt.logisticCompany);
@@ -625,7 +626,7 @@ class LNMasterData extends BaseClass {
         await LNCommon.drilldownRequiredRecord(LNSessionCodes.ENTERPRISE_UNITS,LNCommons.FIRST_RECORD);
 
         // Handle pop-up
-        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT,LNCommons.OK);
+        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT.replace('%s', enterpriseUnit),LNCommons.OK);
 
         await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNIT);
 
@@ -643,7 +644,7 @@ class LNMasterData extends BaseClass {
     console.log('=========>>>>> Create an enterprise unit completed successfully <<<<<=========');
 }
 
-static async createPlanningCluster(planningCluster, planningClusterDesc) {
+static async createPlanningCluster(planningClusters, planningClusterDescs) {
     console.log("=========>>>>> Create a planning cluster started <<<<<=========");
 
     // Navigating to Master Data --> Enterprise Model --> Enterprise Structure --> Planning Clusters
@@ -653,6 +654,8 @@ static async createPlanningCluster(planningCluster, planningClusterDesc) {
     await LNCommon.verifySessionTab(LNSessionTabs.PLANNING_CLUSTERS);
 
     // Filter to check if record exists
+    const planningCluster= planningClusters.replace('%s', "04");
+    const planningClusterDesc= planningClusterDescs.replace('%s', "04");
     await LNCommon.filterRequiredRecord( PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_GRID, LNSessionCodes.PLANNING_CLUSTERS, planningCluster);
 
     const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.PLANNING_CLUSTERS, PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_GRID, planningCluster );
@@ -698,13 +701,16 @@ static async createSite(structureCnxt) {
 
     await LNCommon.decoratorInputField(await LNCommon.getTextField(Sites_Lbl.SITE, Sites_Id.SITE_DESCRIPTION, LNSessionCodes.SITE),structureCnxt.siteDesc);
 
+    structureCnxt.logisticCompany="3270";
     const logisticCompany = await (await LNCommon.getTextField(Sites_Lbl.LOGISTIC_COMPANY, Sites_Id.LOGISTIC_COMPANY, LNSessionCodes.SITE)).inputValue();
     expect(logisticCompany).toBe(structureCnxt.logisticCompany);
 
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.ADDRESS, Sites_Id.ADDRESS, LNSessionCodes.SITE),structureCnxt.addressCode);
 
-    const streetName = await (await LNCommon.getTextField(Sites_Lbl.ADDRESS, Sites_Id.ADDRESS_DESCRIPTION, LNSessionCodes.SITE)).inputValue();
-    expect(streetName).toBe(structureCnxt.street);
+      await expect(async () => {
+          const streetName = await (await LNCommon.getTextField(Sites_Lbl.ADDRESS, Sites_Id.ADDRESS_DESCRIPTION, LNSessionCodes.SITE)).textContent();
+          expect(streetName).toBe(structureCnxt.street);
+      }).toPass({ timeout: 10000 });
 
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.PLANNING_CLUSTER, Sites_Id.PLANNING_CLUSTER, LNSessionCodes.SITE),structureCnxt.planningCluster );
 

@@ -9,7 +9,7 @@ class LNPopupMsg {
   static SALES_OFFICE_UNASSIGNED_SUCCESSFULLY = "The sales office has been unassigned from the site.";
   static DEPARTMENT_UNASSIGNED_SUCCESSFULLY = "The department has been unassigned from the site.";
   static OK = "OK";
-  static NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT = "No business partner is assigned to the enterprise unit.";
+  static NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT = "No business partner assigned to enterprise unit '%s'.";
   static ENTERPRISE_UNIT_CREATED_SUCCESSFULLY = "Enterprise unit created successfully.";
   static ENTERPRISE_UNIT_SITE_LINKED_SUCCESSFULLY = "The enterprise unit is successfully linked to the site.";
 }

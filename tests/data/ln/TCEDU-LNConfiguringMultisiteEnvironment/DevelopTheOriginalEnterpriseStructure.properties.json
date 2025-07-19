@@ -9,7 +9,7 @@
   "enterpriseUnit": "AUS_%s",
   "enterpriseUnitDesc": "Student %s Enterprise Unit",
   "financeCompany": "ABC (US)",
-  "planningCluster": "S",
+  "planningCluster": "S%s",
   "planningClusterDesc": "Austin ST%s Planning Cluster",
   "site": "AUS_ST",
   "siteDesc": "Austin Student %s Site",

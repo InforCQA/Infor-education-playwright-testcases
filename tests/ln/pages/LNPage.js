@@ -140,8 +140,8 @@ class LNPage {
         this.iframe().locator(`(//label[text()='No'])[last()]`);
 
     /* popupText - Button */
-    popupText = () =>
-        this.iframe().locator(`//div[contains(@class,'DialogWindow')]//label/li`);
+    popupText = async() =>{
+        return await (await this.iframe()).locator(`//div[contains(@class,'DialogWindow')]//label/li`)};
 
     /* columnCells */
     columnCells = () =>
@@ -533,10 +533,10 @@ class LNPage {
         );
 
     /* menuItem */
-    menuItem = (id1, id2) =>
-        this.iframe().locator(
+    menuItem = async(id1, id2) =>{
+        return await (await this.iframe()).locator(
             `(//div[contains(@id,'${id1}') and contains(@id,'${id2}')])[last()]`
-        );
+        )};
 
     /* textMenuItem */
     textMenuItem = (id1, id2) =>
@@ -632,22 +632,22 @@ class LNPage {
         );
 
     /* selectRadioBtn */
-    selectRadioBtn = (lbl, id) =>
-        this.iframe().locator(
+    selectRadioBtn = async(lbl, id) =>{
+        return await (await this.iframe()).locator(
             `//label[text()='${lbl}']/parent::div[contains(@id,'${id}')]`
-        );
+        )};
 
     /* filterLabelValue */
-    filterLabelValue = (id1, id2) =>
-        this.iframe().locator(
+    filterLabelValue = async(id1, id2) =>{
+        return await (await this.iframe()).locator(
             `(//label[contains(@id,'${id1}') and contains(@id,'${id2}')])[last()]`
-        );
+        )};
 
     /* filterInputValue */
-    filterInputValue = (id1, id2) =>
-        this.iframe().locator(
+    filterInputValue = async(id1, id2) =>{
+        return await (await this.iframe()).locator(
             `(//input[contains(@id,'${id1}') and contains(@id,'${id2}')][not(contains(@id,'filter'))])[last()]`
-        );
+        )};
 
     /* gridMenuBtn */
     gridMenuBtn = (id1, id2) =>
@@ -669,7 +669,7 @@ class LNPage {
 
     /* filterInput */
     filterInput = async(id1, id2) =>{
-        return await this.iframe().locator(
+        return await (await this.iframe()).locator(
             `(//div[contains(@class,'GridMenuButton') and contains(@id,'${id1}') and contains(@id,'${id2}')]/following-sibling::input[contains(@id,'filter-value')])[last()]`)};
 
     /* personalizationPopup */
@@ -699,8 +699,8 @@ class LNPage {
         this.iframe().locator(`//div[contains(@id,'button-SAVE_AND_CLOSE')]`);
 
     /* popupBtn */
-    popupBtn = (txt) =>
-        this.iframe().locator(`(//label[text()='${txt}'])[last()]`);
+    popupBtn = async(txt) =>{
+        return await (await this.iframe()).locator(`(//label[text()='${txt}'])[last()]`)};
 
     /* orderGroupFrom */
     orderGroupFrom = () =>
@@ -737,7 +737,7 @@ class LNPage {
                 `//label[contains(normalize-space(),"${p1}:")]/parent::td/preceding-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
                 ` | ` +
                 `//label[normalize-space()="${p1}:"]/ancestor::td[contains(@style,'vertical-align')]/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]`
-            );
+            )};
 
     /* selectCheckbox - Button */
     selectCheckboxLabel = async(
@@ -1087,19 +1087,19 @@ class LNPage {
         );
 
     /* lookupBtn - LookupBtn */
-    lookupBtn = (
+    lookupBtn = async(
         p1, p2, p3,
         p4, p5, p6,
         p7, p8, p9
-    ) =>
-        this.iframe()
+    ) =>{
+        return await (await this.iframe())
             .locator(
                 `//label[normalize-space()='${p1}:']/parent::td/following-sibling::td//div[contains(@id,'${p2}')][contains(@id,'${p3}')][contains(@id,'lookup-trigger-button')]` +
                 ` | ` +
                 `//label[normalize-space()='${p4}']/ancestor::tr/following-sibling::tr//td//div[contains(@id,'${p5}')][contains(@id,'${p6}')][contains(@id,'lookup-trigger-button')]` +
                 ` | ` +
                 `//label[normalize-space()='${p7}']/parent::td/following-sibling::td//div[contains(@id,'${p8}')][contains(@id,'${p9}')][contains(@id,'lookup-trigger-button')]`
-            );
+            )};
 
     /* dataCellLookupBtn - LookupBtn */
     dataCellLookupBtn = (p1, p2) =>
@@ -1239,8 +1239,8 @@ class LNPage {
         this.iframe().locator(`//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')]`);
 
     /* gridLookupBtnLastRec - LookupBtn */
-    gridLookupBtnLastRec = (p1, p2) =>
-        this.iframe().locator(`(//div[contains(@id,'${p1}')][contains(@id,'${p2}')][contains(@id,'trigger-button')])[last()]`);
+    gridLookupBtnLastRec = async(p1, p2) =>{
+        return await (await this.iframe()).locator(`(//div[contains(@id,'${p1}')][contains(@id,'${p2}')][contains(@id,'trigger-button')])[last()]`)};
 
     /* drilldownLastRecord - button */
     drilldownLastRecord = (p1) =>

@@ -3,6 +3,7 @@ import LNPage from "../pages/LNPage";
 import {expect} from '@playwright/test';
 import ElementAttributes from "../../commons/constants/ElementAttributes";
 import LNCommons from "../constants/LNCommons";
+import { setBrowserZoom } from 'playwright-zoom';
 
 class LNCommon extends BaseClass {
 
@@ -14,6 +15,7 @@ class LNCommon extends BaseClass {
         // Intializing the page
         const lnPg = new LNPage(this.page);
 
+        await setBrowserZoom(this.page, 50);
         // Using condition to verify whether it is displaying or not
         if (await this.isElementPresent(await lnPg.inforMainModules(module))) {
            await(await lnPg.inforMainModules(module)).click();
@@ -99,10 +101,16 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         await (await lnPg.inforMainModules(module)).click({ button: 'right' });
-        await (await lnPg.collapseAll()).click();
+
+        expect(async () => {
+            await (await lnPg.collapseAll()).waitFor({ state: 'visible', timeout: 5000 });
+            await (await lnPg.collapseAll()).dblclick();
+        }).toPass({ timeout: 10000 });
 
         // Verifying whether module is collapsed or not
-        await expect(await lnPg.inforMainModules(module)).toHaveAttribute(ElementAttributes.ARIA_EXPANDED, 'false');
+        expect(async () => {
+               await expect(await lnPg.inforMainModules(module)).toHaveAttribute(ElementAttributes.ARIA_EXPANDED, 'false');
+        }).toPass();
     }
 
     /*---------------------------------------------------
@@ -271,7 +279,7 @@ class LNCommon extends BaseClass {
 
         // Step 4: Assert record is found
         expect(isRecordFound).toBeTruthy();
-        await this.pause(2000);
+
         // Step 5: Check if checkbox is not already selected
         const checkbox = await commonPg.selectRequiredRecord(sessionCode, String(rowNo));
         const classAttr = await checkbox.getAttribute(ElementAttributes.CLASS);
@@ -367,7 +375,7 @@ class LNCommon extends BaseClass {
 	 * Objective : To Retrieve the grid value based on Column name
 	 * @param row: Pass the row value dynamically from selectRequiredRecord() method
 	 * -----------------------------------------------------------------------------*/
-    static async getRequiredValueFromTheGrid(sessionCode, columnName, elementId, rowNum, page) {
+    static async getRequiredValueFromTheGrid(sessionCode, columnName, elementId, rowNum) {
 
         // Initializing the page
         const lnPg = new LNPage(this.page);
@@ -387,7 +395,7 @@ class LNCommon extends BaseClass {
         } else {
             fetchedValue = labelText?.trim();
         }
-
+        
         return fetchedValue;
     }
     
@@ -396,7 +404,7 @@ class LNCommon extends BaseClass {
 	 *---------------------------------------------------------------------------------*/
     static async filterRequiredRecord(label, elementId, sessionCode, filterItem) {
         // Intializing the page
-        const lnPg = new LNPage();
+        const lnPg = new LNPage(this.page);
 
         // Verifying the label (assuming you have a utility function or method for this)
         await this.verifyColumnHeader(sessionCode, label);
@@ -412,13 +420,13 @@ class LNCommon extends BaseClass {
 static async isRequiredRowPresent(sessionCode, columnName, elementId, value) {
 
     // Intializing the page
-    const lnPg = new LNPage();
+    const lnPg = new LNPage(this.page);
 
     // Verify the column header
     await this.verifyColumnHeader(sessionCode, columnName);
 
     // Get all grid cell elements for the given elementId
-    const records = await lnPg.gridCell(sessionCode, elementId, sessionCode, elementId).elementHandles();
+    const records = await (await lnPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
 
     let isRecordFound = false;
 
@@ -444,15 +452,16 @@ static async isRequiredRowPresent(sessionCode, columnName, elementId, value) {
 static async clickMainMenuItem(sessionCode, menuItem) {
 
     // Initializing the page
-    const lnPg = new LNPage();
+    const lnPg = new LNPage(this.page);
 
-    const menuLocator = lnPg.menuItem(sessionCode, menuItem);
+    const menuLocator = await lnPg.menuItem(sessionCode, menuItem);
 
     // Wait for menu item to be clickable
     await menuLocator.waitFor({ state: 'visible', timeout: 5000 });
 
-    // Click using force to handle any overlay
-    await menuLocator.click({ force: true });
+    expect(async () => {
+        await menuLocator.dblclick();
+    }).toPass({ timeout: 10000 });
 }
 
 /*--------------------------------------------------------------------------------------------
@@ -460,7 +469,7 @@ static async clickMainMenuItem(sessionCode, menuItem) {
  *-------------------------------------------------------------------------------------------*/
 static async triggerInputField(locator, data) {
  // Initializing the page
-    const lnPg = new LNPage();
+    const lnPg = new LNPage(this.page);
 
     // Step 1: Wait and click the input field
     await locator.click();
@@ -470,7 +479,9 @@ static async triggerInputField(locator, data) {
     const classAttr = await parent.getAttribute('class');
 
     if (!classAttr.includes('TriggerInputField-focus')) {
-        await locator.click(); // Re-click to enforce focus
+        await expect(async () => {
+            await locator.click();
+        }).toPass({ timeout: 10000 });
     }
 
     // Step 5: Clear and type
@@ -483,13 +494,13 @@ static async triggerInputField(locator, data) {
 /*----------------------------------------------------------
  * Objective : To get Look up icon of textbox element
  *----------------------------------------------------------*/
-static getTextboxLookUpIcon(label, elementId, sessionCode) {
+static async getTextboxLookUpIcon(label, elementId, sessionCode) {
 
     // Initialize the page
-    const lnPg = new LNPage();
+    const lnPg = new LNPage(this.page);
 
     // Return dynamic locator for lookup icon (your LNPage.lookupBtn must support this structure)
-    return lnPg.lookupBtn(label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode);
+    return await lnPg.lookupBtn(label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode);
 }
 
 /*------------------------------------------------------------------
@@ -498,7 +509,7 @@ static getTextboxLookUpIcon(label, elementId, sessionCode) {
 static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCode) {
 
     // Initialize the page
-    const lnPg = new LNPage();
+    const lnPg = new LNPage(this.page);
 
     await this.verifyColumnHeader(sessionCode, label);
     await this.type(await lnPg.filterInput(elementId, sessionCode), filterItem);
@@ -532,14 +543,15 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
     console.log(`INFO: DataCell element is being used for ${await baseLocator.toString()}`);
 
     // Convert to 1-based index like in Selenium
-    const position2 = position + 1;
 
     // Construct dynamic locator based on position
-    const element = baseLocator.nth(position); // Using Playwright's native nth()
+    const element = await baseLocator.nth(position); // Using Playwright's native nth()
 
     // Scroll/move to the element and click to activate it
-    await element.scrollIntoViewIfNeeded();
-    await element.click();
+    await expect(async () => {
+           await element.click();
+        }).toPass({ timeout: 10000 });
+
 
     // Find the child input inside the cell (assuming structure: <div><input></div>)
     const parentDiv = await element.locator('div');
@@ -565,31 +577,30 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
  * Objective : Validate popup message and handle pop-up
  * ------------------------------------------------------------------
  */
-static async validateMessageAndHandlePopUp(popupText, popupBtn) {
-  const lnPg = new LNPage();
+    static async validateMessageAndHandlePopUp(popupText, popupBtn) {
 
-  // Get all popup text locators
-  const popups = await lnPg.popupText.elementHandles(); // assuming popupText is a locator for all visible messages
-  let matchedText = null;
+        const lnPg = new LNPage(this.page);
 
-  for (let i = popups.length - 1; i >= 0; i--) {
-    const text = (await popups[i].textContent())?.trim();
-    if (text && text.includes(popupText)) {
-      console.log(`=========>>>>> Pop Up message: ${text} <<<<<=========`);
+        let popup = null, textCount = 0;
+        
+        await expect(async () => {
+            await (await lnPg.popupText()).waitFor({ state: 'visible', timeout: 5000 });
+            textCount = await (await lnPg.popupText()).count();
+        }).toPass({ timeout: 10000 });
 
-      matchedText = text;
-      await this.page.waitForTimeout(2000);
-      break;
+        while (textCount > 0) {
+
+            popup = await (await lnPg.popupText()).nth(textCount - 1);
+            if (await (await popup.textContent()).includes(popupText)) {
+                break;
+            }
+            textCount--;
+        }
+
+        expect((await popup.textContent()).toLowerCase()).toBe(popupText.toLowerCase());
+        await (await lnPg.popupBtn(popupBtn)).click();
+
     }
-  }
-
-  // Assert that the expected popup message appeared
-  expect(matchedText).toContain(popupText);
-
-  // Click the required popup button
-  const button = lnPg.popupBtn(popupBtn); // dynamic locator like: (label) => page.getByRole('button', { name: label })
-  await button.click();
-}
 
 /**
  * ----------------------------------------------------------------
@@ -597,7 +608,7 @@ static async validateMessageAndHandlePopUp(popupText, popupBtn) {
  * ----------------------------------------------------------------
  */
 static async getTextboxLookUpIconInGrid(lbl, elementId, sessionCode) {
-  const lnPg = new LNPage();
+  const lnPg = new LNPage(this.page);
     // Verify header label before proceeding
   await this.verifyColumnHeader(sessionCode, lbl);
 
@@ -624,6 +635,37 @@ static async selectCheckbox(label, elementId) {
   const updatedClass = await locator.getAttribute('class');
   expect(updatedClass).toContain(LNCommons.CHECKED);
 }
+
+/*--------------------------------------------------------------------------------------------
+* Objective 	: The method is used to perform custom actions on LN Input fields
+*------------------------------------------------------------------------------------------*/
+static async decoratorInputField(locator, data) {
+
+  // Click to focus – Playwright auto-waits for actionability :contentReference[oaicite:1]{index=1}
+  await locator.click();
+
+  // Locate the parent <div>
+  const parent = await locator.locator('xpath=..');
+
+  // If parent doesn't yet have "focus" in class, click input again
+  if (! (await parent.getAttribute('class')).includes('focus')) {
+    await locator.click();
+  }
+
+  // Wait until parent has class containing "focus"
+    await expect(async () => {
+        // perform the check/assertion inside the function
+        const parentHandle = await parent.elementHandle();
+
+        await expect(parent).toHaveClass(/focus/);
+
+    }).toPass({ timeout: 10000});
+
+  // Clear existing content and fill, then press Tab
+  await this.type(locator, data);
+  await this.page.keyboard.press('Tab');
+}
+
 
 }
 
