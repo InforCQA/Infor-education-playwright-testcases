@@ -1,22 +1,4 @@
 import {test} from '@playwright/test';
-import BaseClass from '../../../testBase/BaseClass';
-import CloudSuite from '../../../commons/functions/CloudSuite';
-
-export default function TCEDU_LNReviewItemsFromGlobalPrespective() {
-
-    test.describe('TCEDU_LNReviewItemsFromGlobalPrespective', () => {
-        test('login', async ({ }) => {
-            await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
-        });
-        // 2.1.1
-        test('Create an address', async ({ }) => {
-             await CloudSuite.navigateToApplication(ProductNames.LN);
-             await LNMasterData.createAnAddress(structureCnxt);
-         });
-
-    })
-}import {test} from '@playwright/test';
 import ProductNames from "../../../commons/constants/ProductNames";
 import CloudSuite from "../../../commons/functions/CloudSuite";
 import BaseClass from "../../../testBase/BaseClass";
@@ -24,7 +6,7 @@ import LNMasterData from '../../functions/LNMasterData';
 
 // Property data for testcases
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
-const enterpriseMdlCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/ReviewTheEnterpriseModel.properties.json")));
+const itemCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/ReviewItemsFromGlobalPrespective.properties.json")));
 
 export default function TCEDU_LNReviewItemsFromGlobalPrespective() {
 
@@ -33,19 +15,14 @@ export default function TCEDU_LNReviewItemsFromGlobalPrespective() {
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-
-        test('Review the enterprise model in Infor LN', async ({ }) => {
-
+        /*-------------------------------------------------------------------------------------
+        * Objective : Review the item at an enterprise level
+        * Workbook	: LN Cloud: Configuring Multisite Environment
+        * Exercises : 2.1.1
+        * ------------------------------------------------------------------------------------*/
+        test('Review the item at an enterprise level', async ({ }) => {
             await CloudSuite.navigateToApplication(ProductNames.LN);
-
-            await LNMasterData.reviewEnterpriseModelInInforLN(enterpriseMdlCnxt);
-
-        });
-
-        test('Review a site in Infor LN', async ({ }) => {
-
-            await LNMasterData.reviewASiteInInforLN(enterpriseMdlCnxt);
-
+            await LNMasterData.reviewItemAtEnterpriseLevel(itemCnxt);
         });
     })
 }

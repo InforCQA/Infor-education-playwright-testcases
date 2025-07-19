@@ -23,6 +23,8 @@ import PlanningClusters_Lbl from "../constants/elementLbls/PlanningClusters_Lbl"
 import PlanningClusters_Id from "../constants/elementIds/PlanningClusters_Id";
 import Sites_Lbl from "../constants/elementLbls/Sites_Lbl";
 import Sites_Id from "../constants/elementIds/Sites_Id";
+import Items_Lbl from "../constants/elementLbls/Items_Lbl";
+import Items_Id from "../constants/elementIds/Items_Id";
 
 class LNMasterData extends BaseClass {
 
@@ -949,6 +951,49 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
     // Close tab and module
     await LNSessionTabActions.closeTab(LNSessionTabs.ENTERPRISE_MODEL_WORKBENCH);
     await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+}
+/* -------------------------------------------------------------------------------------
+* Objective : Review the item at an enterprise level
+* Workbook  : LN Cloud: Configuring Multisite Environment
+* Exercises : 2.1.1
+* -------------------------------------------------------------------------------------*/
+static async reviewItemAtEnterpriseLevel(itemCnxt) {
+
+  console.log("=========>>>>> Review the item at an enterprise level started <<<<<=========");
+
+  // Navigate to Master Data > Items > Items
+  await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA,LNSessionTabs.ITEMS,LNSessionTabs.ITEMS );
+  // Verify session tab is loaded
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEMS);
+
+  // Filter the record by second segment value (e.g., MS200)
+  await LNCommon.filterRequiredRecord(Items_Lbl.ITEM_GRID,Items_Id.ITEM_SEG_2_GRID,LNSessionCodes.ITEMS, itemCnxt.items[0]);
+
+  // Select the filtered row
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEMS,Items_Lbl.ITEM_GRID,Items_Id.ITEM_SEG_2_GRID,itemCnxt.items[0]);
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEMS,rowNo.toString());
+
+  // Verify session tab is now on ITEM detail page
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+  // Assert header shows the correct item
+ // const itemVal = await (await LNCommon.getTextField(Items_Lbl.ITEM,Items_Id.ITEM_SEC,LNSessionCodes.ITEM)).getAttribute(ElementAttributes.VALUE);
+ // expect(itemVal).toBe(itemCnxt.items[0]);
+    await expect(async () => {
+     const itemVal = await (await LNCommon.getTextField(Items_Lbl.ITEM,Items_Id.ITEM_SEC,LNSessionCodes.ITEM)).getAttribute(ElementAttributes.VALUE);
+     expect(itemVal).toBe(itemCnxt.items[0]);
+    }).toPass({ timeout: 10000 });
+  // Go to 'Sites' tab at bottom and validate site data exists
+  await LNCommon.selectGridTab(LNTabs.SITES, LNSessionCodes.ITEM);
+
+  const siteVal = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEMS_BY_SITE,Items_Lbl.SITE_GRID,Items_Id.SITES_GRID,0);
+  // Validate that at least one site is present
+  expect(siteVal).not.toBe(""); 
+
+  // Take screenshot for documentation
+  await screenshot("Review the item at an enterprise level");
+
+  console.log("=========>>>>> Review the item at an enterprise level completed successfully <<<<<=========");
 }
 
 }
