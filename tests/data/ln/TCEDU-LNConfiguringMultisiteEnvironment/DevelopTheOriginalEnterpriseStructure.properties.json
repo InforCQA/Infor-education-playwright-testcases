@@ -19,7 +19,7 @@
   "warehouse": "WHST",
   "warehouseDesc": "Student %s Warehouse",
   "entity": "United States",
-  "offices": ["SLS", "WRH"],
+  "offices": ["[SLS] ", "[WRH] "],
   "addressCode":"",
   "logisticCompany":""
 }
