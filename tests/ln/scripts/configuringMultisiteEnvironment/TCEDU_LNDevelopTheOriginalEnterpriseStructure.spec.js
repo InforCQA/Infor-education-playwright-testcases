@@ -3,6 +3,7 @@ import ProductNames from "../../../commons/constants/ProductNames";
 import CloudSuite from "../../../commons/functions/CloudSuite";
 import BaseClass from "../../../testBase/BaseClass";
 import LNMasterData from '../../functions/LNMasterData';
+import GetDataLN_DevelopTheOriginalEnterpriseStructure from '../../dataMapping/configuringMultisiteEnvironment/GetDataLN_DevelopTheOriginalEnterpriseStructure';
 
 // Property data for testcases
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
@@ -12,9 +13,14 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
 
     test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
         test('login', async ({ }) => {
+            
+            // Input Data Returned From Data Mapping
+            await GetDataLN_DevelopTheOriginalEnterpriseStructure.getLNDevelopTheOriginalEnterpriseStructureContext(structureCnxt);
+
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
+
         // 1.4.1
         test('Create an address', async ({ }) => {
              await CloudSuite.navigateToApplication(ProductNames.LN);
@@ -41,13 +47,14 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
             await LNMasterData.createSalesOfficeAndWarehouse(structureCnxt);
         });
         
-        // // 1.4.6
-        // test('Create a sales setting by site', async ({ }) => {
-        //     await LNMasterData.createSalesSettingBySite(structureCnxt);
-        // }); 
-        // // 1.4.7
-        // test('Review the new site details in the Enterprise Model Workbench', async ({ }) => {
-        //     await LNMasterData.reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt);
-        // }); 
+        // 1.4.6
+        test('Create a sales setting by site', async ({ }) => {
+            await LNMasterData.createSalesSettingBySite(structureCnxt);
+        }); 
+
+        // 1.4.7
+        test('Review the new site details in the Enterprise Model Workbench', async ({ }) => {
+            await LNMasterData.reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt);
+        }); 
     })
 }

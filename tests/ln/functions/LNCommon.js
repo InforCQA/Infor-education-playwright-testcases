@@ -632,7 +632,7 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
 
         const selectCheckboxLabel= await lnPg.selectCheckboxLabel(label, elementId);
         await selectCheckboxLabel.waitFor({ state: 'visible'});
-        classAttr = await selectCheckboxLabel.getAttribute(ElementAttributes.CLASS);
+        classAttr = await selectCheckboxLabel.evaluate(el => el.className);;
 
         console.log(classAttr);
 

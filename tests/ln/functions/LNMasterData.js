@@ -525,7 +525,6 @@ class LNMasterData extends BaseClass {
         await LNCommon.verifySessionTab(LNSessionTabs.ADDRESSES);
 
         // Filter by name
-        structureCnxt.name+="04";
         await LNCommon.filterRequiredRecord(Addresses_Lbl.NAME_GRID,Addresses_Id.NAME_GRID, LNSessionCodes.ADDRESS, structureCnxt.name);
 
         // Check if address already exists
@@ -554,7 +553,6 @@ class LNMasterData extends BaseClass {
 
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.STREET, Addresses_Id.STREET, LNSessionCodes.ADDRESSES), structureCnxt.street);
 
-            structureCnxt.houseNum=structureCnxt.houseNum.replace('%s', '04');
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.HOUSE_NUMBER, Addresses_Id.HOUSE_NUMBER, LNSessionCodes.ADDRESSES), structureCnxt.houseNum);
 
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LATITUDE, Addresses_Id.GPS_LATITUDE, LNSessionCodes.ADDRESSES), structureCnxt.latitude);
@@ -590,7 +588,6 @@ class LNMasterData extends BaseClass {
     await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNITS);
 
     // Filter and check if already present
-    structureCnxt.enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', "04");
     await LNCommon.filterRequiredRecord(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, LNSessionCodes.ENTERPRISE_UNITS, structureCnxt.enterpriseUnit);
 
     const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ENTERPRISE_UNITS, EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, structureCnxt.enterpriseUnit);
@@ -660,8 +657,6 @@ static async createPlanningCluster(planningClusters, planningClusterDescs) {
     await LNCommon.verifySessionTab(LNSessionTabs.PLANNING_CLUSTERS);
 
     // Filter to check if record exists
-    const planningCluster= planningClusters.replace('%s', "04");
-    const planningClusterDesc= planningClusterDescs.replace('%s', "04");
     await LNCommon.filterRequiredRecord( PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_GRID, LNSessionCodes.PLANNING_CLUSTERS, planningCluster);
 
     const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.PLANNING_CLUSTERS, PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_GRID, planningCluster );
@@ -669,9 +664,9 @@ static async createPlanningCluster(planningClusters, planningClusterDescs) {
     if (!isPresent) {
         await LNCommon.clickMainMenuItem(LNSessionCodes.PLANNING_CLUSTERS, LNMenuActions_Id.NEW);
 
-        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID,PlanningClusters_Id.PLANNING_CLUSTER_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningCluster);
+        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID,PlanningClusters_Id.PLANNING_CLUSTER_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusters);
 
-        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_DESCRIPTION_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusterDesc );
+        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_DESCRIPTION_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusterDescs );
 
         await LNCommon.clickMainMenuItem(LNSessionCodes.PLANNING_CLUSTERS, LNMenuActions_Id.SAVE);
     }
@@ -698,7 +693,6 @@ static async createSite(structureCnxt) {
   // Verify Session Tab
   await LNCommon.verifySessionTab(LNSessionTabs.SITES);
 
-  structureCnxt.site+="04";
   await LNCommon.filterRequiredRecord( Sites_Lbl.SITE_GRID,Sites_Id.SITE_GRID,LNSessionCodes.SITES,structureCnxt.site);
 
   const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.SITES, Sites_Lbl.SITE_GRID, Sites_Id.SITE_GRID,structureCnxt.site);
@@ -709,10 +703,8 @@ static async createSite(structureCnxt) {
 
     await LNCommon.decoratorInputField( await LNCommon.getTextField(Sites_Lbl.SITE, Sites_Id.SITE, LNSessionCodes.SITE),structureCnxt.site);
     
-    structureCnxt.siteDesc=structureCnxt.siteDesc.replace('%s', '04');
     await LNCommon.decoratorInputField(await LNCommon.getTextField(Sites_Lbl.SITE, Sites_Id.SITE_DESCRIPTION, LNSessionCodes.SITE),structureCnxt.siteDesc);
 
-    structureCnxt.logisticCompany="3270";
     const logisticCompany = await (await LNCommon.getTextField(Sites_Lbl.LOGISTIC_COMPANY, Sites_Id.LOGISTIC_COMPANY, LNSessionCodes.SITE)).inputValue();
     expect(logisticCompany).toBe(structureCnxt.logisticCompany);
 
@@ -723,16 +715,15 @@ static async createSite(structureCnxt) {
           expect(streetName).toBe(structureCnxt.street);
       }).toPass({ timeout: 10000 });
 
-    structureCnxt.planningCluster= structureCnxt.planningCluster.replace('%s', '04');
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.PLANNING_CLUSTER, Sites_Id.PLANNING_CLUSTER, LNSessionCodes.SITE),structureCnxt.planningCluster );
 
-    structureCnxt.enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', '04');
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.ENTERPRISE_UNIT, Sites_Id.ENTERPRISE_UNIT, LNSessionCodes.SITE),structureCnxt.enterpriseUnit);
 
     await LNCommon.clickMainMenuItem(LNSessionCodes.SITE, LNMenuActions_Id.SAVE_AND_EXIT);
   }
 
   const siteCode = await LNCommon.getRequiredValueFromTheGrid( LNSessionCodes.SITES,Sites_Lbl.SITE_GRID, Sites_Id.SITE_GRID,0);
+  
   console.log("=========>>>>> The Site code is " + siteCode + " <<<<<=========");
 
   const rowNo = await LNCommon.selectRequiredRecord( LNSessionCodes.SITES, Sites_Lbl.SITE_GRID,Sites_Id.SITE_GRID,structureCnxt.site);
@@ -745,8 +736,20 @@ static async createSite(structureCnxt) {
 
   const warehousingElement = await lnPg.hyperlinkText(Sites_Lbl.WAREHOUSING_RDN,Sites_Id.WAREHOUSING_RDN,LNSessionCodes.SITE);
 
-  const warehousingClass = await warehousingElement.getAttribute(ElementAttributes.CLASS);
+    try {
+        await expect(warehousingElement).toContainClass('DashboardButton-checked', { timeout: 5000 });
 
+    } catch (e) {
+        console.log('Checked class not found');
+    }
+
+    let warehousingClass = await warehousingElement.evaluate(el =>
+        el instanceof SVGElement
+            ? el.className.baseVal
+            : el.className
+    );
+
+  console.log(warehousingClass);
   if (!warehousingClass.includes(LNCommons.CHECKED)) {
     await warehousingElement.click();
 
@@ -774,6 +777,7 @@ static async createSite(structureCnxt) {
 }
 
 static async createSalesOfficeAndWarehouse(structureCnxt) {
+
   console.log(">>>>>>> Create a sales office and warehouse started <<<<<<<<");
 
   // Navigate to Enterprise Units module
@@ -800,11 +804,12 @@ static async createSalesOfficeAndWarehouse(structureCnxt) {
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SALES_OFFICES);
 
     await LNCommon.triggerInputField(await LNCommon.getTextField( EnterpriseUnits_Lbl.SALES_OFFICE, EnterpriseUnits_Id.SALES_OFFICE, LNSessionCodes.SALES_OFFICES), structureCnxt.salesOffice);
+
     await LNCommon.decoratorInputField(await LNCommon.getTextField( EnterpriseUnits_Lbl.SALES_OFFICE_DESCRIPTION,EnterpriseUnits_Id.SALES_OFFICE_DESCRIPTION,LNSessionCodes.SALES_OFFICES ),structureCnxt.salesOfficeDesc);
     await LNCommon.triggerInputField(await LNCommon.getTextField(EnterpriseUnits_Lbl.SALES_OFFICE_ADDRESS,EnterpriseUnits_Id.SALES_OFFICE_ADDRESS, LNSessionCodes.SALES_OFFICES ), structureCnxt.addressCode);
     await LNCommon.triggerInputField( await LNCommon.getTextField(EnterpriseUnits_Lbl.PART_OF_SITE,EnterpriseUnits_Id.PART_OF_SITE, LNSessionCodes.SALES_OFFICES), structureCnxt.site);
 
-    const eunitValue = await (await LNCommon.getTextField(EnterpriseUnits_Lbl.PART_OF_ENTERPRISE_UNIT,EnterpriseUnits_Id.PART_OF_ENTERPRISE_UNIT, LNSessionCodes.SALES_OFFICES)).getAttribute("value");
+    const eunitValue = await (await LNCommon.getTextField(EnterpriseUnits_Lbl.PART_OF_ENTERPRISE_UNIT,EnterpriseUnits_Id.PART_OF_ENTERPRISE_UNIT, LNSessionCodes.SALES_OFFICES)).inputValue();
     expect(eunitValue).toBe(structureCnxt.enterpriseUnit);
 
     await LNCommon.clickTextMenuItem(LNSessionCodes.SALES_OFFICES, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
@@ -813,11 +818,10 @@ static async createSalesOfficeAndWarehouse(structureCnxt) {
 
   expect(await LNCommon.isRequiredRowPresent(LNSessionCodes.DEPARTMENTS_SITE,EnterpriseUnits_Lbl.DEPARTMENT_GRID, EnterpriseUnits_Id.DEPARTMENT_GRID,structureCnxt.salesOffice)).toBe(true);
 
-  await screenshot("Create a sales office");
-
   // Warehouse tab
   await LNCommon.selectGridTab(LNTabs.WAREHOUSES, LNSessionCodes.ENTERPRISE_UNIT);
-  await LNCommon.filterRequiredRecord( EnterpriseUnits_Lbl.WAREHOUSE_GRID, EnterpriseUnits_Id.WAREHOUSE_GRID,LNSessionCodes.WAREHOUSES_SITE,structureCnxt.warehouse );
+
+  await LNCommon.filterRequiredRecord( EnterpriseUnits_Lbl.WAREHOUSE_GRID, EnterpriseUnits_Id.WAREHOUSE_GRID,LNSessionCodes.WAREHOUSES_SITE,structureCnxt.warehouse);
 
   const whExists = await LNCommon.isRequiredRowPresent( LNSessionCodes.WAREHOUSES_SITE,EnterpriseUnits_Lbl.WAREHOUSE_GRID,EnterpriseUnits_Id.WAREHOUSE_GRID,structureCnxt.warehouse);
 
@@ -826,7 +830,9 @@ static async createSalesOfficeAndWarehouse(structureCnxt) {
     await LNCommon.verifySessionTab(LNSessionTabs.WAREHOUSES);
 
     await LNCommon.decoratorInputField(await LNCommon.getTextField(EnterpriseUnits_Lbl.WAREHOUSE, EnterpriseUnits_Id.WAREHOUSE, LNSessionCodes.WAREHOUSES ),structureCnxt.warehouse);
+
     await LNCommon.decoratorInputField(await LNCommon.getTextField( EnterpriseUnits_Lbl.WAREHOUSE, EnterpriseUnits_Id.WAREHOUSE_DESCRIPTION, LNSessionCodes.WAREHOUSES), structureCnxt.warehouseDesc);
+
     await LNCommon.triggerInputField(await LNCommon.getTextField(EnterpriseUnits_Lbl.SITE, EnterpriseUnits_Id.SITE, LNSessionCodes.WAREHOUSES),structureCnxt.site);
     await LNCommon.selectCheckbox(EnterpriseUnits_Lbl.USE_SITE_SETTINGS_CHK,EnterpriseUnits_Id.USE_SITE_SETTINGS_CHK);
     await LNCommon.triggerInputField( await LNCommon.getTextField(EnterpriseUnits_Lbl.WAREHOUSE_ADDRESS, EnterpriseUnits_Id.WAREHOUSE_ADDRESS, LNSessionCodes.WAREHOUSES ),structureCnxt.addressCode);
@@ -836,8 +842,6 @@ static async createSalesOfficeAndWarehouse(structureCnxt) {
   }
 
   expect( await LNCommon.isRequiredRowPresent( LNSessionCodes.WAREHOUSES_SITE,EnterpriseUnits_Lbl.WAREHOUSE_GRID, EnterpriseUnits_Id.WAREHOUSE_GRID,structureCnxt.warehouse)).toBe(true);
-
-  await screenshot("Create a warehouse");
 
   await LNCommon.clickMainMenuItem(LNSessionCodes.ENTERPRISE_UNIT, LNMenuActions_Id.SAVE_AND_EXIT);
   await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNITS);
@@ -870,12 +874,25 @@ static async createSalesSettingBySite(structureCnxt) {
   // Click the Settings tab
   await LNCommon.selectHeaderTab(LNTabs.SETTINGS, LNSessionCodes.SITE);
 
-  // Check if Sales settings already exist
-  const salesIconClass = await LNCommon.getDynamicElement(LNPage.hyperlinkText,Sites_Lbl.SALES_RDN,Sites_Id.SALES_RDN,LNSessionCodes.SITE).getAttribute("class");
+  
+  const salesIconClass = await lnPg.hyperlinkText(Sites_Lbl.SALES_RDN,Sites_Id.SALES_RDN,LNSessionCodes.SITE);
 
-  if (!salesIconClass.includes(LNCommons.CHECKED)) {
+      try {
+        await expect(salesIconClass).toContainClass('DashboardButton-checked', { timeout: 5000 });
+
+    } catch (e) {
+         console.log('Checked class not found');
+    }
+
+    let salesClass = await salesIconClass.evaluate(el =>
+        el instanceof SVGElement
+            ? el.className.baseVal
+            : el.className
+    );
+
+  if (!salesClass.includes(LNCommons.CHECKED)) {
     // Click Sales button
-    await LNPage.hyperlinkText(Sites_Lbl.SALES_RDN,Sites_Id.SALES_RDN,LNSessionCodes.SITE).click();
+    await (await lnPg.hyperlinkText(Sites_Lbl.SALES_RDN,Sites_Id.SALES_RDN,LNSessionCodes.SITE)).click();
 
     // Handle confirmation popup
     await LNCommon.validateMessageAndHandlePopUp(`Sales settings are not present for site ${structureCnxt.site}. Do you want to create them?`,LNCommons.YES);
@@ -897,12 +914,9 @@ static async createSalesSettingBySite(structureCnxt) {
   }
 
   // Verify the green check icon exists
-  const finalClass = await LNPage.hyperlinkText(Sites_Lbl.SALES_RDN,Sites_Id.SALES_RDN,LNSessionCodes.SITE).getAttribute("class");
+  const finalClass = await (await lnPg.hyperlinkText(Sites_Lbl.SALES_RDN,Sites_Id.SALES_RDN,LNSessionCodes.SITE)).getAttribute("class");
 
   expect(finalClass).toContain(LNCommons.CHECKED);
-
-  // Screenshot
-  await screenshot("Create a sales setting by site");
 
   // Save and exit from Site and Sites sessions
   await LNCommon.clickMainMenuItem(LNSessionCodes.SITE, LNMenuActions_Id.SAVE_AND_EXIT);
@@ -923,6 +937,7 @@ static async createSalesSettingBySite(structureCnxt) {
 static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
    
     const emwPg=new EnterpriseModelWorkbenchPage(this.page);
+
     // Navigating to Master Data --> Enterprise Model --> Enterprise Model Workbench
     await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA, LNSessionTabs.ENTERPRISE_MODEL,
         LNSessionTabs.ENTERPRISE_MODEL_WORKBENCH);
@@ -931,7 +946,9 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
     await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_MODEL_WORKBENCH);
 
     // Verify the Enterprise Structure pane
-    await expect(emwPg.headerLayoutPanel(EnterpriseModelWorkbench_Lbl.ENTERPRISE_STRUCTURE)).toBeVisible();
+    const isPresent = await LNCommon.isElementPresent(await
+                emwPg.headerLayoutPanel(EnterpriseModelWorkbench_Lbl.ENTERPRISE_STRUCTURE));
+    expect(isPresent).toBeTruthy();
 
     // Click + icon for United States entity
     await emwPg.expandSite(structureCnxt.entity).click();
@@ -942,18 +959,21 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 
     // Validate sales office and warehouse entries
     for (let i = 0; i < structureCnxt.offices.length; i++) {
-        await expect(emwPg.offices(structureCnxt.offices[i])).toBeVisible();
+        console.log(structureCnxt.offices[i]);
+        const isPresent = await LNCommon.isElementPresent(await
+            emwPg.offices(structureCnxt.offices[i]));
+        expect(isPresent).toBeTruthy();
     }
 
     // Click to highlight Sales Office
     await emwPg.offices(structureCnxt.offices[0]).click();
-    await this.page.waitForTimeout(2000);
 
     // Verify the Details pane is visible
-    await expect(emwPg.headerLayoutPanel(EnterpriseModelWorkbench_Lbl.DETAILS)).toBeVisible();
+    expect(await LNCommon.isElementPresent(await emwPg.headerLayoutPanel(EnterpriseModelWorkbench_Lbl.DETAILS))).toBeTruthy();
+    
 
     // Verify info inside the Details pane
-    await expect(emwPg.paneOptionLabel(structureCnxt.salesOffice)).toBeVisible();
+    expect(await LNCommon.isElementPresent(await emwPg.paneOptionLabel(structureCnxt.salesOffice))).toBeTruthy();
 
     // Screenshot
     await this.page.screenshot({ path: 'screenshots/reviewNewSiteDetails.png' });
