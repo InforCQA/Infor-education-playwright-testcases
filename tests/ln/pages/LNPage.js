@@ -445,10 +445,10 @@ class LNPage {
         );
 
     /* selectCheckbox */
-    selectCheckbox = (id) =>
-        this.iframe().locator(
+    selectCheckbox = async(id) =>{
+        return await (await this.iframe()).locator(
             `(//div[contains(@class,'Checkbox')][contains(@id,'${id}')])[last()]`
-        );
+        )};
 
     /* selectRadioButton */
     selectRadioButton = (id) =>
@@ -727,17 +727,27 @@ class LNPage {
         )};
 
     /* textLabel - Button */
-    textLabel = async(
-        p1, p2, p3
-    ) =>{
-        return await (await this.iframe())
-            .locator(
-                `//label[contains(normalize-space(),"${p1}:")]/parent::td/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
-                ` | ` +
-                `//label[contains(normalize-space(),"${p1}:")]/parent::td/preceding-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
-                ` | ` +
-                `//label[normalize-space()="${p1}:"]/ancestor::td[contains(@style,'vertical-align')]/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]`
-            )};
+    textLabel = async (p1, p2, p3) => {
+        return await (await this.iframe()).locator(
+            `//label[normalize-space()="${p1}:"]/parent::td/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}:"]/parent::td/preceding-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}:"]/ancestor::td[contains(@style,'vertical-align')]/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}"]/parent::td/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}:"]/parent::td/following-sibling::td//label[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}"]/ancestor::td/following-sibling::td//label[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}"]/ancestor::tr/following-sibling::tr//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}:"]/parent::div//input[contains(@id,'${p2}') and contains(@id,'${p3}')]` +
+            ` | ` +
+            `//label[normalize-space()="${p1}"]/ancestor::td/following-sibling::td//input[contains(@id,'${p2}') and contains(@id,'${p3}')]`
+        );
+    };
 
     /* selectCheckbox - Button */
     selectCheckboxLabel = async(
@@ -815,10 +825,10 @@ class LNPage {
         );
 
     /* columnHeader - Button */
-    columnHeader = (p1, p2) =>
-        this.iframe().locator(
+    columnHeader = async (p1, p2) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'ColumnHeader')][contains(@id,'${p1}')][contains(@id,'${p2}')]`
-        );
+        )};
 
     /* referenceMenuItem -- Button */
     referenceMenuItem = async(p1) =>{
@@ -961,10 +971,10 @@ class LNPage {
         );
 
     /* verifyHeader - WebElement */
-    verifyHeader = (p1) =>
-        this.iframe().locator(
+    verifyHeader = async(p1) =>{
+       return await (await this.iframe()).locator(
             `(//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${p1}'][contains(@id,'header')])[last()]`
-        );
+        )};
 
     /* actionOverflow -- Button */
     actionOverflow = (p1) =>

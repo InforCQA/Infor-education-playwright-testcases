@@ -15,14 +15,31 @@ export default function TCEDU_LNReviewItemsFromGlobalPrespective() {
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-        /*-------------------------------------------------------------------------------------
-        * Objective : Review the item at an enterprise level
-        * Workbook	: LN Cloud: Configuring Multisite Environment
-        * Exercises : 2.1.1
-        * ------------------------------------------------------------------------------------*/
+        // 2.1.1
         test('Review the item at an enterprise level', async ({ }) => {
             await CloudSuite.navigateToApplication(ProductNames.LN);
             await LNMasterData.reviewItemAtEnterpriseLevel(itemCnxt);
         });
+
+       // 2.1.2
+        test('Review the domain-specific data', async ({ }) => {
+            await CloudSuite.navigateToApplication(ProductNames.LN);
+            await LNMasterData.reviewDomainSpecificData();
+        });
+        //2.1.3
+      test('Review Purchase Data for the Item', async ({ }) => {
+        await CloudSuite.navigateToApplication(ProductNames.LN);
+        await LNMasterData.reviewPurchaseDataForItem(itemCnxt);
+      });
+    // 2.1.4
+      test('Review sales office for the item', async ({ }) => {
+        await CloudSuite.navigateToApplication(ProductNames.LN);
+        await LNMasterData.reviewSalesOfficeForItem();
+      });
+      // 2.1.5
+      test('Review standard costs by enterprise unit', async ({ }) => {
+        await CloudSuite.navigateToApplication(ProductNames.LN);
+        await LNMasterData.reviewStandardCostsByEnterpriseUnit(itemCnxt);
+      });
     })
 }

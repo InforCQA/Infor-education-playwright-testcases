@@ -554,6 +554,7 @@ class LNMasterData extends BaseClass {
 
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.STREET, Addresses_Id.STREET, LNSessionCodes.ADDRESSES), structureCnxt.street);
 
+            structureCnxt.houseNum=structureCnxt.houseNum.replace('%s', '04');
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.HOUSE_NUMBER, Addresses_Id.HOUSE_NUMBER, LNSessionCodes.ADDRESSES), structureCnxt.houseNum);
 
             await LNCommon.triggerInputField(await LNCommon.getTextField(Addresses_Lbl.GPS_LATITUDE, Addresses_Id.GPS_LATITUDE, LNSessionCodes.ADDRESSES), structureCnxt.latitude);
@@ -589,28 +590,30 @@ class LNMasterData extends BaseClass {
     await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNITS);
 
     // Filter and check if already present
-    const enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', "04");
-    await LNCommon.filterRequiredRecord(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, LNSessionCodes.ENTERPRISE_UNITS, enterpriseUnit);
+    structureCnxt.enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', "04");
+    await LNCommon.filterRequiredRecord(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, LNSessionCodes.ENTERPRISE_UNITS, structureCnxt.enterpriseUnit);
 
-    const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ENTERPRISE_UNITS, EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, enterpriseUnit);
+    const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.ENTERPRISE_UNITS, EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID, EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID, structureCnxt.enterpriseUnit);
 
     if (!isPresent) {
         // Click New
         await LNCommon.clickMainMenuItem(LNSessionCodes.ENTERPRISE_UNITS, LNMenuActions_Id.NEW);
 
         // Set Enterprise Unit
-        await LNCommon.dataCellElement(await LNCommon.getDataCell(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID,EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID,LNSessionCodes.ENTERPRISE_UNITS), 0, enterpriseUnit);
+        await LNCommon.dataCellElement(await LNCommon.getDataCell(EnterpriseUnits_Lbl.ENTERPRISE_UNIT_GRID,EnterpriseUnits_Id.ENTERPRISE_UNIT_GRID,LNSessionCodes.ENTERPRISE_UNITS), 0, structureCnxt.enterpriseUnit);
 
         // Set Description
-        await LNCommon.dataCellElement(await LNCommon.getDataCell( EnterpriseUnits_Lbl.DESCRIPTION_GRID,EnterpriseUnits_Id.DESCRIPTION_GRID, LNSessionCodes.ENTERPRISE_UNITS), 0, enterpriseUnit);
+        structureCnxt.enterpriseUnitDesc= structureCnxt.enterpriseUnitDesc.replace('%s', '04');
+        await LNCommon.dataCellElement(await LNCommon.getDataCell( EnterpriseUnits_Lbl.DESCRIPTION_GRID, EnterpriseUnits_Id.DESCRIPTION_GRID, LNSessionCodes.ENTERPRISE_UNITS), 0, structureCnxt.enterpriseUnitDesc);
 
         // Verify Logistic Company
-        structureCnxt.logisticCompany = await LNCommon.getRequiredValueFromTheGrid(
-         LNSessionCodes.ENTERPRISE_UNITS,EnterpriseUnits_Lbl.LOGISTIC_COMPANY_GRID,EnterpriseUnits_Id.LOGISTIC_COMPANY_GRID,0);
+        const logisticCompany= await LNCommon.getRequiredValueFromTheGrid(
+        LNSessionCodes.ENTERPRISE_UNITS,EnterpriseUnits_Lbl.LOGISTIC_COMPANY_GRID,EnterpriseUnits_Id.LOGISTIC_COMPANY_GRID,0);
 
         expect(logisticCompany.trim()).toBe(structureCnxt.logisticCompany);
 
         await this.page.keyboard.press('Tab');
+
         // Click lookup for Financial Company
         await(await LNCommon.getTextboxLookUpIconInGrid( EnterpriseUnits_Lbl.FINANCIAL_COMPANY_GRID,EnterpriseUnits_Id.FINANCIAL_COMPANY_GRID, LNSessionCodes.ENTERPRISE_UNITS)).click();
 
@@ -624,11 +627,12 @@ class LNMasterData extends BaseClass {
         await this.page.keyboard.press('Tab');
         await LNCommon.dataCellElement(
         await LNCommon.getDataCell(EnterpriseUnits_Lbl.SITE_GRID,EnterpriseUnits_Id.SITE_GRID,LNSessionCodes.ENTERPRISE_UNITS),0, "");
+
         // Go to Details
         await LNCommon.drilldownRequiredRecord(LNSessionCodes.ENTERPRISE_UNITS,LNCommons.FIRST_RECORD);
 
         // Handle pop-up
-        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT.replace('%s', enterpriseUnit),LNCommons.OK);
+        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.NO_BUSINESS_PARTNER_ASSIGNED_TO_ENTERPRISE_UNIT.replace('%s', structureCnxt.enterpriseUnit),LNCommons.OK);
 
         await LNCommon.verifySessionTab(LNSessionTabs.ENTERPRISE_UNIT);
 
@@ -685,12 +689,16 @@ static async createPlanningCluster(planningClusters, planningClusterDescs) {
 static async createSite(structureCnxt) {
   console.log("=========>>>>> Create a site started <<<<<=========");
 
+  // Initializing page elements
+  const lnPg = new LNPage(this.page);
+
   // Navigate to Master Data > Enterprise Model > Enterprise Structure > Sites
   await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA,LNSessionTabs.ENTERPRISE_MODEL,LNSessionTabs.ENTERPRISE_STRUCTURE,LNSessionTabs.SITES);
 
   // Verify Session Tab
   await LNCommon.verifySessionTab(LNSessionTabs.SITES);
 
+  structureCnxt.site+="04";
   await LNCommon.filterRequiredRecord( Sites_Lbl.SITE_GRID,Sites_Id.SITE_GRID,LNSessionCodes.SITES,structureCnxt.site);
 
   const isPresent = await LNCommon.isRequiredRowPresent( LNSessionCodes.SITES, Sites_Lbl.SITE_GRID, Sites_Id.SITE_GRID,structureCnxt.site);
@@ -700,7 +708,8 @@ static async createSite(structureCnxt) {
     await LNCommon.verifySessionTab(LNSessionTabs.SITE);
 
     await LNCommon.decoratorInputField( await LNCommon.getTextField(Sites_Lbl.SITE, Sites_Id.SITE, LNSessionCodes.SITE),structureCnxt.site);
-
+    
+    structureCnxt.siteDesc=structureCnxt.siteDesc.replace('%s', '04');
     await LNCommon.decoratorInputField(await LNCommon.getTextField(Sites_Lbl.SITE, Sites_Id.SITE_DESCRIPTION, LNSessionCodes.SITE),structureCnxt.siteDesc);
 
     structureCnxt.logisticCompany="3270";
@@ -714,8 +723,10 @@ static async createSite(structureCnxt) {
           expect(streetName).toBe(structureCnxt.street);
       }).toPass({ timeout: 10000 });
 
+    structureCnxt.planningCluster= structureCnxt.planningCluster.replace('%s', '04');
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.PLANNING_CLUSTER, Sites_Id.PLANNING_CLUSTER, LNSessionCodes.SITE),structureCnxt.planningCluster );
 
+    structureCnxt.enterpriseUnit= structureCnxt.enterpriseUnit.replace('%s', '04');
     await LNCommon.triggerInputField(await LNCommon.getTextField(Sites_Lbl.ENTERPRISE_UNIT, Sites_Id.ENTERPRISE_UNIT, LNSessionCodes.SITE),structureCnxt.enterpriseUnit);
 
     await LNCommon.clickMainMenuItem(LNSessionCodes.SITE, LNMenuActions_Id.SAVE_AND_EXIT);
@@ -732,21 +743,21 @@ static async createSite(structureCnxt) {
   // Click Settings tab
   await LNCommon.selectHeaderTab(LNTabs.SETTINGS, LNSessionCodes.SITE);
 
-  const warehousingElement = await LNCommon.getDynamicElement(Sites_Lbl.WAREHOUSING_RDN,Sites_Id.WAREHOUSING_RDN,LNSessionCodes.SITE);
+  const warehousingElement = await lnPg.hyperlinkText(Sites_Lbl.WAREHOUSING_RDN,Sites_Id.WAREHOUSING_RDN,LNSessionCodes.SITE);
 
-  const warehousingClass = await warehousingElement.getAttribute('class');
+  const warehousingClass = await warehousingElement.getAttribute(ElementAttributes.CLASS);
 
   if (!warehousingClass.includes(LNCommons.CHECKED)) {
     await warehousingElement.click();
 
     await LNCommon.validateMessageAndHandlePopUp(
-      `Warehousing settings are not present for site ${structureCnxt.site}. Do you want to create them?`,
+      LNPopupMsg.WAREHOUSING_SETINGS_ARE_NOT_PRESENT_FOR_SITE_DO_YOU_WANT_TO_CREATE_THEM.replace('%s',  structureCnxt.site),
       LNCommons.YES
     );
 
     await LNCommon.verifySessionTab(LNSessionTabs.WAREHOUSING_SETTINGS_BY_SITE);
     await LNCommon.selectHeaderTab(LNTabs.GENERAL, LNSessionCodes.WAREHOUSING_SETTINGS_BY_SITE);
-    await LNCommon.selectCheckbox( Sites_Lbl.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK,Sites_Id.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK );
+    await LNCommon.selectCheckbox( Sites_Lbl.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK, Sites_Id.USE_GLOBAL_WAREHOUSING_PARAMETERS_CHK );
     await LNCommon.clickMainMenuItem(LNSessionCodes.WAREHOUSING_SETTINGS_BY_SITE, LNMenuActions_Id.SAVE_AND_EXIT);
     await LNCommon.verifySessionTab(LNSessionTabs.SITE);
   }
@@ -754,9 +765,8 @@ static async createSite(structureCnxt) {
   const classFinal = await warehousingElement.getAttribute('class');
   expect(classFinal).toContain(LNCommons.CHECKED);
 
-  await screenshot("Create a site");
   await LNCommon.clickMainMenuItem(LNSessionCodes.SITE, LNMenuActions_Id.SAVE_AND_EXIT);
-  await LNCommon.verifySessionTab(LNSessionTabs.SITES, page);
+  await LNCommon.verifySessionTab(LNSessionTabs.SITES);
   await LNCommon.clickMainMenuItem(LNSessionCodes.SITES, LNMenuActions_Id.SAVE_AND_EXIT);
   await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
@@ -977,23 +987,225 @@ static async reviewItemAtEnterpriseLevel(itemCnxt) {
   await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
 
   // Assert header shows the correct item
- // const itemVal = await (await LNCommon.getTextField(Items_Lbl.ITEM,Items_Id.ITEM_SEC,LNSessionCodes.ITEM)).getAttribute(ElementAttributes.VALUE);
- // expect(itemVal).toBe(itemCnxt.items[0]);
-    await expect(async () => {
-     const itemVal = await (await LNCommon.getTextField(Items_Lbl.ITEM,Items_Id.ITEM_SEC,LNSessionCodes.ITEM)).getAttribute(ElementAttributes.VALUE);
-     expect(itemVal).toBe(itemCnxt.items[0]);
-    }).toPass({ timeout: 10000 });
+  await expect(async () => {
+    const itemVal = await (await LNCommon.getTextField(Items_Lbl.ITEM,Items_Id.ITEM_SEC,LNSessionCodes.ITEM)).inputValue();
+    expect(itemVal).toBe(itemCnxt.items[0]);
+  }).toPass({ timeout: 20000 });
+
   // Go to 'Sites' tab at bottom and validate site data exists
   await LNCommon.selectGridTab(LNTabs.SITES, LNSessionCodes.ITEM);
-
-  const siteVal = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEMS_BY_SITE,Items_Lbl.SITE_GRID,Items_Id.SITES_GRID,0);
+  
   // Validate that at least one site is present
+  const siteVal = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEMS_BY_SITE,Items_Lbl.SITE_GRID,Items_Id.SITES_GRID,0);
   expect(siteVal).not.toBe(""); 
 
-  // Take screenshot for documentation
-  await screenshot("Review the item at an enterprise level");
-
   console.log("=========>>>>> Review the item at an enterprise level completed successfully <<<<<=========");
+}
+
+// -------------------------------------------------------------------------------------
+// Objective : Review the domain-specific data
+// Workbook  : LN Cloud: Configuring Multisite Environment
+// Exercises : 2.1.2
+// -------------------------------------------------------------------------------------
+
+static async reviewDomainSpecificData() {
+
+  console.log("=========>>>>> Review the domain-specific data started <<<<<=========");
+  
+  // Intializing the page
+  const lnPg=new LNPage(this.page);
+
+  // Assert Subentities section is present
+  expect(await this.isElementPresent(await lnPg.verifyHeader(Items_Lbl.SUBENTITIES))).toBeTruthy();
+
+  // Verify that Sales section is enabled (green check class exists)
+  const salesLocator = await lnPg.hyperlinkText(Items_Lbl.SALES_TEXT_BUTTON, Items_Id.SALES_TEXT_BUTTON, LNSessionCodes.ITEM);
+  expect(await salesLocator.getAttribute(ElementAttributes.CLASS)).toContain(LNCommons.CHECKED);
+
+  // Verify that Service section is NOT enabled (no green check class)
+  const serviceLocator = await lnPg.hyperlinkText(Items_Lbl.SERVICE_TEXT_BUTTON, Items_Id.SERVICE_BTN, LNSessionCodes.ITEM);
+  expect(await serviceLocator.getAttribute(ElementAttributes.CLASS)).not.toContain(LNCommons.CHECKED);
+
+  console.log("=========>>>>> Review the domain-specific data completed successfully <<<<<=========");
+}
+    /*-------------------------------------------------------------------------------------
+	 * Objective : Review Purchase Data for the Item
+	 * Workbook	 : LN Cloud: Configuring Multisite Environment
+	 * Exercises : 2.1.3
+	 * ------------------------------------------------------------------------------------*/
+static async reviewPurchaseDataForItem(itemCnxt) {
+
+  console.log("=========>>>>> Review Purchase Data for the Item started <<<<<=========");
+
+   // Initialize the page
+   const lnPg=new LNPage(this.page);
+
+  //Ensure 'Subentities' section is visible
+  expect(await this.isElementPresent(await lnPg.verifyHeader(Items_Lbl.SUBENTITIES))).toBeTruthy();
+
+  // Click 'Purchase' button inside Subentities
+  await (await lnPg.hyperlinkText(Items_Lbl.PURCHASE_BTN,Items_Id.PURCHASE_BTN,LNSessionCodes.ITEM)).click();
+
+  // Wait for Purchase dialog session
+  await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PURCHASE);
+
+  // Verify header field has correct item value
+  const itemHeaderField = await LNCommon.getTextField(Items_Lbl.ITEM_SEC_SEG_ITEM_PURCHASE,Items_Id.ITEM_SEC_SEG_ITEM_PURCHASE,LNSessionCodes.ITEM_PURCHASE);
+  expect(await itemHeaderField.inputValue()).toBe(itemCnxt.items[0]);
+
+  // Tab: Site-wise purchase data
+  await LNCommon.selectGridTab(LNTabs.SITES, LNSessionCodes.ITEM_PURCHASE);
+  await this.page.screenshot({ path: 'purchase_data_by_site.png' });
+
+  // Tab: Office-wise purchase data
+  await LNCommon.selectGridTab(LNTabs.OFFICES, LNSessionCodes.ITEM_PURCHASE);
+  await this.page.screenshot({ path: 'purchase_data_by_office.png' });
+
+  // Tab: Business Partner-wise purchase data
+  await LNCommon.selectGridTab(LNTabs.ITEM_BUSINESS_PARTNER, LNSessionCodes.ITEM_PURCHASE);
+  await this.page.screenshot({ path: 'purchase_data_by_bp.png' });
+
+  // Close the Item - Purchase session
+  await (await lnPg.closeButton(LNSessionCodes.ITEM_PURCHASE)).click();
+
+  // Verify it returned back to the ITEM session
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+  console.log("=========>>>>> Review Purchase Data for the Item completed successfully <<<<<=========");
+}
+/*-------------------------------------------------------------------------------------
+* Objective : Review sales office for the item
+* Workbook	 : LN Cloud: Configuring Multisite Environment
+* Exercises : 2.1.4
+* ------------------------------------------------------------------------------------*/
+static async reviewSalesOfficeForItem() {
+  console.log("=========>>>>> Review sales office for the item started <<<<<=========");
+  
+  // Intialize the page
+  const lnPg=new LNPage(this.page);
+
+  // Ensure 'Subentities' section is visible
+  expect(await this.isElementPresent(await lnPg.verifyHeader(Items_Lbl.SUBENTITIES))).toBeTruthy();
+
+  // Click 'Sales' button in Subentities section
+  await (await lnPg.hyperlinkText(Items_Lbl.SALES_TEXT_BUTTON,Items_Id.SALES_TEXT_BUTTON,LNSessionCodes.ITEM)).click();
+
+  // Wait for Item - Sales session
+  await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_SALES);
+
+  // Select 'Offices' tab in the sales session
+  await LNCommon.selectGridTab(LNTabs.OFFICES, LNSessionCodes.ITEM_SALES);
+
+  // Check that the sales office grid has records
+  const salesOfficeValue = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEMS_SALES_BY_OFFICE,Items_Lbl.SALES_OFFICE_GRID,Items_Id.SALES_OFFICE_GRID,0);
+  expect(salesOfficeValue).not.toBe("");
+
+  // Screenshot for validation
+  await this.page.screenshot({ path: 'review_sales_office_for_item.png' });
+
+  // Close Item - Sales session
+  await (await lnPg.closeButton(LNSessionCodes.ITEM_SALES)).click();
+
+  // Verify return to Item session
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+  // Close Item session
+  await LNSessionTabActions.closeTab(LNSessionTabs.ITEM);
+
+  // Confirm return to Items session
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEMS);
+
+  console.log("=========>>>>> Review sales office for the item completed successfully <<<<<=========");
+}
+
+/* -------------------------------------------------------------------------------------
+* Objective : Review standard costs by enterprise unit
+* Workbook  : LN Cloud: Configuring Multisite Environment
+* Exercises : 2.1.5
+* -------------------------------------------------------------------------------------*/
+static async reviewStandardCostsByEnterpriseUnit(itemCnxt) {
+  console.log("=========>>>>> Review standard costs by enterprise unit started <<<<<=========");
+
+  // Intialize the page
+  const lnPg = new LNPage(this.page);
+
+  //Filter item MS5000-2
+  await LNCommon.filterRequiredRecord(Items_Lbl.ITEM_GRID,Items_Id.ITEM_SEG_2_GRID,LNSessionCodes.ITEMS,itemCnxt.items[1]);
+
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEMS,Items_Lbl.ITEM_GRID,Items_Id.ITEM_SEG_2_GRID,itemCnxt.items[1]);
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEMS, String(rowNo));
+
+  // Verify in ITEM session and click 'Enterprise Units' tab
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+  await LNCommon.selectGridTab(LNTabs.ENTERPRISE_UNITS, LNSessionCodes.ITEM);
+
+  // Validate costing details in grid for each enterprise unit
+  for (let i = 0; i < itemCnxt.enterpriseUnitsDesc.length; i++) {
+    const unitDesc = itemCnxt.enterpriseUnitsDesc[i];
+
+    // Select row by enterprise unit description
+    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID,Items_Lbl.ENTERPRISE_UNIT_GRID);
+    const rowIndex = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEM_COSTING,Items_Lbl.ENTERPRISE_UNIT_GRID,Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID,unitDesc);
+
+    // Costing Source check
+    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.COSTING_SOURCE_GRID,Items_Lbl.COSTING_SOURCE_GRID);
+    const costingSource = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.COSTING_SOURCE_GRID,Items_Id.COSTING_SOURCE_GRID,rowIndex);
+    expect(costingSource).not.toBe("");
+
+    // Standard Cost value
+    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.STANDARD_COST_CURRENCY_GRID,Items_Lbl.STANDARD_COST_GRID);
+    const stdCost = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.STANDARD_COST_GRID,Items_Id.STANDARD_COST_GRID,rowIndex);
+    expect(stdCost).not.toBe("");
+
+    // Standard Cost currency
+    const currency = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.STANDARD_COST_GRID,Items_Id.STANDARD_COST_CURRENCY_GRID,rowIndex);
+    expect(currency).not.toBe("");
+
+    // Supplying EU validation for BER and MUNICH
+    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID);
+
+    const supplyingEU = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex);
+
+    if (i === 2 || i === 3) {
+      // Expect Amsterdam (itemCnxt.enterpriseUnitsDesc[1]) as supplying EU
+      expect(supplyingEU).toBe(itemCnxt.enterpriseUnitsDesc[1]);
+    } else {
+      // For BOSTON and AMSTERDAM, it should be empty
+      expect(supplyingEU).toBe("");
+    }
+  }
+
+  // Drill into each enterprise unit and verify costing source + components
+  for (let i = 0; i < itemCnxt.enterpriseUnits.length; i++) {
+    const unitCode = itemCnxt.enterpriseUnits[i];
+    const expectedSource = itemCnxt.costingSourceDrp[i];
+
+    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID,Items_Lbl.ENTERPRISE_UNIT_GRID);
+    const row = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEM_COSTING,Items_Lbl.ENTERPRISE_UNIT_GRID,Items_Id.ENTERPRISE_UNIT_GRID,unitCode);
+    await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEM_COSTING, String(row));
+
+    await LNCommon.verifySessionTab(LNSessionTabs.ITEM_COSTING);
+
+    // Verify costing source matches expected
+    await LNCommon.clickAndSelectDropdownField(Items_Lbl.COSTING_SOURCE_DRP,Items_Id.COSTING_SOURCE_DRP,expectedSource);
+
+    // Verify 'Cost Components' section exists
+    const costComponentHeader = await lnPg.verifyHeader(Items_Lbl.COST_COMPONENTS);
+    await expect(costComponentHeader).toBeVisible();
+
+    // Close Item - Costing session
+    await LNSessionTabActions.closeTab(LNSessionTabs.ITEM_COSTING);
+    await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+  }
+
+  // Step 5: Screenshot full summary and cleanup
+  await this.page.screenshot({ path: 'standard_costs_by_enterprise_unit.png' });
+
+  await LNSessionTabActions.closeTab(LNSessionTabs.ITEM);
+  await LNSessionTabActions.closeTab(LNSessionTabs.ITEMS);
+  await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+  console.log("=========>>>>> Review standard costs by enterprise unit completed successfully <<<<<=========");
 }
 
 }

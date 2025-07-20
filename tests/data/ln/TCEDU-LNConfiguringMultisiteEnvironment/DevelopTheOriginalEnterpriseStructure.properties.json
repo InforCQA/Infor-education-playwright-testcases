@@ -3,7 +3,7 @@
   "country": "USA",
   "city": "AUSTIN",
   "street": "Red River Street",
-  "houseNum": "8",
+  "houseNum": "8%s",
   "latitude": "30.273819",
   "longitude": "-97.742402",
   "enterpriseUnit": "AUS_%s",

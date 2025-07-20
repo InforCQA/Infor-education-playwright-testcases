@@ -73,6 +73,15 @@ class Items_Lbl {
   static DIRECT_DELIVERY_FROM_QUANTITY = "Direct Delivery from Quantity";
   static SUBJECT_TO_TRADE_COMPLIANCE_CHK = "Subject to Trade Compliance";
   static SITE_GRID = "Site";
+  static SALES_TEXT_BUTTON = "Sales";
+  static SERVICE_TEXT_BUTTON = "Service";
+  static ITEM_SEC_SEG_ITEM_PURCHASE = "Item";
+  static SALES_OFFICE_GRID = "Sales Office";
+  static ENTERPRISE_UNIT_GRID = "Enterprise Unit";
+  static COSTING_SOURCE_GRID = "Costing Source";
+  static STANDARD_COST_GRID = "Standard Cost";
+  static SUPPLYING_ENTERPRISE_UNIT_GRID = "Supplying Enterprise Unit";
+  static COSTING_SOURCE_DRP = "Costing Source";
 }
 
 export default Items_Lbl;

@@ -58,6 +58,16 @@ class Items_Id {
   static ITEM_GRID = "tcibd001.item.segment.2";
   static SITES_GRID = "tcibd150.site";
   static WAREHOUSE_GRID = "tcmcs003.cwar";
+  static SALES_TEXT_BUTTON = "item.sales.data";
+  static SERVICE_BTN = "item.service.data";
+  static ITEM_SEC_SEG_ITEM_PURCHASE = "tdipu001.item.segment.2";
+  static SALES_OFFICE_GRID = "tdisa081.soff";
+  static ENTERPRISE_UNIT_SEC_SEG_GRID = "tcemm030.dsca";
+  static COSTING_SOURCE_GRID = "ticpr007.scos";
+  static STANDARD_COST_CURRENCY_GRID = "amnt.currency";
+  static STANDARD_COST_GRID = "ticpr007.ecpr";
+  static SUPPLYING_ENTERPRISE_UNIT_GRID = "ticpr007.sueu";
+  static COSTING_SOURCE_DRP = "ticpr007.scos";
 }
 
 export default Items_Id;

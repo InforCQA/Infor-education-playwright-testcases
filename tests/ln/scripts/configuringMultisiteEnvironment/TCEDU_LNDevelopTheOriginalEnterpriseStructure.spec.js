@@ -36,10 +36,11 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
             await LNMasterData.createSite(structureCnxt);
         });
         
-        // // 1.4.5
-        // test('Create a sales office and warehouse', async ({ }) => {
-        //     await LNMasterData.createSalesOfficeAndWarehouse(structureCnxt);
-        // });
+        // 1.4.5
+        test('Create a sales office and warehouse', async ({ }) => {
+            await LNMasterData.createSalesOfficeAndWarehouse(structureCnxt);
+        });
+        
         // // 1.4.6
         // test('Create a sales setting by site', async ({ }) => {
         //     await LNMasterData.createSalesSettingBySite(structureCnxt);

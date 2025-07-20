@@ -16,6 +16,7 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         await setBrowserZoom(this.page, 50);
+
         // Using condition to verify whether it is displaying or not
         if (await this.isElementPresent(await lnPg.inforMainModules(module))) {
            await(await lnPg.inforMainModules(module)).click();
@@ -47,10 +48,8 @@ class LNCommon extends BaseClass {
 
         await expect(async () => {
            const currentActiveTab= await lnPg.currentActiveTab(tabName.toLowerCase());
-           await currentActiveTab.waitFor({ state: 'visible', timeout: 30000 });
+           await currentActiveTab.waitFor({ state: 'visible'});
         }).toPass({ timeout: 30000 });
-        
-       // expect(await this.isElementPresent(await lnPg.currentActiveTab(tabName.toLowerCase()))).toBeTruthy();
     }
 
     /*------------------------------------------------------------------
@@ -122,8 +121,10 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         // Used try catch method to select tabs
-      const selectHeaderTab= await (await lnPg.selectHeaderTab(tabName, sessionCode));
-      await (await (selectHeaderTab)).dblclick();
+        await expect(async () => {
+            const selectHeaderTab = await (await lnPg.selectHeaderTab(tabName, sessionCode));
+            await selectHeaderTab.dblclick();
+        }).toPass({ timeout: 10000 });
     }
 
     /*-----------------------------------------------
@@ -540,37 +541,38 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
 	 *------------------------------------------------------------------------------------------*/
 	
     static async dataCellElement(baseLocator, position, data) {
-    console.log(`INFO: DataCell element is being used for ${await baseLocator.toString()}`);
+        
+        console.log(`INFO: DataCell element is being used for ${await baseLocator.toString()}`);
 
-    // Convert to 1-based index like in Selenium
+        // Convert to 1-based index like in Selenium
 
-    // Construct dynamic locator based on position
-    const element = await baseLocator.nth(position); // Using Playwright's native nth()
+        // Construct dynamic locator based on position
+        const element = await baseLocator.nth(position); // Using Playwright's native nth()
 
-    // Scroll/move to the element and click to activate it
-    await expect(async () => {
-           await element.click();
+        // Scroll/move to the element and click to activate it
+        await expect(async () => {
+            await element.click();
         }).toPass({ timeout: 10000 });
 
 
-    // Find the child input inside the cell (assuming structure: <div><input></div>)
-    const parentDiv = await element.locator('div');
-    const classAttr = await parentDiv.first().getAttribute(ElementAttributes.CLASS);
+        // Find the child input inside the cell (assuming structure: <div><input></div>)
+        const parentDiv = await element.locator('div');
+        const classAttr = await parentDiv.first().getAttribute(ElementAttributes.CLASS);
 
-    // If not focused, click again
-    if (!classAttr.includes('focus')) {
-        await element.click();
+        // If not focused, click again
+        if (!classAttr.includes('focus')) {
+            await element.click();
+        }
+
+        // Get the actual input field and type data
+        const inputField = await parentDiv.locator('input');
+
+        await inputField.fill('');
+        await inputField.type(data);
+        await this.page.keyboard.press('Tab');
+
+        await this.page.waitForTimeout(2000);
     }
-
-    // Get the actual input field and type data
-    const inputField = await parentDiv.locator('input');
-
-    await inputField.fill('');
-    await inputField.type(data);
-    await this.page.keyboard.press('Tab');
-
-    await this.page.waitForTimeout(2000);
-}
 
 /**
  * ------------------------------------------------------------------
@@ -607,34 +609,47 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
  * Objective : To get Look up icon of textbox element in Grid 
  * ----------------------------------------------------------------
  */
-static async getTextboxLookUpIconInGrid(lbl, elementId, sessionCode) {
-  const lnPg = new LNPage(this.page);
-    // Verify header label before proceeding
-  await this.verifyColumnHeader(sessionCode, lbl);
+    static async getTextboxLookUpIconInGrid(lbl, elementId, sessionCode) {
 
-  // Return locator for the dynamic grid lookup icon (last record)
-  return await lnPg.gridLookupBtnLastRec(elementId, sessionCode);
-}
+        const lnPg = new LNPage(this.page);
+
+        // Verify header label before proceeding
+        await this.verifyColumnHeader(sessionCode, lbl);
+
+        // Return locator for the dynamic grid lookup icon (last record)
+        return await lnPg.gridLookupBtnLastRec(elementId, sessionCode);
+    }
+
 /*-----------------------------------------------
  * Objective 	: Select checkbox
 *--------------------------------------------------*/	
-static async selectCheckbox(label, elementId) {
-  const locator = await this.getDynamicElementMultiple(label, elementId);
+    static async selectCheckbox(label, elementId) {
 
-  // Move to the element (hover simulation)
-  await locator.scrollIntoViewIfNeeded();
-  await locator.hover();
+        const lnPg = new LNPage(this.page);
 
-  // Check if not already selected
-  const classAttr = await locator.getAttribute('class');
-  if (!classAttr.includes(LNCommons.CHECKED)) {
-    await locator.click({ force: true });
-  }
+        // Check if not already selected
+        let classAttr = null;
 
-  // Verify if selected now
-  const updatedClass = await locator.getAttribute('class');
-  expect(updatedClass).toContain(LNCommons.CHECKED);
-}
+        const selectCheckboxLabel= await lnPg.selectCheckboxLabel(label, elementId);
+        await selectCheckboxLabel.waitFor({ state: 'visible'});
+        classAttr = await selectCheckboxLabel.getAttribute(ElementAttributes.CLASS);
+
+        console.log(classAttr);
+
+        // Using condition to check whether it is selected or not
+        if (!(await classAttr.includes(LNCommons.CHECKED))) {
+
+            await expect(async () => {
+                await (await lnPg.selectCheckboxLabel(label, elementId)).waitFor({ state: 'visible' });
+                await (await lnPg.selectCheckboxLabel(label, elementId)).click();
+            }).toPass({ timeout: 10000 });
+
+        }
+
+        // Verifying whether checkbox is selected ot not
+        const radioBtn = await lnPg.selectCheckboxLabel(label, elementId);
+        expect((await radioBtn.getAttribute(ElementAttributes.CLASS))).toBeTruthy();
+    }
 
 /*--------------------------------------------------------------------------------------------
 * Objective 	: The method is used to perform custom actions on LN Input fields
@@ -666,6 +681,22 @@ static async decoratorInputField(locator, data) {
   await this.page.keyboard.press('Tab');
 }
 
+// ----------------------------------------------------------------------
+// Purpose : Move mouse to a specific column header in a grid
+// ----------------------------------------------------------------------
+
+static async moveToRequiredColumnHeader(sessionCode, elementId, label) {
+  
+    const lnPg = new LNPage(this.page);
+ 
+    await LNCommon.verifyColumnHeader(sessionCode, label); 
+
+    await expect(async () => {
+        const columnHeaderLocator = await lnPg.columnHeader(elementId,sessionCode);
+        await columnHeaderLocator.waitFor({ state: 'visible', timeout: 10000 });
+        await columnHeaderLocator.hover(); 
+    }).toPass({ timeout: 10000 });
+}
 
 }
 

@@ -48,11 +48,13 @@ class BaseClass {
   static async isElementPresent(locator) {
     try {
 
-      await this.page.waitForLoadState('domcontentloaded');
-      await locator.waitFor({
-        state: 'visible'
-      });
-    return true
+      for(let i=0;i<5;i++){
+        await locator.waitFor({
+          state: 'visible'
+        });
+      }
+      
+      return true
     } catch (e) {
       if (e instanceof playwright.errors.TimeoutError) {
         return false;
