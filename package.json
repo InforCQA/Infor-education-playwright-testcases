@@ -9,7 +9,8 @@
   "description": "",
   "devDependencies": {
     "@playwright/test": "^1.53.2",
-    "@types/node": "^24.0.3"
+    "@types/node": "^24.0.3",
+    "jest-expect-message": "^1.1.3"
   },
   "dependencies": {
     "playwright-zoom": "^1.1.0"

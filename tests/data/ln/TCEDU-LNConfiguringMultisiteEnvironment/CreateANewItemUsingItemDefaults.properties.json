@@ -1,0 +1,15 @@
+{
+  "itemType": "Product",
+  "itemGroup": "006",
+  "sites": [
+    "ATLANTA",
+    "BOSTON"
+  ],
+  "item": "00001",
+  "itemDesc": "Item",
+  "itemPurchasePrice": 27.00,
+  "enterpriseUnits": [
+    "BOSTON",
+    "ATLANT"
+  ]
+}
