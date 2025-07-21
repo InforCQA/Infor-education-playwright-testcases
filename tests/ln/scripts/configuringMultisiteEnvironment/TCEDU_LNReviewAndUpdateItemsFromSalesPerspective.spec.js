@@ -17,18 +17,18 @@ export default function TCEDU_LNReviewAndUpdateItemsFromSalesPerspective() {
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
 
-        // 1.4.1
+        // 2.2.1
         test('Review item by site and update purchase price', async ({ }) => {
              await CloudSuite.navigateToApplication(ProductNames.LN);
              await LNMasterData.reviewItemBySiteAndUpdatePurchasePrice(itemsBySiteCnxt);
          });
 
-        // // 1.4.2
+        // // 2.2.2
         // test('Calculate standard cost per enterprise unit (sales center)', async ({ }) => {
         //     await LNMasterData.calculateStandardCostPerEnterpriseUnitSalesCenter(itemsBySiteCnxt);
         // });
         
-        // // 1.4.3
+        // // 2.2.3
         // test('Review item by sales office and update sales price', async ({ }) => {
         //     await LNMasterData.reviewItemBySalesOfficeAndUpdateSalesPrice(itemsBySiteCnxt);
         // });
