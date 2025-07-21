@@ -163,8 +163,10 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         await this.page.waitForLoadState('load');
-        const headers = await (await lnPg.gridHeader(sessionCode)).elementHandles();
-
+        let headers = "";
+        for (let i=0; i<3; i++){
+        headers = await (await lnPg.gridHeader(sessionCode)).elementHandles();
+        }
         let actualLabel = "";
 
         for (const header of headers) {
@@ -258,10 +260,12 @@ class LNCommon extends BaseClass {
 
         // Step 1: Verify column header
         await this.verifyColumnHeader(sessionCode, columnName);
-
+        
         // Step 2: Fetch all grid cell elements
-        const records = await (await commonPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
-
+        let records = null;
+        for(let i=0; i<3; i++){
+        records = await (await commonPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
+        }
         let rowNo = -1;
         let isRecordFound = false;
 
@@ -694,7 +698,8 @@ static async moveToRequiredColumnHeader(sessionCode, elementId, label) {
     await expect(async () => {
         const columnHeaderLocator = await lnPg.columnHeader(elementId,sessionCode);
         await columnHeaderLocator.waitFor({ state: 'visible', timeout: 10000 });
-        await columnHeaderLocator.hover(); 
+        await columnHeaderLocator.scrollIntoViewIfNeeded();
+      //  await columnHeaderLocator.hover(); 
     }).toPass({ timeout: 10000 });
 }
 

@@ -1184,14 +1184,18 @@ static async reviewStandardCostsByEnterpriseUnit(itemCnxt) {
     // Supplying EU validation for BER and MUNICH
     await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID);
 
-    const supplyingEU = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex);
+   // const supplyingEU = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex);
 
     if (i === 2 || i === 3) {
       // Expect Amsterdam (itemCnxt.enterpriseUnitsDesc[1]) as supplying EU
-      expect(supplyingEU).toBe(itemCnxt.enterpriseUnitsDesc[1]);
+      await expect(async () => {
+        expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex)).toBe(itemCnxt.enterpriseUnitsDesc[1]);
+      }).toPass({ timeout: 10000 });
     } else {
       // For BOSTON and AMSTERDAM, it should be empty
-      expect(supplyingEU).toBe("");
+      await expect(async () => {
+       expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex)).toBe("");
+      }).toPass({ timeout: 10000 }); 
     }
   }
 
@@ -1226,6 +1230,81 @@ static async reviewStandardCostsByEnterpriseUnit(itemCnxt) {
   await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
   console.log("=========>>>>> Review standard costs by enterprise unit completed successfully <<<<<=========");
+}
+
+// -----------------------------------------------------------------------------
+// Objective : Update local business partner (customer) data
+// Workbook  : LN Cloud: Configuring Multisite Environment
+// Exercises : 2.4
+// -----------------------------------------------------------------------------
+static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
+
+  // Step 1: Navigate to Master Data > Business Partners > Business Partners
+  await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA, LNSessionTabs.BUSINESS_PARTNERS, LNSessionTabs.BUSINESS_PARTNERS);
+  await LNCommon.verifySessionTab(LNSessionTabs.BUSINESS_PARTNERS);
+
+  // Step 2: Filter and drill down the required Business Partner
+  await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.BUSINESS_PARTNER_GRID, BusinessPartners_Id.BUSINESS_PARTNER_GRID, LNSessionCodes.BUSINESS_PARTNERS, businessCnxt.businessPartner);
+  await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.BUSINESS_PARTNER_GRID, BusinessPartners_Id.BUSINESS_PARTNER_SECOND_SEGMENT_GRID, LNSessionCodes.BUSINESS_PARTNERS, businessCnxt.businessPartnerDesc);
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.BUSINESS_PARTNERS, LNCommons.FIRST_RECORD);
+  await LNCommon.verifySessionTab(LNSessionTabs.BUSINESS_PARTNER);
+
+  // Step 3: Click Sold-to button and verify dialog
+  await LNCommon.clickDynamicButton(BusinessPartners_Lbl.SOLD_TO_BUTTON, BusinessPartners_Id.SOLD_TO_BUTTON, LNSessionCodes.BUSINESS_PARTNER);
+  await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SOLD_TO_BUSINESS_PARTNERS);
+
+  // Step 4: Validate Sold-to BP fields
+  await expect(await LNCommon.getTextField(BusinessPartners_Lbl.SOLD_TO_BUSINESS_PARTNER, BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER, LNSessionCodes.BP_SOLD_TO).getAttribute('value')).toBe(businessCnxt.businessPartner);
+  await expect(await CommonFunctions.isDynamicElementPresent(LNPage.verifyHeader, BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER_DESCRIPTION, LNSessionCodes.BP_SOLD_TO, businessCnxt.businessPartnerDesc)).toBeTruthy();
+
+  // Step 5: Save and Exit from Sold-to dialog
+  await LNCommon.clickMainMenuItem(LNSessionCodes.BP_SOLD_TO, LNMenuActions_Id.SAVE_AND_EXIT);
+  await LNCommon.verifySessionTab(LNSessionTabs.BUSINESS_PARTNER);
+
+  // Step 6: Open Ship-to Business Partner
+  await LNCommon.clickDynamicButton(BusinessPartners_Lbl.SHIP_TO_BUTTON, BusinessPartners_Id.SHIP_TO_BUTTON, LNSessionCodes.BUSINESS_PARTNER);
+  await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER);
+  await LNCommon.selectGridTab(LNTabs.SITES, LNSessionCodes.BP_SHIP_TO);
+
+  // Step 7: Delete site if already exists
+  await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.SITE_IN_SHIP_TO_BP_GRID, BusinessPartners_Id.SITE_IN_SHIP_TO_BP_GRID, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, businessCnxt.site);
+  if (await LNCommon.isRequiredRowPresent(LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, BusinessPartners_Lbl.SITE_IN_SHIP_TO_BP_GRID, BusinessPartners_Id.SITE_IN_SHIP_TO_BP_GRID, businessCnxt.site)) {
+    await LNCommon.selectRequiredRecord(LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, BusinessPartners_Lbl.SITE_IN_SHIP_TO_BP_GRID, BusinessPartners_Id.SITE_IN_SHIP_TO_BP_GRID, businessCnxt.site);
+    await LNCommon.clickMainMenuItem(LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, LNMenuActions_Id.DELETE);
+    await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.DELETE_SELECT_RECORD, LNCommons.YES);
+    await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.DELETED_RECORD, LNCommons.OK);
+  }
+
+  // Step 8: Add new Site and Carrier
+  await LNCommon.clickMainMenuItem(LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, LNMenuActions_Id.NEW);
+  await LNCommon.verifySessionTab(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER_BY_SITE);
+
+  await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.SITE, BusinessPartners_Id.SITE, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE).click();
+  await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SITES);
+  await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.SITE_ZOOM_GRID, BusinessPartners_Id.SITE_ZOOM_GRID, LNSessionCodes.SITES, businessCnxt.site);
+  await LNCommon.selectRequiredRecord(LNSessionCodes.SITES, BusinessPartners_Lbl.SITE_GRID, BusinessPartners_Id.SITE_GRID, businessCnxt.site);
+  await LNCommon.clickTextMenuItem(LNSessionCodes.SITES, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+  await LNCommon.verifySessionTab(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER_BY_SITE);
+  await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.CARRIER_LSP, BusinessPartners_Id.CARRIER_LSP, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE).click();
+  await LNCommon.verifyDialogBoxWindow(LNSessionTabs.CARRIERS_LSP);
+  await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.CARRIER_LSP_ZOOM_GRID, BusinessPartners_Id.CARRIER_LSP_DESCRIPTION_ZOOM_GRID, LNSessionCodes.CARRIERS_LSP, businessCnxt.carrierDesc);
+  await LNCommon.selectRequiredRecord(LNSessionCodes.CARRIERS_LSP, BusinessPartners_Lbl.CARRIER_LSP_ZOOM_GRID, BusinessPartners_Id.CARRIER_LSP_DESCRIPTION_ZOOM_GRID, businessCnxt.carrierDesc);
+  await LNCommon.clickTextMenuItem(LNSessionCodes.CARRIERS_LSP, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+  await LNCommon.verifySessionTab(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER_BY_SITE);
+  await screenshot('Update local business partner (customer) data');
+
+  // Step 9: Save and Exit all opened sessions
+  await LNCommon.clickMainMenuItem(LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, LNMenuActions_Id.SAVE_AND_EXIT);
+  await LNCommon.clickMainMenuItem(LNSessionCodes.BP_SHIP_TO, LNMenuActions_Id.SAVE_AND_EXIT);
+  await LNCommon.clickMainMenuItem(LNSessionCodes.BUSINESS_PARTNER, LNMenuActions_Id.SAVE_AND_EXIT);
+  await LNCommon.clickMainMenuItem(LNSessionCodes.BUSINESS_PARTNERS, LNMenuActions_Id.SAVE_AND_EXIT);
+
+  // Step 10: Collapse Master Data
+  await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+  console.log('=========>>>>> Update local business partner (customer) data completed successfully <<<<<=========');
 }
 
 }
