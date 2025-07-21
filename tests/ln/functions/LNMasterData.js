@@ -23,6 +23,11 @@ import PlanningClusters_Lbl from "../constants/elementLbls/PlanningClusters_Lbl"
 import PlanningClusters_Id from "../constants/elementIds/PlanningClusters_Id";
 import Sites_Lbl from "../constants/elementLbls/Sites_Lbl";
 import Sites_Id from "../constants/elementIds/Sites_Id";
+import ItemsBySite_Id from "../constants/elementIds/ItemsBySite_Id";
+import ItemsBySite_Lbl from "../constants/elementLbls/ItemsBySite_Lbl";
+import { console } from "inspector";
+import Items_Id from "../constants/elementIds/Items_Id";
+import Items_Lbl from "../constants/elementLbls/Items_Lbl";
 
 class LNMasterData extends BaseClass {
 
@@ -747,7 +752,6 @@ static async createSite(structureCnxt) {
             : el.className
     );
 
-  console.log(warehousingClass);
   if (!warehousingClass.includes(LNCommons.CHECKED)) {
     await warehousingElement.click();
 
@@ -980,6 +984,660 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
     await LNSessionTabActions.closeTab(LNSessionTabs.ENTERPRISE_MODEL_WORKBENCH);
     await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 }
+
+    static async reviewItemBySiteAndUpdatePurchasePrice(itemsBySiteCnxt) {
+
+        // Initializing page elements
+	    const lnPg =new LNPage(this.page);
+        
+        console.log("=========>>>>> Review item by site and update purchase price started <<<<<=========");
+
+        await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA, LNSessionTabs.ITEMS, LNSessionTabs.ITEMS_BY_SITE);
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.SEARCH);
+
+        // Verify Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_BY_SITE_SEARCH);
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.CLEAR_FIELDS, LNMenuActions_Lbl.CLEAR_FIELDS);
+        await LNCommon.selectRadioBtn(ItemsBySite_Lbl.SITE_ITEM_RDN, ItemsBySite_Id.SITE_ITEM_RDN);
+        await LNCommon.triggerInputField(
+				await LNCommon.getTextField(ItemsBySite_Lbl.SITE, ItemsBySite_Id.SITE, LNSessionCodes.ITEMS_BY_SITE),
+				itemsBySiteCnxt.site);
+		await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+        
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+
+        // filter
+        await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.ITEM_GRID, ItemsBySite_Id.ITEM_SEGMENT_TWO_GRID,
+				LNSessionCodes.ITEMS_BY_SITE, itemsBySiteCnxt.item[0]);
+		await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.ITEM_GRID, ItemsBySite_Id.ITEM_DESCRIPTION_GRID,
+				LNSessionCodes.ITEMS_BY_SITE, itemsBySiteCnxt.itemDesc);
+		await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEMS_BY_SITE, LNCommons.FIRST_RECORD);
+       
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+
+        // Verifying the Use Global Item checkbox
+        expect(await this.isElementPresent(await lnPg.selectCheckboxLabel(
+						ItemsBySite_Lbl.USE_GLOBAL_ITEM_CHK, ItemsBySite_Id.USE_GLOBAL_ITEM_CHK))).toBeTruthy();
+        
+        // Click Purchase button in Subentities section                
+        expect(await this.isElementPresent(await lnPg.verifyHeader(ItemsBySite_Lbl.SUBENTITIES))).toBeTruthy();
+
+        await (await lnPg.hyperlinkText(ItemsBySite_Lbl.PURCHASE_BUTTON, ItemsBySite_Id.PURCHASE_BUTTON,
+				LNSessionCodes.ITEMS_BY_SITE)).click();
+        
+        // Verify Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_PURCHASE_BY_SITE);
+
+        // Verifying the details in tabs
+        const tabs = [LNTabs.RECEIVING, LNTabs.ACTUAL_ITEM_PRICES];
+        const headers = [ItemsBySite_Lbl.RECEIPT, ItemsBySite_Lbl.PURCHASE_PRICES];
+
+        for (let i = 0; i < tabs.length; i++) {
+            await LNCommon.selectHeaderTab(tabs[i], LNSessionCodes.ITEMS_PURCHASE_BY_SITE);
+
+            expect(await this.isElementPresent(await lnPg.verifyHeader(headers[i]))).toBeTruthy();
+        }
+
+        await LNCommon.selectHeaderTab(LNTabs.BUYING, LNSessionCodes.ITEMS_PURCHASE_BY_SITE);
+
+        // Verifying the Sections in Buying tab
+		const sections = [ItemsBySite_Lbl.GENERAL, ItemsBySite_Lbl.BUYING, ItemsBySite_Lbl.PURCHASE];
+        for (let i = 0; i < sections.length; i++) {
+			expect(await this.isElementPresent(await lnPg.verifyHeader(sections[i]))).toBeTruthy();
+		}
+
+        await LNCommon.deselectCheckbox(ItemsBySite_Lbl.USE_GLOBAL_ITEM_PURCHASE_CHK,
+				ItemsBySite_Id.USE_GLOBAL_ITEM_PURCHASE_CHK);
+
+        await LNCommon.triggerInputField(await LNCommon.getTextField(ItemsBySite_Lbl.PURCHASE_PRICE, ItemsBySite_Id.PURCHASE_PRICE,
+				LNSessionCodes.ITEMS_PURCHASE_BY_SITE), itemsBySiteCnxt.purchasePrice);
+        await LNCommon.clickTextMenuItem(LNSessionTabs.ITEMS_PURCHASE_BY_SITE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+        
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE,);
+
+        await (await lnPg.hyperlinkText(ItemsBySite_Lbl.SALES_BUTTON, ItemsBySite_Id.SALES_BUTTON,
+				LNSessionCodes.ITEMS_BY_SITE)).click();
+        
+        // Verify Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_SALES_BY_SITE);
+
+        // Verifying the values in Items Sales by Site
+        await expect(await LNCommon.getTextField(ItemsBySite_Lbl.ITEM_ZOOM, ItemsBySite_Id.ITEM_SEGMENT_TWO_ZOOM,
+						LNSessionCodes.ITEMS_SALES_BY_SITE)).toHaveValue(ctx.item[0]);
+
+        await expect(await LNCommon.getTextField(ItemsBySite_Lbl.SITE_ZOOM, ItemsBySite_Id.SITE_ZOOM,
+						LNSessionCodes.ITEMS_SALES_BY_SITE)).toHaveValue(ctx.site);
+       
+        await LNCommon.clickTextMenuItem(LNSessionTabs.ITEMS_SALES_BY_SITE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+        
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+        
+        // Verify Session Tab
+        await (await lnPg.hyperlinkText(ItemsBySite_Lbl.ORDERING_BUTTON, ItemsBySite_Id.ORDERING_BUTTON,
+				LNSessionCodes.ITEMS_BY_SITE)).click();
+
+        // Verify Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_ORDERING_BY_SITE);
+
+        const tabsDetails = [
+            [LNTabs.GENERAL, ItemsBySite_Lbl.ORDER],
+            [LNTabs.LOT_SIZES, ItemsBySite_Lbl.QUANTITIES],
+            [LNTabs.DETAILS, ItemsBySite_Lbl.FORECAST]
+        ];
+
+        for (const [tabsInOrdering, headersInOrdering] of tabsDetails) {
+
+            await LNCommon.selectHeaderTab(tabsInOrdering[i], LNSessionCodes.ITEMS_ORDERING_BY_SITE);
+            
+            expect(await this.isElementPresent(await lnPg.verifyHeader(headersInOrdering[i]))).toBeTruthy();
+        }
+
+        await LNCommon.clickTextMenuItem(LNSessionTabs.ITEMS_ORDERING_BY_SITE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+       
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+
+        await (await lnPg.hyperlinkText(ItemsBySite_Lbl.WAREHOUSING_BUTTON, ItemsBySite_Id.WAREHOUSING_BUTTON,
+				LNSessionCodes.ITEMS_BY_SITE)).click();
+        
+        // Verify Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_WAREHOUSING_BY_SITE);
+
+        // Verifying the Details in tabs
+        const warehousingTabs = [
+            [LNTabs.GENERAL, ItemsBySite_Lbl.GENERAL],
+            [LNTabs.INVENTORY, ItemsBySite_Lbl.STORAGE_DATA],
+            [LNTabs.HANDLING, ItemsBySite_Lbl.REJECTS_HANDLING],
+            [LNTabs.IDENTIFICATION, ItemsBySite_Lbl.LOTS]
+        ];
+        for (const [tabsInWarehousing, sectionsInWarehousing] of warehousingTabs) {
+
+             await LNCommon.selectHeaderTab(tabsInWarehousing[i], LNSessionCodes.ITEMS_ORDERING_BY_SITE);
+            
+            expect(await this.isElementPresent(await lnPg.verifyHeader(sectionsInWarehousing[i]))).toBeTruthy();
+        }
+        
+        await LNCommon.selectHeaderTab(LNTabs.HANDLING_UNITS, LNSessionCodes.ITEM_WAREHOUSING_BY_SITE);
+
+        // Verifying the Handling Units in Use checkbox
+        expect(await this.isElementPresent(await lnPg.selectCheckboxLabel(ItemsBySite_Lbl.HANDLING_UNITS_IN_USE_CHK, ItemsBySite_Id.HANDLING_UNITS_IN_USE_CHK))).toBeTruthy();
+
+        await LNCommon.selectHeaderTab(LNTabs.DYNAMIC_CROSS_DOCKING, LNSessionCodes.ITEM_WAREHOUSING_BY_SITE);
+
+        // Verifying the Dynamic Cross Docking checkbox
+        expect(await this.isElementPresent(await lnPg.selectCheckboxLabel(ItemsBySite_Lbl.DYNAMIC_CROSS_DOCKING_CHK, ItemsBySite_Id.DYNAMIC_CROSS_DOCKING_CHK))).toBeTruthy();
+
+        await LNCommon.selectGridTab(LNTabs.WAREHOUSES, LNSessionCodes.ITEM_WAREHOUSING_BY_SITE);
+		await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.WAREHOUSE_ZOOM_GRID, ItemsBySite_Id.WAREHOUSE_ZOOM_GRID,
+				LNSessionCodes.ITEM_DATA_WAREHOUSE, itemsBySiteCnxt.warehouse);
+		await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEM_DATA_WAREHOUSE, LNCommons.FIRST_RECORD);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEM_DATA_BY_WAREHOUSE);
+        
+        // Verifying the Details in tabs
+        const itemDataTabs = [
+            [LNTabs.GENERAL, ItemsBySite_Lbl.GENERAL],
+            [LNTabs.REPLENISHMENT, ItemsBySite_Lbl.ORDER_SETTINGS]
+        ];
+        for (const [tabsInItemData, sectionsInItemData] of itemDataTabs) {
+            
+            await LNCommon.selectHeaderTab(tabsInItemData[i], LNSessionCodes.ITEMS_ORDERING_BY_SITE);
+            
+            expect(await this.isElementPresent(await lnPg.verifyHeader(sectionsInItemData[i]))).toBeTruthy();
+        }
+
+        await this.page.screenshot({ path: 'screenshots/reviewItemBySite.png' });
+
+        await LNCommon.clickMainMenuItem(LNSessionTabs.ITEM_DATA_BY_WAREHOUSE, LNMenuActions_Id.SAVE_AND_CLOSE);
+        await LNCommon.clickMainMenuItem(LNSessionTabs.ITEMS_WAREHOUSING_BY_SITE, LNMenuActions_Id.SAVE_AND_CLOSE);
+        await LNCommon.clickMainMenuItem(LNSessionTabs.ITEMS_BY_SITE, LNMenuActions_Id.SAVE_AND_CLOSE);
+        await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+        log().info("=========>>>>> Review item by site and update purchase price completed sucessfully <<<<<=========");
+    }
+
+
+    static async calculateStandardCostPerEnterpriseUnitSalesCenter(itemsBySiteCnxt) {
+
+        const lnPg = new LNPage(this.page);
+
+        console.log('=== Calculate standard cost per enterprise unit started ===');
+
+        // Navigating to Master Data --> Items --> Items by Site
+        await LNCommon.navigateToLNModule(LNSessionTabs.COMMON, LNSessionTabs.STANDARD_COSTS, LNSessionTabs.CALCULATION, LNSessionTabs.CALCULATE_STANDARD_COST);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.CALCULATE_STANDARD_COST);
+
+        await LNCommon.triggerInputField(LNCommon.getTextField(CalculateStandardCost_Lbl.FROM_ITEM,
+            CalculateStandardCost_Id.FROM_ITEM_SEG2, LNSessionCodes.CALCULATE_STANDARD_COST), itemsBySiteCnxt.item[0]);
+
+        // Verifying the value in To Item field
+        expect( await LNCommon.getTextField(CalculateStandardCost_Lbl.TO_ITEM, CalculateStandardCost_Id.TO_ITEM_SEG2,
+                    LNSessionCodes.CALCULATE_STANDARD_COST).getAttribute(ElementAttributes.VALUE)).toBe(itemsBySiteCnxt.item[0]);
+
+        await LNCommon.selectCheckbox(CalculateStandardCost_Lbl.ACTUALIZE_STANDARD_COST_AND_REVALUE_INVENTORY_CHK,
+            CalculateStandardCost_Id.ACTUALIZE_STANDARD_COST_AND_REVALUE_INVENTORY_CHK);
+        await LNCommon.clickTextMenuItem(LNSessionCodes.CALCULATE_STANDARD_COST, LNMenuActions_Id.CALCULATES, LNMenuActions_Lbl.CALCULATE);
+        await LNCommon.handleDevice();
+        pause(3);
+
+        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.PROCESS_READY, LNCommons.OK);
+        LNCommon.clickTextMenuItem(LNSessionCodes.CALCULATE_STANDARD_COST, LNMenuActions_Id.CLOSE, LNMenuActions_Lbl.CLOSE);
+
+        // Close all LN Modules
+        await LNCommon.collapseLNModule(LNSessionTabs.COMMON);
+
+        // Navigating to Master Data --> Items --> Items by Site
+        await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA, LNSessionTabs.ITEMS, LNSessionTabs.ITEMS_BY_SITE);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.SEARCH);
+
+        // Verify Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_BY_SITE_SEARCH);
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.CLEAR_FIELDS,
+            LNMenuActions_Lbl.CLEAR_FIELDS);
+        await LNCommon.selectRadioBtn(ItemsBySite_Lbl.ITEM_SITE_RDN, ItemsBySite_Id.ITEM_SITE_RDN);
+        await LNCommon.triggerInputField(LNCommon.getTextField(ItemsBySite_Lbl.ITEM, ItemsBySite_Id.ITEM_SEGMENT_TWO,
+            LNSessionCodes.ITEMS_BY_SITE), itemsBySiteCnxt.item[0]);
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+
+        // Verifying our Item is displayed in second item field
+        expect(await LNCommon.getTextField(ItemsBySite_Lbl.ITEM_IN_ITEMS_BY_SITE,
+                ItemsBySite_Id.ITEM_IN_ITEMS_BY_SITE, LNSessionCodes.ITEMS_BY_SITE)
+                .inputValue()).toBe(itemsBySiteCnxt.item[0]);
+
+        await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.SITE_GRID, ItemsBySite_Id.SITE_GRID, LNSessionCodes.ITEMS_BY_SITE,
+            itemsBySiteCnxt.site);
+        await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEMS_BY_SITE, LNCommons.FIRST_RECORD);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_BY_SITE);
+
+        await LNCommon.navigateToLNReferences(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Lbl.COSTINGS);
+
+        // Verifying the Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_COSTING);
+
+        await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.ENTERPRISE_UNIT_ZOOM_GRID,
+            ItemsBySite_Id.ENTERPRISE_UNIT_ZOOM_GRID, LNSessionCodes.ITEM_COSTINGS, itemsBySiteCnxt.enterpriseUnit);
+        await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEM_COSTINGS, LNCommons.FIRST_RECORD);
+
+        // Verifying the Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_COSTING);
+
+        // Verifying the Data in Item Costing
+        expect(await LNCommon
+                .getTextField(ItemsBySite_Lbl.ITEM_IN_ITEM_COSTING,
+                    ItemsBySite_Id.ITEM_IN_ITEM_COSTING_SEGMENT_TWO, LNSessionCodes.ITEM_COSTING)
+                .inputValue()).toBe(itemsBySiteCnxt.item[0]);
+
+        // Verifying the Costing Source dropdown value
+        expect(await lnPg.dropdownValueLabel(ItemsBySite_Lbl.COSTING_SOURCE_DRP,
+                ItemsBySite_Id.COSTING_SOURCE_DRP).getAttribute(ElementAttributes.INNER_TEXT))
+            .toBe(itemsBySiteCnxt.costingSource);
+
+        // Verifying Data in Costs Section
+        expect(await lnPg.verifyHeader(ItemsBySite_Lbl.COSTS)).toBeTruthy();
+
+        expect(await LNCommon.getTextField(ItemsBySite_Lbl.MATERIAL_COSTS, ItemsBySite_Id.MATERIAL_COSTS,
+                LNSessionCodes.ITEM_COSTING).getAttribute(ElementAttributes.INNER_TEXT))
+            .toBe(itemsBySiteCnxt.purchasePrice);
+
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_COSTING, LNMenuActions_Id.SAVE_AND_CLOSE);
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_COSTINGS, LNMenuActions_Id.SAVE_AND_CLOSE);
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.SAVE_AND_CLOSE);
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.SAVE_AND_CLOSE);
+
+        // Close all LN Modules
+        await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+        console.log('=== Calculate standard cost completed successfully ===');
+    }
+
+    
+    static async reviewItemBySalesOfficeAndUpdateSalesPrice(itemsBySiteCnxt) {
+
+        console.log('=== Start reviewItemBySalesOfficeAndUpdateSalesPrice ===');
+
+        await LNCommon.LNRestart();
+        await LNCommon.runProgram(LNSessionCodes.ITEMS_SALES_BY_OFFICE);
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_SALES_BY_OFFICE);
+
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.SEARCH);
+
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_SALES_BY_OFFICE_SEARCH);
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.CLEAR_FIELDS, LNMenuActions_Lbl.CLEAR_FIELDS);
+        await LNCommon.selectRadioBtn(ItemsBySite_Lbl.SALES_OFFICE_ITEM_SITE_RDN, ItemsBySite_Id.SALES_OFFICE_ITEM_SITE_RDN);
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_SALES_BY_OFFICE);
+
+        await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.SEARCH);
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_SALES_BY_OFFICE_SEARCH);
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.CLEAR_FIELDS, LNMenuActions_Lbl.CLEAR_FIELDS);
+        await LNCommon.selectRadioBtn(ItemsBySite_Lbl.SALES_OFFICE_ITEM_SITE_RDN, ItemsBySite_Id.SALES_OFFICE_ITEM_SITE_RDN);
+
+
+        await (await LNCommon.getTextboxLookUpIcon(ItemsBySite_Lbl.SALES_OFFICE_ZOOM, ItemsBySite_Id.SALES_OFFICE_ZOOM, LNSessionCodes.ITEMS_SALES_BY_OFFICE)).click();
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SALES_OFFICES);
+
+        await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.SALES_OFFICE_ZOOM_GRID, ItemsBySite_Id.SALES_OFFICE_DESCRIPTION_ZOOM_GRID, LNSessionCodes.SALES_OFFICES, itemsBySiteCnxt.salesOfficeDesc);
+        await LNCommon.selectRequiredRecord(LNSessionCodes.SALES_OFFICES, ItemsBySite_Lbl.SALES_OFFICE_ZOOM_GRID, ItemsBySite_Id.SALES_OFFICE_ZOOM_GRID, itemsBySiteCnxt.salesOffice);
+        await LNCommon.clickTextMenuItem(LNSessionCodes.SALES_OFFICES, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_SALES_BY_OFFICE_SEARCH);
+
+        await LNCommon.triggerInputField(
+            LNCommon.getTextField(ItemsBySite_Lbl.ITEM_IN_SALES_BY_OFFICE,
+                ItemsBySite_Id.ITEM_IN_SALES_BY_OFFICE_SEGMENT_TWO, LNSessionCodes.ITEMS_SALES_BY_OFFICE),
+            itemsBySiteCnxt.item[1]);
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_SALES_BY_OFFICE);
+
+        await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.ITEM_IN_SALES_BY_OFFICE_GRID, ItemsBySite_Id.ITEM_IN_SALES_BY_OFFICE_DESCRIPTION_GRID, LNSessionCodes.ITEMS_SALES_BY_OFFICE, itemsBySiteCnxt.item[1]);
+        await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNCommons.FIRST_RECORD);
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_SALES_BY_OFFICE);
+
+        await (await LNCommon.getTextboxLookUpIcon(ItemsBySite_Lbl.SITE_IN_SALES_BY_OFFICE, ItemsBySite_Id.SITE_IN_SALES_BY_OFFICE, LNSessionCodes.ITEMS_SALES_BY_OFFICE)).click();
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SITES);
+
+        await LNCommon.filterRequiredRecord(ItemsBySite_Lbl.SITE_IN_SITES_ZOOM_GRID, ItemsBySite_Id.SITE_IN_SITES_ZOOM_GRID, LNSessionCodes.SITES, ctx.site);
+        await LNCommon.selectRequiredRecord(LNSessionCodes.SITES, ItemsBySite_Lbl.SITE_IN_SITES_ZOOM_GRID, ItemsBySite_Id.SITE_IN_SITES_ZOOM_GRID, ctx.site);
+        await LNCommon.clickTextMenuItem(LNSessionCodes.SITES, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_SALES_BY_OFFICE);
+
+        await LNCommon.selectHeaderTab(LNTabs.PRICE, LNSessionCodes.ITEMS_SALES_BY_OFFICE);
+        await LNCommon.deselectCheckbox(ItemsBySite_Lbl.USE_GLOBAL_ITEM_SALES_CHK, ItemsBySite_Id.USE_GLOBAL_ITEM_SALES_CHK);
+
+        await LNCommon.triggerInputField(LNCommon.getTextField(ItemsBySite_Lbl.SALES_PRICE, ItemsBySite_Id.SALES_PRICE,
+            LNSessionCodes.ITEMS_SALES_BY_OFFICE), itemsBySiteCnxt.salesPrice);
+
+        await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.DEFAULT_PRICE_BOOK, LNCommons.OK);
+
+        await this.page.screenshot({ path: 'screenshots/reviewItemBySalesOffice.png' });
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.SAVE_AND_EXIT);
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEMS_SALES_BY_OFFICE);
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_SALES_BY_OFFICE, LNMenuActions_Id.SAVE_AND_EXIT);
+
+        await LNCommon.collapseLNModule(LNSessionTabs.OPTIONS);
+
+        console.log('=== Completed reviewItemBySalesOfficeAndUpdateSalesPrice ===');
+    }
+
+    static async reviewItemDefaults(itemCnxt) {
+
+        // Initialising page elements
+        const lnPg = new LNPage(this.page);
+
+        log().info("=========>>>>> Review item defaults started <<<<<=========");
+
+        // Navigating to Master Data --> Items --> Defaults --> Item Defaults
+        await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA, LNSessionTabs.ITEMS, LNSessionTabs.DEFAULTS,
+            LNSessionTabs.ITEM_DEFAULTS);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEM_DEFAULTS);
+
+        await LNCommon.clickAndSelectDropdownFieldGridFilter(ItemDefaults_Id.ITEM_TYPE_GRID_DRP, itemCnxt.itemType,
+            ItemDefaults_Lbl.ITEM_TYPE_GRID_DRP, LNSessionCodes.ITEM_DEFAULTS);
+        await LNCommon.filterRequiredRecord(ItemDefaults_Lbl.ITEM_GROUP_GRID, ItemDefaults_Id.ITEM_GROUP_GRID,
+            LNSessionCodes.ITEM_DEFAULTS, itemCnxt.itemGroup);
+        await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEM_DEFAULTS, LNCommons.FIRST_RECORD);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEM_DEFAULTS);
+
+        // Verifying the Item Type dropdown value
+        expect(await lnPg.dropdownValueLabel(ItemDefaults_Lbl.ITEM_TYPE_DRP,
+            ItemDefaults_Id.ITEM_TYPE_DRP).getAttribute(ElementAttributes.INNER_TEXT))
+            .toBe(itemCnxt.itemType);
+
+        // Verifying the Item Group value
+        expect(await LNCommon.getTextField(ItemDefaults_Lbl.ITEM_GROUP_GRID, ItemDefaults_Id.ITEM_GROUP_GRID,
+            LNSessionCodes.ITEM_DEFAULTS_DETAIL).getAttribute(ElementAttributes.VALUE)).toBe(itemCnxt.itemGroup);
+
+        await lnPg.verifyHeader(ItemDefaults_Lbl.SUBENTITIES).hover();
+
+        // Review the fields and data in Subentities section
+        expect(await this.isElementPresent(await lnPg.verifyHeader(ItemDefaults_Lbl.SUBENTITIES))).toBeTruthy();
+
+        for (let i = 0; i < itemCnxt.sites.length; i++) {
+            await LNCommon.selectGridTab(LNTabs.SITES, LNSessionCodes.ITEM_DEFAULTS_DETAIL);
+
+            await LNCommon.filterRequiredRecord(ItemDefaults_Lbl.SITE_GRID, ItemDefaults_Id.SITE_GRID,
+                LNSessionCodes.ITEM_CONTROL_AND_DEFAULTS_BY_SITE, itemCnxt.sites[i]);
+            await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEM_CONTROL_AND_DEFAULTS_BY_SITE, LNCommons.FIRST_RECORD);
+
+            // Verifying the Session title
+            await LNCommon.verifySessionTab(LNSessionTabs.ITEM_CONTROL_AND_DEFAULTS_BY_SITE);
+
+            // Verifying the Value in Site
+            expect(await LNCommon
+                .getTextField(ItemDefaults_Lbl.SITE, ItemDefaults_Id.SITE,
+                    LNSessionCodes.ITEM_CONTROL_AND_DEFAULTS_BY_SITE)
+                .getAttribute(ElementAttributes.VALUE)).toBe(itemCnxt.sites[i]);
+
+            await LNSessionTabActions.closeTab(LNSessionTabs.ITEM_CONTROL_AND_DEFAULTS_BY_SITE);
+        }
+
+        await LNCommon.selectGridTab(LNTabs.ENTERPRISE_UNITS, LNSessionCodes.ITEM_DEFAULTS_DETAIL);
+
+        await lnPg.verifyHeader(ItemDefaults_Lbl.SUBENTITIES).hover();
+
+        await lnPg.hyperlinkText(ItemDefaults_Lbl.SALES_BTN, ItemDefaults_Id.SALES_BTN,
+            LNSessionCodes.ITEM_DEFAULTS_DETAIL).click();
+
+        // Verifying the Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_SALES_DEFAULTS);
+
+        // Verifying the Details in Item Sales Defaults window
+        expect(await lnPg.dropdownValueLabel(ItemDefaults_Lbl.ITEM_TYPE_IN_SALES_ZOOM_DRP,
+            ItemDefaults_Id.ITEM_TYPE_IN_SALES_ZOOM_DRP).getAttribute(ElementAttributes.INNER_TEXT)).toBe(itemCnxt.itemType);
+        expect(await LNCommon
+            .getTextField(ItemDefaults_Lbl.ITEM_GROUP_IN_SALES_ZOOM,
+                ItemDefaults_Id.ITEM_GROUP_IN_SALES_ZOOM, LNSessionCodes.ITEM_SALES_DEFAULTS)
+            .getAttribute(ElementAttributes.VALUE)).toBe(itemCnxt.itemGroup);
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEM_SALES_DEFAULTS, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEM_DEFAULTS);
+
+        await lnPg.hyperlinkText(ItemDefaults_Lbl.ORDERING_BTN, ItemDefaults_Id.ORDERING_BTN,
+            LNSessionCodes.ITEM_DEFAULTS_DETAIL).click();
+
+        // Verifying the Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_ORDERING_DEFAULTS);
+
+        // Verifying the Details in Item Sales Defaults window
+        expect(await lnPg.dropdownValueLabel(ItemDefaults_Lbl.ITEM_TYPE_IN_ORDERING_ZOOM_DRP,
+            ItemDefaults_Id.ITEM_TYPE_IN_ORDERING_ZOOM_DRP).getAttribute(ElementAttributes.INNER_TEXT)).toBe(itemCnxt.itemType);
+        expect(await LNCommon
+            .getTextField(ItemDefaults_Lbl.ITEM_GROUP_IN_ORDERING_ZOOM,
+                ItemDefaults_Id.ITEM_GROUP_IN_ORDERING_ZOOM, LNSessionCodes.ITEM_ORDERING_DEFAULTS)
+            .getAttribute(ElementAttributes.VALUE)).toBe(itemCnxt.itemGroup);
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEM_ORDERING_DEFAULTS, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEM_DEFAULTS);
+
+        await lnPg.hyperlinkText(ItemDefaults_Lbl.PURCHASE_BTN, ItemDefaults_Id.PURCHASE_BTN,
+            LNSessionCodes.ITEM_DEFAULTS_DETAIL).click();
+
+        // Verifying the Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PURCHASE_DEFAULTS);
+
+        await LNCommon.selectHeaderTab(LNTabs.PURCHASE_DEFAULTS_ONE, LNSessionCodes.ITEM_PURCHASE_DEFAULTS);
+
+        // Verifying the Price Details section
+        expect(await lnPg.verifyHeader(ItemDefaults_Lbl.PRICE_DETAILS_SECTION)).toBeTruthy();
+
+        await LNCommon.selectHeaderTab(LNTabs.PURCHASE_DEFAULTS_TWO, LNSessionCodes.ITEM_PURCHASE_DEFAULTS);
+
+        // Verifying the Order Details section
+        expect(await this.isElementPresent(lnPg.verifyHeader, ItemDefaults_Lbl.ORDER_DETAILS_SECTION)).toBeTruthy();
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEM_PURCHASE_DEFAULTS, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEM_DEFAULTS);
+
+        await lnPg.hyperlinkText(ItemDefaults_Lbl.WAREHOUSING_BTN, ItemDefaults_Id.WAREHOUSING_BTN,
+            LNSessionCodes.ITEM_DEFAULTS_DETAIL).click();
+
+        // Verifying the Dialogbox title
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEMS_WAREHOUSING_DEFAULTS);
+
+        // Verifying the Details in Items Warehousing Defaults window
+        expect(await lnPg.dropdownValueLabel(ItemDefaults_Lbl.ITEM_TYPE_IN_WAREHOUSING_ZOOM_DRP, ItemDefaults_Id.ITEM_TYPE_IN_WAREHOUSING_ZOOM_DRP)
+            .getAttribute(ElementAttributes.INNER_TEXT)).toBe(itemCnxt.itemType);
+
+        expect(await LNCommon.getTextField(ItemDefaults_Lbl.ITEM_GROUP_IN_WAREHOUSING_ZOOM,
+            ItemDefaults_Id.ITEM_GROUP_IN_WAREHOUSING_ZOOM, LNSessionCodes.ITEMS_WAREHOUSING_DEFAULTS)
+            .getAttribute(ElementAttributes.VALUE)).toBe(itemCnxt.itemGroup);
+
+        await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_WAREHOUSING_DEFAULTS, LNMenuActions_Id.OK,
+            LNMenuActions_Lbl.OK);
+
+        // Verify Session Tab
+        await LNCommon.verifySessionTab(LNSessionTabs.ITEM_DEFAULTS);
+
+        // tscreenshot("Review item defaults");
+
+        await LNSessionTabActions.closeTab(LNSessionTabs.ITEM_DEFAULTS);
+        await LNSessionTabActions.closeTab(LNSessionTabs.ITEM_DEFAULTS);
+
+        // Close all LN Modules
+        await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+        log().info("=========>>>>> Review item defaults completed sucessfully <<<<<=========");
+    }
+
+    static async createANewItem(itemCnxt) {
+
+		// Initialising page elements
+		const lnPg = new LNPage(this.page);
+
+		log().info("=========>>>>> Create a new item started <<<<<=========");
+
+		// Navigating to Master Data --> Items --> Items
+		await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA, LNSessionTabs.ITEMS, LNSessionTabs.ITEMS);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEMS);
+
+		// Verifying and Deleting the Item if already created
+		await LNCommon.filterRequiredRecord(Items_Lbl.ITEM_GRID, Items_Id.ITEM_SEG_2_GRID, LNSessionCodes.ITEMS,
+				itemCnxt.item);
+		if (await LNCommon.isRequiredRowPresent(LNSessionCodes.ITEMS, Items_Lbl.ITEM_GRID, Items_Id.ITEM_SEG_2_GRID,
+				itemCnxt.item)) {
+			await LNCommon.selectRequiredRecord(LNSessionCodes.ITEMS, Items_Lbl.ITEM_GRID, Items_Id.ITEM_SEG_2_GRID,
+					itemCnxt.item);
+			await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS, LNMenuActions_Id.DELETE);
+			await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.DELETE_SELECT_RECORD, LNCommons.YES);
+			
+            await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.DELETED_RECORD, LNCommons.OK);
+		}
+
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS, LNMenuActions_Id.NEW);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+		await LNCommon.triggerInputField(LNCommon.getTextField(Items_Lbl.ITEM, Items_Id.ITEM_SEC, LNSessionCodes.ITEM),
+				itemCnxt.item);
+		await LNCommon.triggerInputField(await
+				LNCommon.getTextField(Items_Lbl.DESCRIPTION, Items_Id.DESCRIPTION_ITEM, LNSessionCodes.ITEM),
+				itemCnxt.itemDesc);
+		await LNCommon.getTextboxLookUpIcon(Items_Lbl.ITEM_GROUP, Items_Id.ITEM_GROUP, LNSessionCodes.ITEM).click();
+
+		// Verifying the Dialogbox title
+		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM);
+
+		await LNCommon.selectRadioBtn(Items_Lbl.ITEM_DEFAULTS_RDN, Items_Id.ITEM_DEFAULTS_RDN);
+		await LNCommon.handlePopUp();
+
+		// Verifying the Dialogbox title
+		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_DEFAULTS);
+
+		await LNCommon.clickAndSelectDropdownFieldGridFilter(Items_Id.ITEM_TYPE_ZOOM_GRID_DRP, itemCnxt.itemType,
+				Items_Lbl.ITEM_TYPE_ZOOM_GRID_DRP, LNSessionCodes.ITEM_DEFAULTS);
+		await LNCommon.filterRequiredRecord(Items_Lbl.ITEM_GROUP_ZOOM_GRID, Items_Id.ITEM_GROUP_IN_ITEM_DEFAULTS_ZOOM_GRID,
+				LNSessionCodes.ITEM_DEFAULTS, itemCnxt.itemGroup);
+		await LNCommon.selectRecord(LNSessionCodes.ITEM_DEFAULTS, LNCommons.FIRST_RECORD);
+		await LNCommon.clickTextMenuItem(LNSessionCodes.ITEM_DEFAULTS, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+		await this.page.keyboard.press('Tab');
+		
+		// Verifying the Unit Set
+		expect(await LNCommon.getTextField(Items_Lbl.UNIT_SET, Items_Id.UNIT_SET, LNSessionCodes.ITEM)
+				.getAttribute(ElementAttributes.VALUE)).as("The Unit set field is empty").not.toBe();
+
+		// Verifying the Unit
+		expect(await LNCommon.getTextField(Items_Lbl.UNIT, Items_Id.UNIT, LNSessionCodes.ITEM)
+				.getAttribute(ElementAttributes.VALUE)).not.toBeEmpty();
+
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM, LNMenuActions_Id.SAVE);
+		await lnPg.verifyHeader(Items_Lbl.SUBENTITIES).hover();
+
+
+		// Review the fields and data in Subentities section
+		expect(await this.isElementPresent(lnPg.verifyHeader(Items_Lbl.SUBENTITIES))).toBeTruthy();
+
+		await lnPg.hyperlinkText(Items_Lbl.PURCHASE_BTN, Items_Id.PURCHASE_BTN, LNSessionCodes.ITEM)
+				.click();
+
+		// Verifying the Dialogbox title
+		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PURCHASE);
+
+		await LNCommon.triggerInputField(
+				await LNCommon.getTextField(Items_Lbl.PURCHASE_PRICE, Items_Id.PURCHASE_PRICE, LNSessionCodes.ITEM_PURCHASE),
+				itemCnxt.itemPurchasePrice);
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_PURCHASE, LNMenuActions_Id.SAVE);
+
+		// Verifying the Dialogbox title
+		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PURCHASE_TDIPU);
+		await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.REPLACE_LATEST_PURCHASE_PRICE, LNCommons.YES);
+
+		// Verifying the Dialogbox title
+		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PURCHASE_TDIPUA);
+		await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.REPLACE_AVERAGE_PURCHASE_PRICE_ACTUAL_PRICE, LNCommons.YES);
+
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_PURCHASE, LNMenuActions_Id.SAVE_AND_EXIT);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+		await LNCommon.selectGridTab(LNTabs.ENTERPRISE_UNITS, LNSessionCodes.ITEM);
+		await LNCommon.filterRequiredRecord(Items_Lbl.ENTERPRISE_UNIT_GRID, Items_Id.ENTERPRISE_UNIT_GRID,
+				LNSessionCodes.ITEM_COSTING, itemCnxt.enterpriseUnits[0]);
+		await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEM_COSTING, LNCommons.FIRST_RECORD);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEM_COSTING);
+
+		await LNCommon.navigateToLNActions(LNSessionCodes.ITEM_COSTING,
+				LNMenuActions_Lbl.CALCULATE_AND_ACTUALIZE_STANDARD_COSTS);
+
+		// Verifying the Costs
+		expect(await LNCommon
+						.getTextField(Items_Lbl.MATERIAL_COSTS, Items_Id.MATERIAL_COSTS, LNSessionCodes.ITEM_COSTING)
+						.getAttribute(ElementAttributes.INNER_TEXT)).toBe(itemCnxt.itemPurchasePrice);
+
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_COSTING, LNMenuActions_Id.SAVE_AND_EXIT);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+		await LNCommon.filterRequiredRecord(Items_Lbl.ENTERPRISE_UNIT_GRID, Items_Id.ENTERPRISE_UNIT_GRID,
+				LNSessionCodes.ITEM_COSTING, itemCnxt.enterpriseUnits[1]);
+		await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEM_COSTING, LNCommons.FIRST_RECORD);
+
+		// Verify Session Tab
+		await LNCommon.verifySessionTab(LNSessionTabs.ITEM_COSTING);
+
+		await LNCommon.navigateToLNActions(LNSessionCodes.ITEM_COSTING,
+				LNMenuActions_Lbl.CALCULATE_AND_ACTUALIZE_STANDARD_COSTS);
+				
+		// Verifying the Material Cost
+		expect(await LNCommon
+						.getTextField(Items_Lbl.MATERIAL_COSTS, Items_Id.MATERIAL_COSTS, LNSessionCodes.ITEM_COSTING)
+						.getAttribute(ElementAttributes.INNER_TEXT))
+				.toBe(itemCnxt.itemPurchasePrice);
+
+		// Verifying the Total Cost
+		expect(await LNCommon.getTextField(Items_Lbl.TOTAL_COSTS, Items_Id.TOTAL_COSTS, LNSessionCodes.ITEM_COSTING)
+								.getAttribute(ElementAttributes.INNER_TEXT)).toBeGreaterThan(itemCnxt.itemPurchasePrice);
+
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_COSTING, LNMenuActions_Id.SAVE_AND_EXIT);
+
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM, LNMenuActions_Id.SAVE_AND_EXIT);
+		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS, LNMenuActions_Id.SAVE_AND_EXIT);
+
+		// Close all LN Modules
+		await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+		log().info("=========>>>>> Create a new item completed sucessfully <<<<<=========");
+	}
 
 }
 

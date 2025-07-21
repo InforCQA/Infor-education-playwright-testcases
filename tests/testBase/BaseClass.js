@@ -1,6 +1,7 @@
 import { chromium } from 'playwright';
 import path from 'path' 
 const playwright = require('playwright');
+import { expect } from '@playwright/test';
 
 class BaseClass {
   static page;
@@ -47,13 +48,13 @@ class BaseClass {
 
   static async isElementPresent(locator) {
     try {
-
-      for(let i=0;i<5;i++){
+        
+      await expect(async () => {
         await locator.waitFor({
           state: 'visible'
         });
-      }
-      
+      }).toPass({ timeout: 15000 });
+    
       return true
     } catch (e) {
       if (e instanceof playwright.errors.TimeoutError) {
@@ -112,9 +113,13 @@ class BaseClass {
   }
 
   static async type(locator, value) {
-    await locator.click({ clickCount: 3 });
-    await locator.press('Backspace');
-    await locator.type(value);
+
+    await expect(async () => {
+      await locator.click({ clickCount: 3 });
+      await locator.press('Backspace');
+      await locator.type(value);
+    }).toPass({ timeout: 10000 });
+
   }
 
   static async selectValueFromDropdown(locator, value) {

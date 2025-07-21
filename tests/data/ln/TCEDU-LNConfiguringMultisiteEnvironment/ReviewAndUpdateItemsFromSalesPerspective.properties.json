@@ -1,0 +1,15 @@
+{
+  "site": "ATLANTA",
+  "item": [
+    "MS100A",
+    "MS200"
+  ],
+  "itemDesc": "Motor Lift Chair - Type A",
+  "purchasePrice": 105.00,
+  "warehouse": "WHATLA",
+  "enterpriseUnit": "ATLANT",
+  "costingSource": "Purchase",
+  "salesOffice": "SOATLA",
+  "salesOfficeDesc": "Atlanta",
+  "salesPrice": 52.00
+}

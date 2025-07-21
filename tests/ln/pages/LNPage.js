@@ -1,11 +1,13 @@
 import { defaultMaxListeners } from "events";
 import BaseClass from "../../testBase/BaseClass";
 import { assert } from "console";
+import LNCustomActions from "./LNCustomActions";
 
-class LNPage {
+class LNPage extends LNCustomActions{
 
 
     constructor(page) {
+        super();
         this.page = page;
     }
 
@@ -971,16 +973,16 @@ class LNPage {
         );
 
     /* verifyHeader - WebElement */
-    verifyHeader = (p1) =>
-        this.iframe().locator(
+    verifyHeader = async(p1) =>{
+        return await (await this.iframe()).locator(
             `(//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//label[normalize-space()='${p1}'][contains(@id,'header')])[last()]`
-        );
+        )};
 
     /* actionOverflow -- Button */
-    actionOverflow = (p1) =>
-        this.iframe().locator(
+    actionOverflow = async(p1) =>{
+        return await this.iframe().locator(
             `(//label[contains(@id,'${p1}') and contains(@id,'std:action-label') and normalize-space()='Actions'])[last()]`
-        );
+        )};
 
     /* referenceOverflow -- Button */
     referenceOverflow = async(p1) =>{
@@ -989,10 +991,10 @@ class LNPage {
         )};
 
     /* viewOverflow -- Button */
-    viewOverflow = (p1) =>
-        this.iframe().locator(
+    viewOverflow = async(p1) =>{
+        await this.iframe().locator(
             `(//label[contains(@id,'${p1}') and contains(@id,'std:view-label') and normalize-space()='Views'])[last()]`
-        );
+        )};
 
     /* selectHeaderTab - Button */
     selectHeaderTab = async(p1, p2) =>{

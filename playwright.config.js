@@ -5,11 +5,12 @@ export default defineConfig({
   use: {
     browserName: undefined,
     headless: undefined,
+    trace: 'on',
   },
   globalSetup: './global-setup.js',
   testDir: './tests',
+  reporter: 'html',
   timeout: 60 * 1000,
-  slowMo: 1000,
   projects: [
     {
       name: 'InforOS',

@@ -8,8 +8,8 @@ import { setBrowserZoom } from 'playwright-zoom';
 class LNCommon extends BaseClass {
 
     /*----------------------------------------------------------------------------
-	 * Objective 	: Navigate to LN required session through left page navigation
-	 *-------------------------------------------------------------------------------*/
+     * Objective 	: Navigate to LN required session through left page navigation
+     *-------------------------------------------------------------------------------*/
     static async navigateToLNModule(module, ...subModules) {
 
         // Intializing the page
@@ -19,20 +19,20 @@ class LNCommon extends BaseClass {
 
         // Using condition to verify whether it is displaying or not
         if (await this.isElementPresent(await lnPg.inforMainModules(module))) {
-           await(await lnPg.inforMainModules(module)).click();
+            await (await lnPg.inforMainModules(module)).click();
 
             // Using loop to navigate to expand and use multiple sub modules
             for (let i = 0; i < subModules.length; i++) {
 
                 const subModule = subModules[i];
                 if (!(i == subModules.length - 1)) {
-                    await(await lnPg.inforLNSubModule(subModule, i + 2)).waitFor({ state: 'visible' });
-                    await(await lnPg.inforLNSubModule(subModule, i + 2)).hover();
-                    await(await lnPg.inforLNSubModule(subModule, i + 2)).click();
+                    await (await lnPg.inforLNSubModule(subModule, i + 2)).waitFor({ state: 'visible' });
+                    await (await lnPg.inforLNSubModule(subModule, i + 2)).hover();
+                    await (await lnPg.inforLNSubModule(subModule, i + 2)).click();
                 } else {
-                    await(await lnPg.inforLNSubModuleEnd(subModule, i + 2)).waitFor({ state: 'visible' });
-                    await(await lnPg.inforLNSubModuleEnd(subModule, i + 2)).hover();
-                    await(await lnPg.inforLNSubModuleEnd(subModule, i + 2)).click();
+                    await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).waitFor({ state: 'visible' });
+                    await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).hover();
+                    await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).click();
                 }
             }
         }
@@ -47,8 +47,8 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         await expect(async () => {
-           const currentActiveTab= await lnPg.currentActiveTab(tabName.toLowerCase());
-           await currentActiveTab.waitFor({ state: 'visible'});
+            const currentActiveTab = await lnPg.currentActiveTab(tabName.toLowerCase());
+            await currentActiveTab.waitFor({ state: 'visible' });
         }).toPass({ timeout: 30000 });
     }
 
@@ -65,7 +65,7 @@ class LNCommon extends BaseClass {
             await (await lnPg.clickDropdownLabel(label, elementId)).hover();
             await (await lnPg.clickDropdownLabel(label, elementId)).click();
         }).toPass({ timeout: 10000 });
-       
+
         await (await lnPg.selectListItem(listItem)).waitFor({ state: 'visible', timeout: 5000 });
         await (await lnPg.selectListItem(listItem)).click();
 
@@ -108,7 +108,7 @@ class LNCommon extends BaseClass {
 
         // Verifying whether module is collapsed or not
         expect(async () => {
-               await expect(await lnPg.inforMainModules(module)).toHaveAttribute(ElementAttributes.ARIA_EXPANDED, 'false');
+            await expect(await lnPg.inforMainModules(module)).toHaveAttribute(ElementAttributes.ARIA_EXPANDED, 'false');
         }).toPass();
     }
 
@@ -137,12 +137,12 @@ class LNCommon extends BaseClass {
 
         // Used try catch method to select tabs
         try {
-            
-    
-            const selectFooterTab= await lnPg.selectFooterTab(tabName, sessionCode);
+
+
+            const selectFooterTab = await lnPg.selectFooterTab(tabName, sessionCode);
             await selectFooterTab.hover();
             await selectFooterTab.click({ force: true });
-        
+
         } catch (error) {
             // Expand more tab options
             const moreBtn = await lnPg.moreGridBtn(sessionCode);
@@ -199,7 +199,7 @@ class LNCommon extends BaseClass {
                 break;
             }
         }
-        
+
         await this.page.waitForLoadState('load');
         //expect(actualLabel.toLowerCase()).toBe(label.trim().toLowerCase());
     }
@@ -216,13 +216,13 @@ class LNCommon extends BaseClass {
         await this.verifyColumnHeader(sessionCode, label); // Assuming this is implemented
 
         // Wait for the dropdown to be clickable
-        const drpValueGridFilter= await (await lnPg.drpValueGridFilter(elementId));
+        const drpValueGridFilter = await (await lnPg.drpValueGridFilter(elementId));
         await (drpValueGridFilter).click();
 
         // Using condition to verify the list item is already selected or not
         const currentValue = await (await lnPg.dropdownValueField(elementId)).textContent();
         if (currentValue.trim() != listItem) {
-            const drpValueGridFilter= await lnPg.drpValueGridFilter(elementId);
+            const drpValueGridFilter = await lnPg.drpValueGridFilter(elementId);
             await drpValueGridFilter.click();
 
             // Verifying whether dropdown field is in active or not
@@ -291,9 +291,9 @@ class LNCommon extends BaseClass {
         return rowNo;
     }
 
-	/*----------------------------------------------------------------------
-	 * Objective 	: Click drilldown button for required record
-	 *----------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------
+     * Objective 	: Click drilldown button for required record
+     *----------------------------------------------------------------------*/
     static async drilldownRequiredRecord(sessionCode, recordNum) {
 
         // Intializing the page
@@ -307,8 +307,8 @@ class LNCommon extends BaseClass {
     }
 
     /*------------------------------------------------------------------------------------------------
-	 * Objective 	: Navigate to LN References and select required menu option - label
-	 *-----------------------------------------------------------------------------------------------*/
+     * Objective 	: Navigate to LN References and select required menu option - label
+     *-----------------------------------------------------------------------------------------------*/
     static async navigateToLNReferences(sessionCode, ...menuOptions) {
 
         // Intializing the page   
@@ -346,9 +346,9 @@ class LNCommon extends BaseClass {
         expect(await this.isElementPresent(await lnPg.dialogWindowTab(tabName))).toBeTruthy();
     }
 
-	/*---------------------------------------------------------------------------------
-	 * Objective 	: Type for one , double, triple field (trigger input and decorator)
-	 *---------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------
+     * Objective 	: Type for one , double, triple field (trigger input and decorator)
+     *---------------------------------------------------------------------------------*/
     static async getTextField(label, elementId, sessionCode) {
 
         // Intializing the page
@@ -358,8 +358,8 @@ class LNCommon extends BaseClass {
     }
 
     /*---------------------------------------------------------------------------------
-	 * Objective 	: Type for data cell element
-	 *---------------------------------------------------------------------------------*/
+     * Objective 	: Type for data cell element
+     *---------------------------------------------------------------------------------*/
     static async getDataCell(label, elementId, sessionCode) {
 
         // Initializing the page
@@ -373,9 +373,9 @@ class LNCommon extends BaseClass {
     }
 
     /*------------------------------------------------------------------------------
-	 * Objective : To Retrieve the grid value based on Column name
-	 * @param row: Pass the row value dynamically from selectRequiredRecord() method
-	 * -----------------------------------------------------------------------------*/
+     * Objective : To Retrieve the grid value based on Column name
+     * @param row: Pass the row value dynamically from selectRequiredRecord() method
+     * -----------------------------------------------------------------------------*/
     static async getRequiredValueFromTheGrid(sessionCode, columnName, elementId, rowNum) {
 
         // Initializing the page
@@ -385,7 +385,7 @@ class LNCommon extends BaseClass {
         await LNCommon.verifyColumnHeader(sessionCode, columnName);
 
         // Get the target row element
-        const target = await(await lnPg.gridCell(sessionCode, elementId)).nth(rowNum);
+        const target = await (await lnPg.gridCell(sessionCode, elementId)).nth(rowNum);
 
         let fetchedValue = null;
         const labelText = await target.textContent();
@@ -396,13 +396,13 @@ class LNCommon extends BaseClass {
         } else {
             fetchedValue = labelText?.trim();
         }
-        
+
         return fetchedValue;
     }
-    
+
     /*---------------------------------------------------------------------------------
-	 * Objective 	: Filter the required record
-	 *---------------------------------------------------------------------------------*/
+     * Objective 	: Filter the required record
+     *---------------------------------------------------------------------------------*/
     static async filterRequiredRecord(label, elementId, sessionCode, filterItem) {
         // Intializing the page
         const lnPg = new LNPage(this.page);
@@ -415,133 +415,138 @@ class LNCommon extends BaseClass {
         await this.page.keyboard.press('Tab');
     }
 
-/* -----------------------------------------------------------------------
- * Objective : To check if required record is present in the grid 
- * -----------------------------------------------------------------------*/
-static async isRequiredRowPresent(sessionCode, columnName, elementId, value) {
+    /* -----------------------------------------------------------------------
+     * Objective : To check if required record is present in the grid 
+     * -----------------------------------------------------------------------*/
+    static async isRequiredRowPresent(sessionCode, columnName, elementId, value) {
 
-    // Intializing the page
-    const lnPg = new LNPage(this.page);
+        // Intializing the page
+        const lnPg = new LNPage(this.page);
 
-    // Verify the column header
-    await this.verifyColumnHeader(sessionCode, columnName);
+        // Verify the column header
+        await this.verifyColumnHeader(sessionCode, columnName);
 
-    // Get all grid cell elements for the given elementId
-    const records = await (await lnPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
+        // Get all grid cell elements for the given elementId
+        const records = await (await lnPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
 
-    let isRecordFound = false;
+        let isRecordFound = false;
 
-    // Loop through each cell to match value
-    for (let i = 0; i < records.length; i++) {
-        const labelText = (await records[i].innerText())?.trim();
-        const inputValue = await records[i].getAttribute(ElementAttributes.VALUE);
-        const fetchedValue = inputValue ? inputValue.trim() : labelText;
+        // Loop through each cell to match value
+        for (let i = 0; i < records.length; i++) {
+            const labelText = (await records[i].innerText())?.trim();
+            const inputValue = await records[i].getAttribute(ElementAttributes.VALUE);
+            const fetchedValue = inputValue ? inputValue.trim() : labelText;
 
-        if (fetchedValue.toLowerCase() === value.toLowerCase()) {
-            isRecordFound = true;
-            break;
+            if (fetchedValue.toLowerCase() === value.toLowerCase()) {
+                isRecordFound = true;
+                break;
+            }
         }
+
+        // Return result
+        return isRecordFound;
     }
 
-    // Return result
-    return isRecordFound;
-}
+    /*------------------------------------------------------------------
+     * Objective 	: Click on the required main menu item
+     *-------------------------------------------------------------------*/
+    static async clickMainMenuItem(sessionCode, menuItem) {
 
-/*------------------------------------------------------------------
- * Objective 	: Click on the required main menu item
- *-------------------------------------------------------------------*/
-static async clickMainMenuItem(sessionCode, menuItem) {
+        // Initializing the page
+        const lnPg = new LNPage(this.page);
 
-    // Initializing the page
-    const lnPg = new LNPage(this.page);
+        const menuLocator = await lnPg.menuItem(sessionCode, menuItem);
 
-    const menuLocator = await lnPg.menuItem(sessionCode, menuItem);
+        // Wait for menu item to be clickable
+        await menuLocator.waitFor({ state: 'visible', timeout: 5000 });
 
-    // Wait for menu item to be clickable
-    await menuLocator.waitFor({ state: 'visible', timeout: 5000 });
-
-    expect(async () => {
-        await menuLocator.dblclick();
-    }).toPass({ timeout: 10000 });
-}
-
-/*--------------------------------------------------------------------------------------------
- * Objective 	: The method is used to perform custom actions on LN Input fields with Lookup
- *-------------------------------------------------------------------------------------------*/
-static async triggerInputField(locator, data) {
- // Initializing the page
-    const lnPg = new LNPage(this.page);
-
-    // Step 1: Wait and click the input field
-    await locator.click();
-
-    // Step 3: Get parent div and check for focus class
-    const parent = await locator.locator('..'); // parent div
-    const classAttr = await parent.getAttribute('class');
-
-    if (!classAttr.includes('TriggerInputField-focus')) {
-        await expect(async () => {
-            await locator.click();
+        expect(async () => {
+            await menuLocator.dblclick();
         }).toPass({ timeout: 10000 });
     }
 
-    // Step 5: Clear and type
-    await this.type(locator, data);
+    /*--------------------------------------------------------------------------------------------
+     * Objective 	: The method is used to perform custom actions on LN Input fields with Lookup
+     *-------------------------------------------------------------------------------------------*/
+    static async triggerInputField(locator, data) {
+        // Initializing the page
+        const lnPg = new LNPage(this.page);
 
-    // Step 6: Press Tab to trigger any events
-    await this.page.keyboard.press('Tab');
-}
+        // Step 1: Wait and click the input field
+        await locator.click();
 
-/*----------------------------------------------------------
- * Objective : To get Look up icon of textbox element
- *----------------------------------------------------------*/
-static async getTextboxLookUpIcon(label, elementId, sessionCode) {
+        // Step 3: Get parent div and check for focus class
+        const parent = await locator.locator('..'); // parent div
+        const classAttr = await parent.getAttribute('class');
 
-    // Initialize the page
-    const lnPg = new LNPage(this.page);
+        if (!classAttr.includes('TriggerInputField-focus')) {
 
-    // Return dynamic locator for lookup icon (your LNPage.lookupBtn must support this structure)
-    return await lnPg.lookupBtn(label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode);
-}
+            await expect(async () => {
+                await locator.click();
+            }).toPass({ timeout: 10000 });
 
-/*------------------------------------------------------------------
- * Objective 	: Filters the required record and select first record
- *-------------------------------------------------------------------*/
-static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCode) {
+        }
 
-    // Initialize the page
-    const lnPg = new LNPage(this.page);
+        // Step 5: Clear and type
+        await expect(async () => {
+            await this.type(locator, data);
+        }).toPass({ timeout: 10000 });
 
-    await this.verifyColumnHeader(sessionCode, label);
-    await this.type(await lnPg.filterInput(elementId, sessionCode), filterItem);
-    await this.page.keyboard.press('Enter');
-    await this.page.waitForTimeout(2000);
-    // Step 4: Validate typed value
-    const labelValueLocator = await lnPg.filterLabelValue(elementId, sessionCode);
-    const inputValueLocator = await lnPg.filterInputValue(elementId, sessionCode);
 
-    if (await labelValueLocator.isVisible()) {
-        const labelText = (await labelValueLocator.textContent())?.trim();
-        await this.page.waitForTimeout(2000);
-        expect(labelText.toLowerCase()).toBe(filterItem.toLowerCase());
-    } else {
-        const valueAttr = await inputValueLocator.inputValue();
-        await this.page.waitForTimeout(2000);
-        expect(valueAttr?.trim().toLowerCase()).toBe(filterItem.toLowerCase());
+        // Step 6: Press Tab to trigger any events
+        await this.page.keyboard.press('Tab');
     }
 
-    const firstRecord = await lnPg.selectRequiredRecord(sessionCode, LNCommons.FIRST_RECORD);
-    await firstRecord.click();
+    /*----------------------------------------------------------
+     * Objective : To get Look up icon of textbox element
+     *----------------------------------------------------------*/
+    static async getTextboxLookUpIcon(label, elementId, sessionCode) {
 
-    const classAttr = await firstRecord.getAttribute(ElementAttributes.CLASS);
-    expect(classAttr.includes(LNCommons.CHECKED)).toBeTruthy();
-}
+        // Initialize the page
+        const lnPg = new LNPage(this.page);
+
+        // Return dynamic locator for lookup icon (your LNPage.lookupBtn must support this structure)
+        return await lnPg.lookupBtn(label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode);
+    }
+
+    /*------------------------------------------------------------------
+     * Objective 	: Filters the required record and select first record
+     *-------------------------------------------------------------------*/
+    static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCode) {
+
+        // Initialize the page
+        const lnPg = new LNPage(this.page);
+
+        await this.verifyColumnHeader(sessionCode, label);
+        await this.type(await lnPg.filterInput(elementId, sessionCode), filterItem);
+        await this.page.keyboard.press('Enter');
+        await this.page.waitForTimeout(2000);
+        // Step 4: Validate typed value
+        const labelValueLocator = await lnPg.filterLabelValue(elementId, sessionCode);
+        const inputValueLocator = await lnPg.filterInputValue(elementId, sessionCode);
+
+        if (await labelValueLocator.isVisible()) {
+            const labelText = (await labelValueLocator.textContent())?.trim();
+            await this.page.waitForTimeout(2000);
+            expect(labelText.toLowerCase()).toBe(filterItem.toLowerCase());
+        } else {
+            const valueAttr = await inputValueLocator.inputValue();
+            await this.page.waitForTimeout(2000);
+            expect(valueAttr?.trim().toLowerCase()).toBe(filterItem.toLowerCase());
+        }
+
+        const firstRecord = await lnPg.selectRequiredRecord(sessionCode, LNCommons.FIRST_RECORD);
+        await firstRecord.click();
+
+        const classAttr = await firstRecord.getAttribute(ElementAttributes.CLASS);
+        expect(classAttr.includes(LNCommons.CHECKED)).toBeTruthy();
+    }
     /*--------------------------------------------------------------------------------------------
-	 * Objective 	: The method is used to perform custom actions on LN Table fields Input fields
-	 *------------------------------------------------------------------------------------------*/
-	
+     * Objective 	: The method is used to perform custom actions on LN Table fields Input fields
+     *------------------------------------------------------------------------------------------*/
+
     static async dataCellElement(baseLocator, position, data) {
-        
+
         console.log(`INFO: DataCell element is being used for ${await baseLocator.toString()}`);
 
         // Convert to 1-based index like in Selenium
@@ -574,17 +579,17 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
         await this.page.waitForTimeout(2000);
     }
 
-/**
- * ------------------------------------------------------------------
- * Objective : Validate popup message and handle pop-up
- * ------------------------------------------------------------------
- */
+    /**
+     * ------------------------------------------------------------------
+     * Objective : Validate popup message and handle pop-up
+     * ------------------------------------------------------------------
+     */
     static async validateMessageAndHandlePopUp(popupText, popupBtn) {
 
         const lnPg = new LNPage(this.page);
 
         let popup = null, textCount = 0;
-        
+
         await expect(async () => {
             await (await lnPg.popupText()).waitFor({ state: 'visible', timeout: 5000 });
             textCount = await (await lnPg.popupText()).count();
@@ -604,11 +609,11 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
 
     }
 
-/**
- * ----------------------------------------------------------------
- * Objective : To get Look up icon of textbox element in Grid 
- * ----------------------------------------------------------------
- */
+    /**
+     * ----------------------------------------------------------------
+     * Objective : To get Look up icon of textbox element in Grid 
+     * ----------------------------------------------------------------
+     */
     static async getTextboxLookUpIconInGrid(lbl, elementId, sessionCode) {
 
         const lnPg = new LNPage(this.page);
@@ -620,9 +625,9 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
         return await lnPg.gridLookupBtnLastRec(elementId, sessionCode);
     }
 
-/*-----------------------------------------------
- * Objective 	: Select checkbox
-*--------------------------------------------------*/	
+    /*-----------------------------------------------
+     * Objective 	: Select checkbox
+    *--------------------------------------------------*/
     static async selectCheckbox(label, elementId) {
 
         const lnPg = new LNPage(this.page);
@@ -630,11 +635,9 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
         // Check if not already selected
         let classAttr = null;
 
-        const selectCheckboxLabel= await lnPg.selectCheckboxLabel(label, elementId);
-        await selectCheckboxLabel.waitFor({ state: 'visible'});
-        classAttr = await selectCheckboxLabel.evaluate(el => el.className);;
-
-        console.log(classAttr);
+        const selectCheckboxLabel = await lnPg.selectCheckboxLabel(label, elementId);
+        await selectCheckboxLabel.waitFor({ state: 'visible' });
+        classAttr = await selectCheckboxLabel.evaluate(el => el.className);
 
         // Using condition to check whether it is selected or not
         if (!(await classAttr.includes(LNCommons.CHECKED))) {
@@ -647,40 +650,112 @@ static async filterAndSelectFirstRecord(label, elementId, filterItem, sessionCod
         }
 
         // Verifying whether checkbox is selected ot not
-        const radioBtn = await lnPg.selectCheckboxLabel(label, elementId);
-        expect((await radioBtn.getAttribute(ElementAttributes.CLASS))).toBeTruthy();
+        const checkbox = await lnPg.selectCheckboxLabel(label, elementId);
+        expect((await checkbox.getAttribute(ElementAttributes.CLASS))).toBeTruthy();
     }
 
-/*--------------------------------------------------------------------------------------------
-* Objective 	: The method is used to perform custom actions on LN Input fields
-*------------------------------------------------------------------------------------------*/
-static async decoratorInputField(locator, data) {
+    /*--------------------------------------------------------------------------------------------
+    * Objective 	: The method is used to perform custom actions on LN Input fields
+    *------------------------------------------------------------------------------------------*/
+    static async decoratorInputField(locator, data) {
 
-  // Click to focus – Playwright auto-waits for actionability :contentReference[oaicite:1]{index=1}
-  await locator.click();
+        // Click to focus – Playwright auto-waits for actionability :contentReference[oaicite:1]{index=1}
+        await locator.click();
 
-  // Locate the parent <div>
-  const parent = await locator.locator('xpath=..');
+        // Locate the parent <div>
+        const parent = await locator.locator('xpath=..');
 
-  // If parent doesn't yet have "focus" in class, click input again
-  if (! (await parent.getAttribute('class')).includes('focus')) {
-    await locator.click();
-  }
+        // If parent doesn't yet have "focus" in class, click input again
+        if (!(await parent.getAttribute('class')).includes('focus')) {
+            await locator.click();
+        }
 
-  // Wait until parent has class containing "focus"
-    await expect(async () => {
-        // perform the check/assertion inside the function
-        const parentHandle = await parent.elementHandle();
+        // Wait until parent has class containing "focus"
+        await expect(async () => {
+            // perform the check/assertion inside the function
+            const parentHandle = await parent.elementHandle();
 
-        await expect(parent).toHaveClass(/focus/);
+            await expect(parent).toHaveClass(/focus/);
 
-    }).toPass({ timeout: 10000});
+        }).toPass({ timeout: 10000 });
 
-  // Clear existing content and fill, then press Tab
-  await this.type(locator, data);
-  await this.page.keyboard.press('Tab');
-}
+        // Clear existing content and fill, then press Tab
+        await this.type(locator, data);
+        await this.page.keyboard.press('Tab');
+    }
 
+    static async deselectCheckbox(label, elementId) {
+
+        const lnPg = new LNPage(this.page);
+
+        // Check if not already selected
+        let classAttr = null;
+
+        const selectCheckboxLabel = await lnPg.selectCheckboxLabel(label, elementId);
+        await selectCheckboxLabel.waitFor({ state: 'visible' });
+        classAttr = await selectCheckboxLabel.evaluate(el => el.className);
+
+        // Using condition to check whether it is selected or not
+        if ((await classAttr.includes(LNCommons.CHECKED))) {
+
+            await expect(async () => {
+                await (await lnPg.selectCheckboxLabel(label, elementId)).waitFor({ state: 'visible' });
+                await (await lnPg.selectCheckboxLabel(label, elementId)).click();
+            }).toPass({ timeout: 10000 });
+
+        }
+
+        // Verifying whether checkbox is selected ot not
+        const checkbox = await lnPg.selectCheckboxLabel(label, elementId);
+        expect((await checkbox.getAttribute(ElementAttributes.CLASS)).includes(LNCommons.CHECKED)).toBeFalsy();
+    }
+
+    /*----------------------------------------------- 
+	 * Objective 	: Handles the device window
+	 *-----------------------------------------------*/
+	static async handleDevice() {
+		
+		// Intializing the page
+		const lnPg = new LNPage(this.page);
+		
+		LNCommon.verifyDialogBoxWindow(LNSessionTabs.SELECT_DEVICE);
+		await lnPg.display().click();
+		await lnPg.triggerInputField(await lnPg.device(), LNCommons.DEVICE_D);
+		await lnPg.continueIcon.click();
+		if (await this.isElementPresent(lnPg.closeProcess)) {
+			await lnPg.closeProcess.click();
+			pause(2);
+		}
+		pause(2);
+	}
+
+    static async selectRadioBtn(text, elementId) {
+
+        // Intializing the page
+        const lnPg = new LNPage(this.page);
+
+        const radio = await lnPg.selectRadioBtn(text, elementId);
+
+        await expect(async () => {
+            await radio.waitFor({ state: 'visible', timeout: 2000 });
+        }).toPass({ timeout: 10000 });
+
+        // Click only if not already checked
+        const classAttr = await radio.getAttribute(ElementAttributes.CLASS);
+        if (!await classAttr.includes(LNCommons.CHECKED)) {
+
+            await radio.click();
+        }
+        console.log(await radio.getAttribute(ElementAttributes.CLASS));
+        // Verifying the value
+
+        await expect(async () => {
+            await radio.waitFor({ state: 'visible', timeout: 2000 });
+
+            expect((await radio.getAttribute(ElementAttributes.CLASS)).includes(LNCommons.CHECKED), `radio button is not selected`)
+                .toBeTruthy();
+        }).toPass({ timeout: 10000 });
+    }
 
 }
 
