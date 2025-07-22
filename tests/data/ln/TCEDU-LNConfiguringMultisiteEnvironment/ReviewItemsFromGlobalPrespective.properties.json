@@ -1,0 +1,16 @@
+{
+  "items": ["MS200", "MS5000-2"],
+  "enterpriseUnits": ["BOSTON", "MS_AMS", "MS_BER", "MUNICH"],
+  "enterpriseUnitsDesc": [
+    "Boston - Consumer Products",
+    "Amsterdam - Consumer Products",
+    "Berlin - Consumer Products",
+    "Munich - Consumer Products"
+  ],
+  "costingSourceDrp": [
+    "Purchase",
+    "Job Shop",
+    "Intercompany Transfer",
+    "Intercompany Transfer"
+  ]
+}

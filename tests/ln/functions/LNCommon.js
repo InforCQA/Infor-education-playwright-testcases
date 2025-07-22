@@ -172,8 +172,10 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         await this.page.waitForLoadState('load');
-        const headers = await (await lnPg.gridHeader(sessionCode)).elementHandles();
-
+        let headers = "";
+        for (let i=0; i<3; i++){
+        headers = await (await lnPg.gridHeader(sessionCode)).elementHandles();
+        }
         let actualLabel = "";
 
         for (const header of headers) {
@@ -267,10 +269,12 @@ class LNCommon extends BaseClass {
 
         // Step 1: Verify column header
         await this.verifyColumnHeader(sessionCode, columnName);
-
+        
         // Step 2: Fetch all grid cell elements
-        const records = await (await commonPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
-
+        let records = null;
+        for(let i=0; i<3; i++){
+        records = await (await commonPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
+        }
         let rowNo = -1;
         let isRecordFound = false;
 
@@ -766,6 +770,23 @@ class LNCommon extends BaseClass {
                 .toBeTruthy();
         }).toPass({ timeout: 10000 });
     }
+// ----------------------------------------------------------------------
+// Purpose : Move mouse to a specific column header in a grid
+// ----------------------------------------------------------------------
+
+static async moveToRequiredColumnHeader(sessionCode, elementId, label) {
+  
+    const lnPg = new LNPage(this.page);
+ 
+    await LNCommon.verifyColumnHeader(sessionCode, label); 
+
+    await expect(async () => {
+        const columnHeaderLocator = await lnPg.columnHeader(elementId,sessionCode);
+        await columnHeaderLocator.waitFor({ state: 'visible', timeout: 10000 });
+        await columnHeaderLocator.scrollIntoViewIfNeeded();
+      //  await columnHeaderLocator.hover(); 
+    }).toPass({ timeout: 10000 });
+}
 
     static async LNRestart() 
 	{

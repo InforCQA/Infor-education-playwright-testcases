@@ -827,10 +827,10 @@ class LNPage extends LNCustomActions{
         );
 
     /* columnHeader - Button */
-    columnHeader = (p1, p2) =>
-        this.iframe().locator(
+    columnHeader = async (p1, p2) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'ColumnHeader')][contains(@id,'${p1}')][contains(@id,'${p2}')]`
-        );
+        )};
 
     /* referenceMenuItem -- Button */
     referenceMenuItem = async(p1) =>{

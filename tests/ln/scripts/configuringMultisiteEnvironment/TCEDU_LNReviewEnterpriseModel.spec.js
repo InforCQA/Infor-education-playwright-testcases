@@ -15,7 +15,7 @@ export default function TCEDU_LNReviewEnterpriseModel() {
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-
+        // 1.3.1
         test('Review the enterprise model in Infor LN', async ({ }) => {
 
             await CloudSuite.navigateToApplication(ProductNames.LN);
@@ -23,7 +23,7 @@ export default function TCEDU_LNReviewEnterpriseModel() {
             await LNMasterData.reviewEnterpriseModelInInforLN(enterpriseMdlCnxt);
 
         });
-
+        // 1.3.2
         test('Review a site in Infor LN', async ({ }) => {
 
             await LNMasterData.reviewASiteInInforLN(enterpriseMdlCnxt);

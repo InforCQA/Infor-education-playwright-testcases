@@ -21,14 +21,14 @@ export default function TCEDU_LNCreateANewItemUsingItemDefaults() {
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
 
-       
+       // 2.3.1
         test('Review item defaults', async ({ }) => {
              await CloudSuite.navigateToApplication(ProductNames.LN);
 
              await LNMasterData.reviewItemDefaults(itemCnxt);
          });
 
-        
+        // 2.3.2
         test('Create a new item', async ({ }) => {
             await LNMasterData.createANewItem(itemCnxt);
         });
