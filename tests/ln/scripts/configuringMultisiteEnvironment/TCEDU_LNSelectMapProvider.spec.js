@@ -15,7 +15,7 @@ export default function TCEDU_LNSelectMapProvider() {
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-
+        // 1.2
         test('Select a map provider', async ({ }) => {
 
             await CloudSuite.navigateToApplication(ProductNames.LN);
