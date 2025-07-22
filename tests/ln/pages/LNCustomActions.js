@@ -1,4 +1,6 @@
+import ElementAttributes from "../../commons/constants/ElementAttributes";
 import BaseClass from "../../testBase/BaseClass";
+import { expect } from "@playwright/test";
 
 class LNCustomActions extends BaseClass{
 
@@ -6,20 +8,24 @@ class LNCustomActions extends BaseClass{
         
         const parentLocator = await inputLocator.locator('xpath=./parent::div');
 
-        // Wait until input is clickable and click it
-        await inputLocator.waitFor({ state: 'visible', timeout: 10000 });
-        await inputLocator.click();
-
         // Sometimes needs a second click to ensure focus
-        if (!(await parentLocator.getAttribute('class')).includes('TriggerInputField-focus')) {
-            await inputLocator.click();
+        await expect(async () => {
+            if (!(await parentLocator.getAttribute(ElementAttributes.CLASS)).includes('TriggerInputField-focus')) {
+            
+            await inputLocator.waitFor({ state: 'visible', timeout: 10000 });
+             await this.page.waitForTimeout(2000);
+            await parentLocator.click({ force: true});
         }
-
+        }).toPass({ timeout: 10000 });
+       
         // Wait until parent gets "focus" class
-        await expect(parentLocator).toHaveClass(/.*focus/, { timeout: 60000 });
+        await expect(async () => {
+            await expect(parentLocator).toHaveClass(/.*focus/, { timeout: 3000 });
+        }).toPass({ timeout: 10000 });
+        
 
         // Clear, type and tab out
-        await this.type(inputLocator, data);
+        await inputLocator.type(data);
         
         await this.page.keyboard.press('Tab');
     }

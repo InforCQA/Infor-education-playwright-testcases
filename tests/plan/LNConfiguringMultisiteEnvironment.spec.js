@@ -9,6 +9,6 @@ test.describe('LNConfiguringMultisiteEnvironment', () => {
     // TCEDU_LNSelectMapProvider();
     //TCEDU_LNReviewEnterpriseModel();
     //TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
-    //TCEDU_LNCreateANewItemUsingItemDefaults();
+    //TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
+    TCEDU_LNCreateANewItemUsingItemDefaults();
 });
