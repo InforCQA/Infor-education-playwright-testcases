@@ -46,7 +46,7 @@ class Homepages extends BaseClass {
   signOutLn = "//*[@ygtrackclick='Sign Out']";
 
   // Context Apps button (V2)
-  btnV2ContextApps = "//*[local-name()='ids-button'][@id='osp-ds-t-widgets']";
+  btnV2ContextApps = async () => { return await this.page.locator("//*[local-name()='ids-button'][@id='osp-ds-t-widgets']") };
 
   // App menu (V2)
   appMenuV2 = "//*[contains(@id,'nav-launcher')]";

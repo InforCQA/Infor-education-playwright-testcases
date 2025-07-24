@@ -7,7 +7,7 @@ class LNPage extends LNCustomActions{
 
 
     constructor(page) {
-        super();
+        super(page);
         this.page = page;
     }
 
@@ -19,10 +19,10 @@ class LNPage extends LNCustomActions{
         this.iframe().locator(`//div[@class='ProgressIndicator']`);
 
     /* optionsCaret - WebElement */
-    optionsCaret = () =>
-        this.iframe().locator(
+    optionsCaret = async() =>{
+        return await (await this.iframe()).locator(
             `//label[text()='Options']//parent::div/following-sibling::div//*[local-name()='svg']`
-        );
+        )};
 
     /* selectedCompany - WebElement */
     selectedCompany = () =>
@@ -70,12 +70,12 @@ class LNPage extends LNCustomActions{
             );
 
     /* lnSideNavigate */
-    lnSideNavigate = () =>
-        this.iframe().locator(`//div[@id='side-navigation']/parent::div/parent::div`);
+    lnSideNavigate = async() =>{
+        return await (await this.iframe()).locator(`//div[@id='side-navigation']/parent::div/parent::div`)};
 
     /* lnOptions */
-    lnOptions = () =>
-        this.iframe().locator(`//label[@id='node-options-label'][text()='Options']`);
+    lnOptions = async() =>{
+        return await (await this.iframe()).locator(`//label[@id='node-options-label'][text()='Options']`)};
 
     /* changeCompany */
     changeCompany = () =>
@@ -128,14 +128,14 @@ class LNPage extends LNCustomActions{
         return await (await this.iframe()).locator(`//label[text()='Collapse All']`)};
 
     /* popupOKButton - Button */
-    popupOKButton = () =>
-        this.iframe().locator(
+    popupOKButton = async() =>{
+        return await (await this.iframe()).locator(
             `(//div[contains(@class,'DialogWindow')]//label[text()='OK'])[last()]`
-        );
+        )};
 
     /* YesButton - Button */
-    YesButton = () =>
-        this.iframe().locator(`(//label[text()='Yes'])[last()]`);
+    YesButton = async() =>{
+        return await (await this.iframe()).locator(`(//label[text()='Yes'])[last()]`)};
 
     /* NoButton - Button */
     NoButton = () =>
@@ -160,26 +160,26 @@ class LNPage extends LNCustomActions{
         );
 
     /* lnSystemMessage */
-    lnSystemMessage = () =>
-        this.iframe().locator(`//div[@id='sysmesdialog-button-n0']`);
+    lnSystemMessage = async() =>{
+        return await (await this.iframe()).locator(`//div[@id='sysmesdialog-button-n0']`)};
 
     /* lnRunprogram */
-    lnRunprogram = () =>
-        this.iframe().locator(
+    lnRunprogram = async() =>{
+        return await (await this.iframe()).locator(
             `//label[@id='node-run_program-label'][text()='Run Program']`
-        );
+        )};
 
     /* lnRestart */
-    lnRestart = () =>
-        this.iframe().locator(
+    lnRestart = async() =>{
+        return await (await this.iframe()).locator(
             `//label[@id='node-restart-label'][text()='Restart']`
-        );
+        )};
 
     /* lnRunprogramInput */
-    lnRunprogramInput = () =>
-        this.iframe().locator(
+    lnRunprogramInput = async() =>{
+        return await (await this.iframe()).locator(
             `//input[@id='dlg-run_program-input-control-widget-label']`
-        );
+        )};
 
     /* lnSessionInput */
     lnSessionInput = () =>
@@ -188,8 +188,8 @@ class LNPage extends LNCustomActions{
         );
 
     /* lnRunprogramOK */
-    lnRunprogramOK = () =>
-        this.iframe().locator(`//div[@id='dlg-run_program-button-n0']`);
+    lnRunprogramOK = async() =>{
+        return await (await this.iframe()).locator(`//div[@id='dlg-run_program-button-n0']`)};
 
     /* lnPOSessionTab */
     lnPOSessionTab = () =>
@@ -204,16 +204,16 @@ class LNPage extends LNCustomActions{
         );
 
     /* device */
-    device = () =>
-        this.iframe().locator(
+    device = async() =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@style,'visibility: visible') and not(@aria-hidden='true')]/div[@class='DetailXForm']//label[text()='Device:']/parent::td/following-sibling::td//input[contains(@id,'ttstpsplopen') and contains(@id,'devc') and contains(@id,'lookup-widget')]`
-        );
+        )};
 
     /* display */
-    display = () =>
-        this.iframe().locator(
+    display = async() =>{
+        return await (await this.iframe()).locator(
             `//label[contains(@id,'ttstpsplopen') and contains(@id,'pages-bar-page') and text()='Display']`
-        );
+        )};
 
     /* printer */
     printer = () =>
@@ -228,16 +228,16 @@ class LNPage extends LNCustomActions{
         );
 
     /* continueIcon */
-    continueIcon = () =>
-        this.iframe().locator(
+    continueIcon = async() =>{
+        return await (await this.iframe()).locator(
             `//label[contains(@id,'ttstpsplopen') and contains(@id,'-form-exec.cont.process-label') and text()='Continue']`
-        );
+        )};
 
     /* closeProcess */
-    closeProcess = () =>
-        this.iframe().locator(
+    closeProcess = async() =>{
+        return await (await this.iframe()).locator(
             `//label[@class='Label' and text()='Close'][contains(@id,'tsspc2201m000')]`
-        );
+        )};
 
     /* currentTab */
     currentTab = async(name) =>{
@@ -317,16 +317,16 @@ class LNPage extends LNCustomActions{
         this.iframe().locator(`#node-run_program-label`);
 
     /* openInNewWindow */
-    openInNewWindow = () =>
-        this.iframe().locator(
+    openInNewWindow = async() =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'Checkbox')][contains(@id,'run_program')]`
-        );
+        )};
 
     /* sessionCode */
-    sessionCode = () =>
-        this.iframe().locator(
+    sessionCode = async() =>{
+        return await (await this.iframe()).locator(
             `//input[contains(@id,'dlg-run_program')][contains(@id,'control-widget')]`
-        );
+        )};
 
     /* runProgram_OK */
     runProgram_OK = () =>
@@ -559,10 +559,10 @@ class LNPage extends LNCustomActions{
         )};
 
     /* referencesMenuItem */
-    referencesMenuItem = (id) =>
-        this.iframe().locator(
+    referencesMenuItem = async(id) =>{
+        return await (await this.iframe()).locator(
             `(//label[contains(@id,'${id}') and contains(@id,'std:reference-label')])[last()]`
-        );
+        )};
 
     /* referencesMenuOption */
     referencesMenuOption = (id1, id2) =>
@@ -571,16 +571,16 @@ class LNPage extends LNCustomActions{
         );
 
     /* actionsMenuItem */
-    actionsMenuItem = (id) =>
-        this.iframe().locator(
+    actionsMenuItem = async(id) =>{
+        return await (await this.iframe()).locator(
             `(//label[contains(@id,'${id}') and contains(@id,'std:action-label')])[last()]`
-        );
+        )};
 
     /* actionsMenuOption */
-    actionsMenuOption = (id1, id2) =>
-        this.iframe().locator(
-            `//label[contains(@id,'${i1}') and contains(@id,'std:action') and contains(@id,'${i2}') and contains(@id,'label')]`
-        );
+    actionsMenuOption =async (id1, id2) =>{
+        return await (await this.iframe()).locator(
+            `//label[contains(@id,'${id1}') and contains(@id,'std:action') and contains(@id,'${id2}') and contains(@id,'label')]`
+        )};
 
     /* viewsMenuItem */
     viewsMenuItem = (id) =>
@@ -797,10 +797,10 @@ class LNPage extends LNCustomActions{
         );
 
     /* textMenuOverflow - Button */
-    textMenuOverflow = (p1, p2, p3) =>
-        this.iframe().locator(
+    textMenuOverflow = async(p1, p2, p3) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'Button')][contains(@id,'${p1}') and contains(@id,'${p2}')]//label[text()='${p3}']`
-        );
+        )};
 
     /* textMenu - Button */
     textMenu = async(p1, p2, p3) =>{
@@ -845,16 +845,16 @@ class LNPage extends LNCustomActions{
         )};
 
     /* actionMenuItem -- Button */
-    actionMenuItem = (p1) =>
-        this.iframe().locator(
+    actionMenuItem = async(p1) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@style,'visibility: visible') and not(@aria-hidden='true')]//label[contains(@id,'${p1}') and contains(@id,'std:action-label') and normalize-space()='Actions']`
-        );
+        )};
 
     /* actionMenuOption -- Button */
-    actionMenuOption = (p1, p2) =>
-        this.iframe().locator(
+    actionMenuOption = async(p1, p2) =>{
+        return await (await this.iframe()).locator(
             `(//label[normalize-space()='${p1}' and contains(@id,'${p2}') and contains(@id,'std:action') and contains(@id,'label')])[last()]`
-        );
+        )};
 
     /* viewMenuItem -- Button */
     viewMenuItem = (p1) =>
@@ -873,16 +873,15 @@ class LNPage extends LNCustomActions{
         this.iframe().locator(`//label[contains(@class,'Label') and normalize-space()='${p1}']`);
 
     /* status - WebElement */
-    status = (
-        p1, p2, p3,
-        p4, p5, p6
-    ) =>
-        this.iframe()
+    status = async(
+        p1, p2, p3
+    ) =>{
+        return await (await this.iframe())
             .locator(
                 `//label[normalize-space()='${p1}:']/parent::td/following-sibling::td//label[contains(@id,'${p2}') and normalize-space()='${p3}']` +
                 ` | ` +
-                `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[@class='TabContents']//label[normalize-space()='${p4}:']/parent::td/following-sibling::td//label[contains(@id,'${p5}') and normalize-space()='${p6}']`
-            );
+                `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[@class='TabContents']//label[normalize-space()='${p1}:']/parent::td/following-sibling::td//label[contains(@id,'${p2}') and normalize-space()='${p3}']`
+            )};
 
     /* statusField - WebElement */
     statusField = (p1, p2, p3) =>
@@ -980,7 +979,7 @@ class LNPage extends LNCustomActions{
 
     /* actionOverflow -- Button */
     actionOverflow = async(p1) =>{
-        return await this.iframe().locator(
+        return await (await this.iframe()).locator(
             `(//label[contains(@id,'${p1}') and contains(@id,'std:action-label') and normalize-space()='Actions'])[last()]`
         )};
 
@@ -1099,19 +1098,17 @@ class LNPage extends LNCustomActions{
         );
 
     /* lookupBtn - LookupBtn */
-    lookupBtn = async(
-        p1, p2, p3,
-        p4, p5, p6,
-        p7, p8, p9
-    ) =>{
+    lookupBtn = async (p1, p2, p3) => {
         return await (await this.iframe())
             .locator(
-                `//label[normalize-space()='${p1}:']/parent::td/following-sibling::td//div[contains(@id,'${p2}')][contains(@id,'${p3}')][contains(@id,'lookup-trigger-button')]` +
-                ` | ` +
-                `//label[normalize-space()='${p4}']/ancestor::tr/following-sibling::tr//td//div[contains(@id,'${p5}')][contains(@id,'${p6}')][contains(@id,'lookup-trigger-button')]` +
-                ` | ` +
-                `//label[normalize-space()='${p7}']/parent::td/following-sibling::td//div[contains(@id,'${p8}')][contains(@id,'${p9}')][contains(@id,'lookup-trigger-button')]`
-            )};
+                `//label[normalize-space()="${p1}:"]/parent::td/following-sibling::td//div[contains(@id,"${p2}")][contains(@id,"${p3}")][contains(@id,"lookup-trigger-button")]` +
+                ` | //label[normalize-space()="${p1}"]/ancestor::tr/following-sibling::tr//td//div[contains(@id,"${p2}")][contains(@id,"${p3}")][contains(@id,"lookup-trigger-button")]` +
+                ` | //label[normalize-space()="${p1}"]/parent::td/following-sibling::td//div[contains(@id,"${p2}")][contains(@id,"${p3}")][contains(@id,"lookup-trigger-button")]` +
+                ` | //label[normalize-space()="${p1}"]/ancestor::*//div[contains(@id,"${p2}")][contains(@id,"${p3}")][contains(@id,"lookup-trigger-button")]` +
+                ` | //label[normalize-space()="${p1}:"]/ancestor::*//div[contains(@id,"${p2}")][contains(@id,"${p3}")][contains(@id,"lookup-trigger-button")]` +
+                ` | //label[normalize-space()="${p1}:"]/following-sibling::div//following-sibling::div[contains(@id,"${p2}")][contains(@id,"${p3}")][contains(@id,"lookup-trigger-button")]`
+            );
+    };
 
     /* dataCellLookupBtn - LookupBtn */
     dataCellLookupBtn = (p1, p2) =>

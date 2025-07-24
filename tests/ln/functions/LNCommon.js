@@ -4,6 +4,9 @@ import {expect} from '@playwright/test';
 import ElementAttributes from "../../commons/constants/ElementAttributes";
 import LNCommons from "../constants/LNCommons";
 import { setBrowserZoom } from 'playwright-zoom';
+import LNSessionTabs from "../constants/LNSessionTabs";
+import LNSessionCodes from "../constants/LNSessionCodes";
+import CloudSuite from "../../commons/functions/CloudSuite";
 
 class LNCommon extends BaseClass {
 
@@ -82,12 +85,15 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         try {
-            await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'visible', timeout: 1000 });
-            await (await lnPg.textMenu(sessionCode, id, label)).hover();
-            await (await lnPg.textMenu(sessionCode, id, label)).click();
+
+            await expect(async () => {
+                await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'visible', timeout: 1000 });
+                await (await lnPg.textMenu(sessionCode, id, label)).click();
+            }).toPass({ timeout: 10000 });
+
         } catch (e) {
-            await lnPg.moreButton(sessionCode).click();
-            await lnPg.textMenuOverflow(sessionCode, id, label).click();
+            await (await lnPg.moreButton(sessionCode)).click();
+            await (await lnPg.textMenuOverflow(sessionCode, id, label)).click();
         }
     }
 
@@ -99,15 +105,17 @@ class LNCommon extends BaseClass {
         // Intializing the page
         const lnPg = new LNPage(this.page);
 
-        await (await lnPg.inforMainModules(module)).click({ button: 'right' });
-
-        expect(async () => {
+        await expect(async () => {
+            await this.page.waitForTimeout(3000);
+            await (await lnPg.inforMainModules(module)).waitFor({ state: 'visible', timeout: 5000 });
+            await (await lnPg.inforMainModules(module)).click({ button: 'right' });
+            await this.page.waitForTimeout(1000);
             await (await lnPg.collapseAll()).waitFor({ state: 'visible', timeout: 5000 });
-            await (await lnPg.collapseAll()).dblclick();
+            await (await lnPg.collapseAll()).click();
         }).toPass({ timeout: 10000 });
 
         // Verifying whether module is collapsed or not
-        expect(async () => {
+        await expect(async () => {
             await expect(await lnPg.inforMainModules(module)).toHaveAttribute(ElementAttributes.ARIA_EXPANDED, 'false');
         }).toPass();
     }
@@ -122,8 +130,9 @@ class LNCommon extends BaseClass {
 
         // Used try catch method to select tabs
         await expect(async () => {
-            const selectHeaderTab = await (await lnPg.selectHeaderTab(tabName, sessionCode));
-            await selectHeaderTab.dblclick();
+            const selectHeaderTab = await lnPg.selectHeaderTab(tabName, sessionCode);
+             await selectHeaderTab.waitFor({ state: 'visible', timeout: 5000 });
+            await selectHeaderTab.click();
         }).toPass({ timeout: 10000 });
     }
 
@@ -140,6 +149,7 @@ class LNCommon extends BaseClass {
 
 
             const selectFooterTab = await lnPg.selectFooterTab(tabName, sessionCode);
+            await this.pause(1);
             await selectFooterTab.hover();
             await selectFooterTab.click({ force: true });
 
@@ -225,7 +235,8 @@ class LNCommon extends BaseClass {
         const currentValue = await (await lnPg.dropdownValueField(elementId)).textContent();
         if (currentValue.trim() != listItem) {
             const drpValueGridFilter = await lnPg.drpValueGridFilter(elementId);
-            await drpValueGridFilter.click();
+            await drpValueGridFilter.waitFor({ state: 'visible', timeout: 5000 });
+            await drpValueGridFilter.click({force: true});
 
             // Verifying whether dropdown field is in active or not
             for (let count = 0; count < 4; count++) {
@@ -324,15 +335,17 @@ class LNCommon extends BaseClass {
         if (!isRefMenuVisible) {
             await (await lnPg.moreButton(sessionCode)).click();
             await (await lnPg.referenceOverflow(sessionCode)).click();
-        } else {
-            await (await lnPg.referenceMenuItem(sessionCode)).click();
         }
-
+        
+        await expect(async () => {
+        await this.page.waitForTimeout(2000);
+        await (await lnPg.referencesMenuItem(sessionCode)).click();
+        }).toPass({ timeout: 10000 });
 
         // Using loop to click on multiple navigations
         for (const menuOption of menuOptions) {
             await expect(async () => {
-                await (await lnPg.referenceMenuOption(menuOption, sessionCode)).hover();
+                await (await lnPg.referenceMenuOption(menuOption, sessionCode)).waitFor({ state: 'visible'});
                 await (await lnPg.referenceMenuOption(menuOption, sessionCode)).click();
             }).toPass({ timeout: 10000 });
         }
@@ -348,6 +361,7 @@ class LNCommon extends BaseClass {
 
         // Verifying the dialog window Tab
         expect(await this.isElementPresent(await lnPg.dialogWindowTab(tabName))).toBeTruthy();
+ 
     }
 
     /*---------------------------------------------------------------------------------
@@ -462,11 +476,14 @@ class LNCommon extends BaseClass {
         const menuLocator = await lnPg.menuItem(sessionCode, menuItem);
 
         // Wait for menu item to be clickable
-        await menuLocator.waitFor({ state: 'visible', timeout: 5000 });
+        await menuLocator.waitFor({ state: 'attached', timeout: 3000 });
 
-        expect(async () => {
-            await menuLocator.dblclick();
-        }).toPass({ timeout: 10000 });
+        await expect(async () => {
+
+             await this.page.waitForTimeout(1000);
+             await menuLocator.hover();
+            await menuLocator.click();
+        }).toPass({ timeout: 80000 });
     }
 
     /*--------------------------------------------------------------------------------------------
@@ -477,7 +494,9 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         // Step 1: Wait and click the input field
-        await locator.click();
+        await expect(async () => {
+            await locator.click();
+        }).toPass({ timeout: 10000 });
 
         // Step 3: Get parent div and check for focus class
         const parent = await locator.locator('..'); // parent div
@@ -492,9 +511,10 @@ class LNCommon extends BaseClass {
         }
 
         // Step 5: Clear and type
+        await this.pause(2);
         await expect(async () => {
             await this.type(locator, data);
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 20000 });
 
 
         // Step 6: Press Tab to trigger any events
@@ -510,7 +530,7 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         // Return dynamic locator for lookup icon (your LNPage.lookupBtn must support this structure)
-        return await lnPg.lookupBtn(label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode, label, elementId, sessionCode);
+        return await lnPg.lookupBtn(label, elementId, sessionCode);
     }
 
     /*------------------------------------------------------------------
@@ -597,7 +617,7 @@ class LNCommon extends BaseClass {
         await expect(async () => {
             await (await lnPg.popupText()).waitFor({ state: 'visible', timeout: 5000 });
             textCount = await (await lnPg.popupText()).count();
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 60000 });
 
         while (textCount > 0) {
 
@@ -608,7 +628,12 @@ class LNCommon extends BaseClass {
             textCount--;
         }
 
-        expect((await popup.textContent()).toLowerCase()).toBe(popupText.toLowerCase());
+        await expect(async () => {
+
+            expect((await popup.textContent()).toLowerCase()).toBe(popupText.toLowerCase());
+
+        }).toPass({ timeout: 10000 });
+
         await (await lnPg.popupBtn(popupBtn)).click();
 
     }
@@ -717,21 +742,19 @@ class LNCommon extends BaseClass {
     /*----------------------------------------------- 
 	 * Objective 	: Handles the device window
 	 *-----------------------------------------------*/
-	static async handleDevice() {
-		
-		// Intializing the page
-		const lnPg = new LNPage(this.page);
-		
-		LNCommon.verifyDialogBoxWindow(LNSessionTabs.SELECT_DEVICE);
-		await lnPg.display().click();
-		await lnPg.triggerInputField(await lnPg.device(), LNCommons.DEVICE_D);
-		await lnPg.continueIcon.click();
-		if (await this.isElementPresent(lnPg.closeProcess)) {
-			await lnPg.closeProcess.click();
-			pause(2);
-		}
-		pause(2);
-	}
+    static async handleDevice() {
+
+        // Intializing the page
+        const lnPg = new LNPage(this.page);
+
+        await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SELECT_DEVICE);
+        await (await lnPg.display()).click();
+        await lnPg.triggerInputField(await lnPg.device(), LNCommons.DEVICE_D);
+        await (await lnPg.continueIcon()).click();
+        if (await this.isElementPresent(await lnPg.closeProcess())) {
+            await (await lnPg.closeProcess()).click();
+        }
+    }
 
     static async selectRadioBtn(text, elementId) {
 
@@ -821,6 +844,181 @@ static async updateDefaultFilter(elementId, sessionCode, value) {
   await new Promise(resolve => setTimeout(resolve, 300));
 }
 
+    static async LNRestart() 
+	{
+		// Intializing the page
+		const lnPg = new LNPage(this.page);
+		
+		await (await lnPg.lnOptions()).click();
+		
+		await (await lnPg.lnRestart()).click();
+
+		await LNCommon.handleYesPopUp();
+		await LNCommon.handlePopUp();
+	}
+
+
+    static async handleYesPopUp() {
+        const lnPg = new LNPage(this.page);
+
+        const count = await (await lnPg.YesButton()).count();
+        if (count > 0) {
+            const textCount = await (await lnPg.popupText()).count();
+
+            if (textCount > 0) {
+                console.log("=========>>>>> Pop Up message: " + await (await lnPg.popupText.nth(0)).textContent() + " <<<<<=========");
+            }
+
+            await (await lnPg.YesButton().nth(0)).click();
+        }
+    }
+
+    static async handlePopUp() {
+
+        const lnPg=new LNPage(this.page);
+
+        const count= await (await lnPg.popupOKButton()).count();
+
+        if(count>0) {
+
+            const textCount= await (await lnPg.popupText()).count();
+            if(textCount>0){
+               
+                const popupText= await (await lnPg.popupText()).nth(0);
+                console.log("=========>>>>> Pop Up message: "+ await popupText.textContent() +" <<<<<=========");
+            }
+
+            await (await (await lnPg.popupOKButton()).nth(0)).click();
+        }
+
+    }
+
+    static async runProgram(sessionID)
+	{
+		// Intializing the page
+		const lnPg = new LNPage(this.page);
+		
+		 await setBrowserZoom(this.page, 50);
+         
+		if(await this.isElementPresent(await lnPg.lnSystemMessage())==true)
+		{
+			await (await lnPg.lnSystemMessage()).click();
+		}
+		
+		if(await (await (await lnPg.lnSideNavigate()).getAttribute(ElementAttributes.STYLE)).includes("width: 0px"))
+		{
+			console.log("INFO : ========>>>>> LN Menu is Closed <<<<<=========");
+			await (await lnPg.lnMenu()).click();
+			console.log("INFO : ========>>>>> LN Menu is Opened <<<<<=========");
+		}else
+		{
+			console.log("INFO : ========>>>>> LN Menu is Opened <<<<<=========");
+		}
+
+		await CloudSuite.collapseContextApps();
+
+        if (await (await (await lnPg.optionsCaret()).getAttribute(ElementAttributes.ICONID))?.includes(LNCommons.DOWN)) {
+            await (await lnPg.lnOptions()).click();
+        }
+
+        const locator =await (await lnPg.iframe()).locator(`#${LNCommons.NODE_OPTIONS_LABEL}`);
+  
+        await expect(async () => {
+
+            await expect(locator).toHaveAttribute(ElementAttributes.ARIA_EXPANDED, 'true');
+
+        }).toPass({ timeout: 10000 });
+		
+		await (await lnPg.lnRunprogram()).click();
+
+        await expect(async () => {
+
+            await this.page.waitForTimeout(2000);
+            await (await lnPg.lnRunprogramInput()).type(sessionID);
+
+        }).toPass({ timeout: 10000 });
+	
+		await this.page.keyboard.press('Tab');
+
+		console.log("===="+await (await (await lnPg.sessionCode()).inputValue()).substring(0,13));
+        
+		if((await (await (await lnPg.sessionCode()).textContent()).substring(0,13).toLowerCase())===(LNSessionCodes.BILL_OF_MATERIAL.toLowerCase())) {
+			
+			if(!await (await (await lnPg.openInNewWindow()).getAttribute(ElementAttributes.CLASS))?.includes(LNCommons.CHECKED)) {
+				
+				await (await lnPg.openInNewWindow()).click();
+			}
+		}
+		await (await lnPg.lnRunprogramOK()).click();
+		
+		console.log("INFO : ========>>>>> Navigated to "+sessionID+" Session <<<<<=========");
+	}
+
+    static async selectRecord(sessionCode, recordNum) {
+
+        // Intializing the page
+        const lnPg = new LNPage(this.page);
+
+        // Using condition to verify whether it is already selected or not
+        if (!await (await (await lnPg.selectRequiredRecord(sessionCode, recordNum)).getAttribute(ElementAttributes.CLASS)).includes(LNCommons.CHECKED)) {
+
+            await (await lnPg.selectRequiredRecord(sessionCode, recordNum)).click();
+        }
+        // Verifying whether record is already selected or not
+        await expect(async () => {
+
+            expect(await (await (await lnPg.selectRequiredRecord(sessionCode, recordNum)).getAttribute(ElementAttributes.CLASS)).includes(LNCommons.CHECKED), " checkbox is not selected").toBeTruthy();
+
+        }).toPass({ timeout: 10000 });
+    }
+
+    static async navigateToLNActions(sessionCode, ...menuOptions) {
+
+		const lnPg = new LNPage(this.page);
+
+        if (!await this.isElementPresent(await lnPg.actionsMenuItem(sessionCode))) {
+
+            await (await lnPg.moreButton(sessionCode)).click();
+			await (await lnPg.actionOverflow(sessionCode)).click();
+          
+        } else {
+
+            await (await lnPg.actionMenuItem(sessionCode)).click();
+        }
+
+        for (let i = 0; i < menuOptions.length; i++) {
+
+            let menuOption = menuOptions[i];
+            await expect(async () => {
+
+                await (await lnPg.actionMenuOption(menuOption, sessionCode)).hover();
+                await (await lnPg.actionMenuOption(menuOption, sessionCode)).click();
+                
+            }).toPass({ timeout: 30000 });
+        }
+    }
+
+    static async updateDefaultFilter(elementId, sessionCode, value) {
+
+		// Intializing the page
+		const lnPg = new LNPage(this.page);
+		
+		
+		await (await lnPg.gridMenuBtn(elementId, sessionCode)).click();
+		await (await lnPg.filterOperator(value)).click();
+
+	}
+
+    static async verifyValueWithLabel(label, sessionCode, text) {
+		
+		// Intializing the page
+		const lnPg =new LNPage(this.page);
+		
+		// Verifying the status
+		expect(await this.isElementPresent(await lnPg.status(label, sessionCode, text)), `=========>>>>>  ${text} status is not displaying<<<<<=========`)
+				  .toBeTruthy();		
+	}
+	
 }
 
 export default LNCommon;

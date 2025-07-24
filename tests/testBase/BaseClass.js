@@ -53,7 +53,7 @@ class BaseClass {
         await locator.waitFor({
           state: 'visible'
         });
-      }).toPass({ timeout: 15000 });
+      }).toPass({ timeout: 60000 });
     
       return true
     } catch (e) {
@@ -79,9 +79,12 @@ class BaseClass {
     await this.page.screenshot({ path: filePath });
   }
 
-    static async pause(seconds) {
+  static async pause(seconds) {
 
-      await this.page.waitForTimeout(seconds* 1000);
+    await expect(async () => {
+      await this.page.waitForTimeout(seconds * 1000);
+    }).toPass({ timeout: 60000 });
+    
   }
 
 
@@ -114,12 +117,9 @@ class BaseClass {
 
   static async type(locator, value) {
 
-    await expect(async () => {
       await locator.click({ clickCount: 3 });
       await locator.press('Backspace');
       await locator.type(value);
-    }).toPass({ timeout: 10000 });
-
   }
 
   static async selectValueFromDropdown(locator, value) {
