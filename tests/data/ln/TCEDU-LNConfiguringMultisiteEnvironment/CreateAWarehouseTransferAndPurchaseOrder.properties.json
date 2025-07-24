@@ -1,0 +1,16 @@
+{
+  "order": "Transfer (Manual)",
+  "warehouses": ["WHBO", "ATL", "WHATLA"],
+  "warehouseDesc": ["Boston", "ATLANTA"],
+  "addresses": ["ADD000058", "ADD000077"],
+  "orderLine": ["10", "1"],
+  "items": ["MS200", "MS100A"],
+  "itemDesc": "Chair Frame",
+  "orderedQuantity": "1",
+  "priceOrigin": "Cost-Plus",
+  "transactionLine": "1",
+  "enterpriseUnits": ["BOSTON", "ATLANT"],
+  "buyFromBP": ["MSC", "MSC000003"],
+  "toEnterpriseUnit": "ATL",
+  "intercompanyTradeNumSales": ""
+}

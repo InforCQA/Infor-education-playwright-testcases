@@ -53,7 +53,7 @@ class BaseClass {
         await locator.waitFor({
           state: 'visible'
         });
-      }).toPass({ timeout: 15000 });
+      }).toPass({ timeout: 60000 });
     
       return true
     } catch (e) {
@@ -83,7 +83,7 @@ class BaseClass {
 
     await expect(async () => {
       await this.page.waitForTimeout(seconds * 1000);
-    }).toPass({ timeout: 10000 });
+    }).toPass({ timeout: 60000 });
     
   }
 

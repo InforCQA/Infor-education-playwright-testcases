@@ -7,10 +7,10 @@ import TCEDU_LNCreateANewItemUsingItemDefaults from '../ln/scripts/configuringMu
 import TCEDU_LNReviewItemsFromGlobalPrespective from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNReviewItemsFromGlobalPrespective.spec';
 
 test.describe('LNConfiguringMultisiteEnvironment', () => {
-   TCEDU_LNSelectMapProvider();
-   TCEDU_LNReviewEnterpriseModel();
-   TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-   TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
+    TCEDU_LNSelectMapProvider();
+    TCEDU_LNReviewEnterpriseModel();
+    TCEDU_LNDevelopTheOriginalEnterpriseStructure();
+    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
     TCEDU_LNCreateANewItemUsingItemDefaults();
     TCEDU_LNReviewItemsFromGlobalPrespective();
 });

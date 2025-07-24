@@ -571,16 +571,16 @@ class LNPage extends LNCustomActions{
         );
 
     /* actionsMenuItem */
-    actionsMenuItem = (id) =>
-        this.iframe().locator(
+    actionsMenuItem = async(id) =>{
+        return await (await this.iframe()).locator(
             `(//label[contains(@id,'${id}') and contains(@id,'std:action-label')])[last()]`
-        );
+        )};
 
     /* actionsMenuOption */
-    actionsMenuOption = (id1, id2) =>
-        this.iframe().locator(
-            `//label[contains(@id,'${i1}') and contains(@id,'std:action') and contains(@id,'${i2}') and contains(@id,'label')]`
-        );
+    actionsMenuOption =async (id1, id2) =>{
+        return await (await this.iframe()).locator(
+            `//label[contains(@id,'${id1}') and contains(@id,'std:action') and contains(@id,'${id2}') and contains(@id,'label')]`
+        )};
 
     /* viewsMenuItem */
     viewsMenuItem = (id) =>
@@ -845,16 +845,16 @@ class LNPage extends LNCustomActions{
         )};
 
     /* actionMenuItem -- Button */
-    actionMenuItem = (p1) =>
-        this.iframe().locator(
+    actionMenuItem = async(p1) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@style,'visibility: visible') and not(@aria-hidden='true')]//label[contains(@id,'${p1}') and contains(@id,'std:action-label') and normalize-space()='Actions']`
-        );
+        )};
 
     /* actionMenuOption -- Button */
-    actionMenuOption = (p1, p2) =>
-        this.iframe().locator(
+    actionMenuOption = async(p1, p2) =>{
+        return await (await this.iframe()).locator(
             `(//label[normalize-space()='${p1}' and contains(@id,'${p2}') and contains(@id,'std:action') and contains(@id,'label')])[last()]`
-        );
+        )};
 
     /* viewMenuItem -- Button */
     viewMenuItem = (p1) =>
@@ -873,16 +873,15 @@ class LNPage extends LNCustomActions{
         this.iframe().locator(`//label[contains(@class,'Label') and normalize-space()='${p1}']`);
 
     /* status - WebElement */
-    status = (
-        p1, p2, p3,
-        p4, p5, p6
-    ) =>
-        this.iframe()
+    status = async(
+        p1, p2, p3
+    ) =>{
+        return await (await this.iframe())
             .locator(
                 `//label[normalize-space()='${p1}:']/parent::td/following-sibling::td//label[contains(@id,'${p2}') and normalize-space()='${p3}']` +
                 ` | ` +
-                `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[@class='TabContents']//label[normalize-space()='${p4}:']/parent::td/following-sibling::td//label[contains(@id,'${p5}') and normalize-space()='${p6}']`
-            );
+                `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[@class='TabContents']//label[normalize-space()='${p1}:']/parent::td/following-sibling::td//label[contains(@id,'${p2}') and normalize-space()='${p3}']`
+            )};
 
     /* statusField - WebElement */
     statusField = (p1, p2, p3) =>
@@ -980,7 +979,7 @@ class LNPage extends LNCustomActions{
 
     /* actionOverflow -- Button */
     actionOverflow = async(p1) =>{
-        return await this.iframe().locator(
+        return await (await this.iframe()).locator(
             `(//label[contains(@id,'${p1}') and contains(@id,'std:action-label') and normalize-space()='Actions'])[last()]`
         )};
 

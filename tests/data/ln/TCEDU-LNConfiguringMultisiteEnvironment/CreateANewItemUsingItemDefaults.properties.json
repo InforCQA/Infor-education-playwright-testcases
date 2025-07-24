@@ -7,7 +7,7 @@
   ],
   "item": "00001",
   "itemDesc": "Item",
-  "itemPurchasePrice": 27.00,
+  "itemPurchasePrice": "27.00",
   "enterpriseUnits": [
     "BOSTON",
     "ATLANT"

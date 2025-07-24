@@ -149,6 +149,7 @@ class LNCommon extends BaseClass {
 
 
             const selectFooterTab = await lnPg.selectFooterTab(tabName, sessionCode);
+            await this.pause(1);
             await selectFooterTab.hover();
             await selectFooterTab.click({ force: true });
 
@@ -234,7 +235,8 @@ class LNCommon extends BaseClass {
         const currentValue = await (await lnPg.dropdownValueField(elementId)).textContent();
         if (currentValue.trim() != listItem) {
             const drpValueGridFilter = await lnPg.drpValueGridFilter(elementId);
-            await drpValueGridFilter.click();
+            await drpValueGridFilter.waitFor({ state: 'visible', timeout: 5000 });
+            await drpValueGridFilter.click({force: true});
 
             // Verifying whether dropdown field is in active or not
             for (let count = 0; count < 4; count++) {
@@ -359,6 +361,7 @@ class LNCommon extends BaseClass {
 
         // Verifying the dialog window Tab
         expect(await this.isElementPresent(await lnPg.dialogWindowTab(tabName))).toBeTruthy();
+ 
     }
 
     /*---------------------------------------------------------------------------------
@@ -474,9 +477,13 @@ class LNCommon extends BaseClass {
 
         // Wait for menu item to be clickable
         await menuLocator.waitFor({ state: 'attached', timeout: 3000 });
-        await menuLocator.waitFor({ state: 'visible', timeout: 5000 });
-        await menuLocator.hover();
-        await menuLocator.click();
+
+        await expect(async () => {
+
+             await this.page.waitForTimeout(1000);
+             await menuLocator.hover();
+            await menuLocator.click();
+        }).toPass({ timeout: 80000 });
     }
 
     /*--------------------------------------------------------------------------------------------
@@ -504,6 +511,7 @@ class LNCommon extends BaseClass {
         }
 
         // Step 5: Clear and type
+        await this.pause(2);
         await expect(async () => {
             await this.type(locator, data);
         }).toPass({ timeout: 20000 });
@@ -609,7 +617,7 @@ class LNCommon extends BaseClass {
         await expect(async () => {
             await (await lnPg.popupText()).waitFor({ state: 'visible', timeout: 5000 });
             textCount = await (await lnPg.popupText()).count();
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 60000 });
 
         while (textCount > 0) {
 
@@ -620,7 +628,12 @@ class LNCommon extends BaseClass {
             textCount--;
         }
 
-        expect((await popup.textContent()).toLowerCase()).toBe(popupText.toLowerCase());
+        await expect(async () => {
+
+            expect((await popup.textContent()).toLowerCase()).toBe(popupText.toLowerCase());
+
+        }).toPass({ timeout: 10000 });
+
         await (await lnPg.popupBtn(popupBtn)).click();
 
     }
@@ -825,13 +838,14 @@ static async moveToRequiredColumnHeader(sessionCode, elementId, label) {
 
         if(count>0) {
 
-            const textCount= await (await lnPg.popupOKButton()).count();
+            const textCount= await (await lnPg.popupText()).count();
             if(textCount>0){
                
-                    console.log("=========>>>>> Pop Up message: "+ await (await lnPg.popupText.nth(0)).textContent() +" <<<<<=========");
+                const popupText= await (await lnPg.popupText()).nth(0);
+                console.log("=========>>>>> Pop Up message: "+ await popupText.textContent() +" <<<<<=========");
             }
 
-            await (await lnPg.popupOKButton.nth(0)).click();
+            await (await (await lnPg.popupOKButton()).nth(0)).click();
         }
 
     }
@@ -897,6 +911,71 @@ static async moveToRequiredColumnHeader(sessionCode, elementId, label) {
 		console.log("INFO : ========>>>>> Navigated to "+sessionID+" Session <<<<<=========");
 	}
 
+    static async selectRecord(sessionCode, recordNum) {
+
+        // Intializing the page
+        const lnPg = new LNPage(this.page);
+
+        // Using condition to verify whether it is already selected or not
+        if (!await (await (await lnPg.selectRequiredRecord(sessionCode, recordNum)).getAttribute(ElementAttributes.CLASS)).includes(LNCommons.CHECKED)) {
+
+            await (await lnPg.selectRequiredRecord(sessionCode, recordNum)).click();
+        }
+        // Verifying whether record is already selected or not
+        await expect(async () => {
+
+            expect(await (await (await lnPg.selectRequiredRecord(sessionCode, recordNum)).getAttribute(ElementAttributes.CLASS)).includes(LNCommons.CHECKED), " checkbox is not selected").toBeTruthy();
+
+        }).toPass({ timeout: 10000 });
+    }
+
+    static async navigateToLNActions(sessionCode, ...menuOptions) {
+
+		const lnPg = new LNPage(this.page);
+
+        if (!await this.isElementPresent(await lnPg.actionsMenuItem(sessionCode))) {
+
+            await (await lnPg.moreButton(sessionCode)).click();
+			await (await lnPg.actionOverflow(sessionCode)).click();
+          
+        } else {
+
+            await (await lnPg.actionMenuItem(sessionCode)).click();
+        }
+
+        for (let i = 0; i < menuOptions.length; i++) {
+
+            let menuOption = menuOptions[i];
+            await expect(async () => {
+
+                await (await lnPg.actionMenuOption(menuOption, sessionCode)).hover();
+                await (await lnPg.actionMenuOption(menuOption, sessionCode)).click();
+                
+            }).toPass({ timeout: 30000 });
+        }
+    }
+
+    static async updateDefaultFilter(elementId, sessionCode, value) {
+
+		// Intializing the page
+		const lnPg = new LNPage(this.page);
+		
+		
+		await (await lnPg.gridMenuBtn(elementId, sessionCode)).click();
+		await (await lnPg.filterOperator(value)).click();
+
+	}
+
+    static async verifyValueWithLabel(label, sessionCode, text) {
+		
+		// Intializing the page
+		const lnPg =new LNPage(this.page);
+		
+		// Verifying the status
+		expect(await this.isElementPresent(await lnPg.status(label, sessionCode, text)), `=========>>>>>  ${text} status is not displaying<<<<<=========`)
+				  .toBeTruthy();		
+	}
+	
 }
 
 export default LNCommon;
