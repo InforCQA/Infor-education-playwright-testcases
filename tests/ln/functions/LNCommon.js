@@ -777,6 +777,49 @@ static async moveToRequiredColumnHeader(sessionCode, elementId, label) {
       //  await columnHeaderLocator.hover(); 
     }).toPass({ timeout: 10000 });
 }
+/**-----------------------------------------------------------------
+ * Objective: Validate popup message and handle pop-up if it exists
+ *------------------------------------------------------------------*/
+static async validateMessageAndHandlePopUpIfExists(popupText, popupBtn) {
+  
+    const lnPg = new LNPage(this.page);
+
+  // Check if popup button is present
+  const isPresent = await lnPg.popupBtn(popupBtn);
+  if (isPresent) {
+    const popupTexts = await lnPg.popupText.allTextContents();
+    for (let i = popupTexts.length - 1; i >= 0; i--) {
+      if (popupTexts[i].toLowerCase().includes(popupText.toLowerCase())) {
+        console.log(`=========>>>>> Pop Up message: ${popupTexts[i]} <<<<<=========`);
+
+        expect(popupTexts[i]).toContain(popupText);
+
+        const popupBtnElement = await lnPg.popupBtn(popupBtn);
+        await popupBtnElement.click();
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * --------------------------------------------------------
+ * Objective : To update default filter value in the grids
+ * --------------------------------------------------------
+ */
+static async updateDefaultFilter(elementId, sessionCode, value) {
+  // Initializing the page
+  const lnPg = new LNPage(this.page);
+
+  // Click on the grid menu button
+  await LNCommon.getDynamicElement(lnPg.gridMenuBtn, elementId, sessionCode).click();
+
+  // Click on the desired filter operator (e.g., Contains, Starts With)
+  await LNCommon.getDynamicElement(lnPg.filterOperator, value).click();
+
+  // Wait for 300 milliseconds
+  await new Promise(resolve => setTimeout(resolve, 300));
+}
 
 }
 

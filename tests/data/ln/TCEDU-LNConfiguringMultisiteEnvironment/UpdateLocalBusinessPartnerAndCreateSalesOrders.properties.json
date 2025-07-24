@@ -1,0 +1,15 @@
+{
+  "businessPartner": "MSC000010",
+  "businessPartnerDesc": "MS Cus Chair US",
+  "site": "ATLANTA",
+  "carrierDesc": "Atlanta",
+  "salesOffice": "SOATLA",
+  "line": "10",
+  "item": ["MS200", "MS5000-1"],
+  "partialSalesOffice": "ATL",
+  "plannedTime": "12:00 PM",
+  "orderedQuan": "1",
+  "price": "1000.00",
+  "enterpriseUnits": ["BOSTON", "ATLANT"],
+  "transactionLine": "1"
+}
