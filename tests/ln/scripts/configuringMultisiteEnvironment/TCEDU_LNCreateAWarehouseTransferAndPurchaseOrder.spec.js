@@ -10,7 +10,7 @@ import LNWarehousing from '../../functions/LNWarehousing';
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
 const warehouseCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/CreateAWarehouseTransferAndPurchaseOrder.properties.json")));
 
-export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
+export default function TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder() {
 
     test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
 
@@ -26,44 +26,49 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
 		// Ship warehouse transfer (by distribution center)
 		// Review the intercompany trade order transaction line (by sales center)
         test('Review intercompany trade order - purchase (by sales center)', async ({ }) => {
+             test.slow(); 
              await CloudSuite.navigateToApplication(ProductNames.LN);
-             LNWarehousing.createAWarehouseTransferForInternalMaterialDelivery(warehouseCnxt);
+             await LNWarehousing.createAWarehouseTransferForInternalMaterialDelivery(warehouseCnxt);
          });
 
         // 1.4.2
-        test('Create an enterprise unit', async ({ }) => {
-            await LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(warehouseCnxt.enterpriseUnits, warehouseCnxt.intercompanyTradeNumPurchase, 1);
-        });
+        // test('Invoice intercompany trade order transaction line (by distribution center)', async ({ }) => {
+        //     await LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(warehouseCnxt.enterpriseUnits, warehouseCnxt.intercompanyTradeNumPurchase, 1);
+        // });
         
-        // 1.4.3
-        test('Create a planning cluster', async ({ }) => {
-            await LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(warehouseCnxt.intercompanyTradeNumPurchase, null, 1);
-        });
+        // // 1.4.3
+        // test('Create intercompany trade purchase invoice (by sales center)', async ({ }) => {
+        //     await LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(warehouseCnxt.intercompanyTradeNumPurchase, null, 1);
+        // });
 
-        // 1.4.4
-        test('Create a site', async ({ }) => {
-            await LNProcurement.createAPurchaseOrderForExternalMaterialDelivery(warehouseCnxt);
-        });
+        // // Create purchase order (by distribution center)
+		// // Review intercompany trade order - sales (by purchase office at distribution center)
+		// // Review intercompany trade order - purchase (by sales center)
+		// // Receive the purchase order (by your sales center)
+		// // Review the intercompany trade order transaction line (by distribution center)
+        // test('Create purchase order (by distribution center)', async ({ }) => {
+        //     await LNProcurement.createAPurchaseOrderForExternalMaterialDelivery(warehouseCnxt);
+        // });
         
-        // 1.4.5
-        test('Create a sales office and warehouse', async ({ }) => {
-            await LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByPurchaseOfficeOfDistributionCenter(warehouseCnxt);
-        });
+        // // 1.4.5
+        // test('Invoice intercompany trade order transaction line (by purchase office of distribution center)', async ({ }) => {
+        //     await LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByPurchaseOfficeOfDistributionCenter(warehouseCnxt);
+        // });
         
-        // 1.4.6
-        test('Create a sales setting by site', async ({ }) => {
-            await LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(warehouseCnxt.intercompanyTradeNumSales, warehouseCnxt.toEnterpriseUnit, 2);
-        }); 
+        // // 1.4.6
+        // test('Create intercompany trade purchase invoice(by sales center)', async ({ }) => {
+        //     await LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(warehouseCnxt.intercompanyTradeNumSales, warehouseCnxt.toEnterpriseUnit, 2);
+        // }); 
 
-        // 1.4.7
-        test('Review the new site details in the Enterprise Model Workbench', async ({ }) => {
-            await LNCommonFunctions.reviewTheIntercompanyTradeSalesDashboard(warehouseCnxt);
-        }); 
+        // // 1.4.7
+        // test('Review the Intercompany Trade Sales Dashboard', async ({ }) => {
+        //     await LNCommonFunctions.reviewTheIntercompanyTradeSalesDashboard(warehouseCnxt);
+        // }); 
 
-          // 1.4.7
-        test('Review the new site details in the Enterprise Model Workbench', async ({ }) => {
-            await LNCommonFunctions.reviewTheIntercompanyTradePurchaseDashboard(warehouseCnxt);
-        }); 
+        //   // 1.4.7
+        // test('Review the Intercompany Trade Purchase Dashboard', async ({ }) => {
+        //     await LNCommonFunctions.reviewTheIntercompanyTradePurchaseDashboard(warehouseCnxt);
+        // }); 
 
     })
 }

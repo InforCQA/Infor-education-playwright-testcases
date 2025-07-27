@@ -10,15 +10,19 @@ import LNSessionCodes from "../constants/LNSessionCodes";
 import LNSessionTabs from "../constants/LNSessionTabs";
 import LNPage from "../pages/LNPage";
 import LNCommon from "./LNCommon";
+import LNTabs from "../constants/LNTabs";
+import SalesWorkbench_Lbl from "../constants/elementLbls/SalesWorkbench_Lbl";
+import SalesWorkbench_Id from "../constants/elementIds/SalesWorkbench_Id";
+import OrderIntakeWorkbench_Id from "../constants/elementIds/OrderIntakeWorkbench_Id";
 
 class LNWarehousing extends BaseClass{
 
     //To close the Tab in LN
-    static async createAWarehouseTransferForInternalMaterialDelivery(tabName) {
+    static async createAWarehouseTransferForInternalMaterialDelivery(warehouseCnxt) {
 
 
 		// Initialising page elements
-		const commonPg = new LNPage(this.page);
+		let commonPg = new LNPage(this.page);
 
         console.log("=========>>>>> Create warehouse transfer (by sales center) started <<<<<=========");
 
@@ -48,7 +52,7 @@ class LNWarehousing extends BaseClass{
         await LNCommon.clickAndSelectDropdownField(Orders_Lbl.ORDER_DRP, Orders_Id.ORDER_DRP, warehouseCnxt.order);
 
         // Verifying the Ship From section
-        expect(await this.isElementPresent(await commonPg.verifyHeader(Orders_Lbl.SHIP_FROM),) `${Orders_Lbl.SHIP_FROM} section is not found`).toBeTruthy();
+        expect(await this.isElementPresent(await commonPg.verifyHeader(Orders_Lbl.SHIP_FROM)), `${Orders_Lbl.SHIP_FROM} section is not found`).toBeTruthy();
 
         await (await LNCommon.getTextboxLookUpIcon(Orders_Lbl.SHIP_FROM_CODE, Orders_Id.SHIP_FROM_CODE_SEGMENT_THREE,
             LNSessionCodes.WAREHOUSING_ORDER)).click();
@@ -64,12 +68,13 @@ class LNWarehousing extends BaseClass{
 
         // Verifying the Session title
         await LNCommon.verifySessionTab(LNSessionTabs.WAREHOUSING_ORDER);
-
+        
+        await this.pause(1);
         await this.page.keyboard.press('Tab');
 
         // Verifying the Ship From Address
         expect(await (await LNCommon.getTextField(Orders_Lbl.SHIP_FROM_ADDRESS, Orders_Id.SHIP_FROM_ADDRESS,
-                LNSessionCodes.WAREHOUSING_ORDER)).inputValue(), `The Ship from address is not ${warehouseCnxt.addresses[0]}`).toBe(warehouseCnxt.addresses[0]);
+                LNSessionCodes.WAREHOUSING_ORDER)), `The Ship from address is not ${warehouseCnxt.addresses[0]}`).toHaveValue(warehouseCnxt.addresses[0]);
 
         // Verifying the Ship To section
         expect(await this.isElementPresent(await commonPg.verifyHeader(Orders_Lbl.SHIP_TO)), `${Orders_Lbl.SHIP_TO} section is not found`).toBeTruthy();
@@ -91,31 +96,37 @@ class LNWarehousing extends BaseClass{
 
         // Verifying the Session title
         await LNCommon.verifySessionTab(LNSessionTabs.WAREHOUSING_ORDER);
-
+        
+        await this.pause(1);
         await this.page.keyboard.press('Tab');
         
         await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.NO_DISTANCE_HAS_BEEN_DEFINED_BETWEEN_ADDRESSES, LNCommons.OK);
-
+        
+        await this.pause(1);
         await this.page.keyboard.press('Tab');
 
         // Verifying the Ship To Address
-        expect(await (await LNCommon.getTextField(Orders_Lbl.SHIP_TO_ADDRESS, Orders_Id.SHIP_TO_ADDRESS,
-                LNSessionCodes.WAREHOUSING_ORDER)).inputValue(), `The Ship to address is not ${warehouseCnxt.addresses[1]}`).toBe(warehouseCnxt.addresses[1]);
+        expect(await LNCommon.getTextField(Orders_Lbl.SHIP_TO_ADDRESS, Orders_Id.SHIP_TO_ADDRESS,
+                LNSessionCodes.WAREHOUSING_ORDER), `The Ship to address is not ${warehouseCnxt.addresses[1]}`).toHaveValue(warehouseCnxt.addresses[1]);
 
         await LNCommon.selectGridTab(LNTabs.OUTBOUND_LINES, LNSessionCodes.WAREHOUSING_ORDER);
         await LNCommon.clickMainMenuItem(LNSessionCodes.OUTBOUND_LINES, LNMenuActions_Id.NEW);
+        
+        await (await this.page).waitForTimeout(1000);
 
         // Verifying the Order Line values
+
         expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.OUTBOUND_LINES,
-                Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID, Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_GRID,
-                Number(LNCommons.FIRST_RECORD)), `The value Order line segment one is not ${warehouseCnxt.orderLine[0]}`)
+            Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID, Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_GRID,
+            Number(LNCommons.FIRST_RECORD)), `The value Order line segment one is not ${warehouseCnxt.orderLine[0]}`)
             .toBe(warehouseCnxt.orderLine[0]);
 
         expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.OUTBOUND_LINES,
             Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID, Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_SEGMENT_TWO_GRID,
-            Integer.valueOf(LNCommons.FIRST_RECORD)), `The value Order line segment two is not ${warehouseCnxt.orderLine[1]}`)
+            Number(LNCommons.FIRST_RECORD)), `The value Order line segment two is not ${warehouseCnxt.orderLine[1]}`)
             .toBe(warehouseCnxt.orderLine[1]);
 
+        await this.pause(1);
         await this.page.keyboard.press('Tab');
         await this.page.keyboard.press('Tab');
         await this.page.keyboard.press('Tab');
@@ -146,6 +157,7 @@ class LNWarehousing extends BaseClass{
 
         await LNCommon.selectRequiredRecord(LNSessionCodes.OUTBOUND_LINES, Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID,
             Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_GRID, warehouseCnxt.orderLine[0]);
+        await this.pause(2);
         await LNCommon.navigateToLNReferences(LNSessionCodes.OUTBOUND_LINES, LNMenuActions_Lbl.INTERCOMPANY_TRADE_ORDER,
             LNMenuActions_Lbl.PURCHASE_);
 
@@ -188,49 +200,47 @@ const priceOriginId = [
         for (let i = 0; i < tab.length; i++) {
             await LNCommon.selectHeaderTab(tab[i], LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL);
 
-            expect(await (await commonPg.dropdownValueLabel(priceOriginLbl[i], priceOriginId[i])).innerText(),  `${warehouseCnxt.priceOrigin} is not selected from dropdown`)
+            await expect(async () => {
+             expect(await (await commonPg.dropdownValueLabel(priceOriginLbl[i], priceOriginId[i])).innerText(),  `${warehouseCnxt.priceOrigin} is not selected from dropdown`)
                 .toBe(warehouseCnxt.priceOrigin);
+        }).toPass({ timeout: 10000 });
+
         }
 
         // Verifying the Details in Project/Item tab
         await LNCommon.selectHeaderTab(LNTabs.PROJECT_ITEM, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL);
         
-        expect(await (await LNCommon
+        expect(await LNCommon
                 .getTextField(Orders_Lbl.FROM_ITEM_IN_PROJECT_ITEM_TAB,
                     Orders_Id.FROM_ITEM_IN_PROJECT_ITEM_TAB_SEGMENT_TWO,
-                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL))
-                .inputValue(), `The From Item is not ${warehouseCnxt.items[0]}`).toBe(warehouseCnxt.items[0]);
+                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL), `The From Item is not ${warehouseCnxt.items[0]}`).toHaveValue(warehouseCnxt.items[0]);
 
         // Verifying the Details in Operational tab
         await LNCommon.selectHeaderTab(LNTabs.OPERATIONAL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL);
 
-        expect(await (await LNCommon
+        expect(await LNCommon
                 .getTextField(Orders_Lbl.SHIP_FROM_ADDRESS_IN_OPERATIONAL_TAB,
                     Orders_Id.SHIP_FROM_ADDRESS_IN_OPERATIONAL_TAB,
-                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL))
-                .inputValue(), `The Ship From address is not ${warehouseCnxt.addresses[0]}`).toBe(warehouseCnxt.addresses[0]);
+                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL), `The Ship From address is not ${warehouseCnxt.addresses[0]}`).toHaveValue(warehouseCnxt.addresses[0]);
 
-        expect(await (await LNCommon
+        expect(await LNCommon
                 .getTextField(Orders_Lbl.SHIP_TO_ADDRESS_IN_OPERATIONAL_TAB,
                     Orders_Id.SHIP_TO_ADDRESS_IN_OPERATIONAL_TAB,
-                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL))
-                .inputValue(), `The Ship To address is not ${warehouseCnxt.addresses[1]}`).toBe(warehouseCnxt.addresses[1]);
+                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL), `The Ship To address is not ${warehouseCnxt.addresses[1]}`).toHaveValue(warehouseCnxt.addresses[1]);
 
         // Verifying the Details in Buying Information tab
         await LNCommon.selectHeaderTab(LNTabs.BUYING_INFORMATION, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL);
         
-        expect(await (await LNCommon
+        expect(await LNCommon
                 .getTextField(Orders_Lbl.BUY_FROM_ADDRESS_IN_BUYING_INFORMATION_TAB,
                     Orders_Id.BUY_FROM_ADDRESS_IN_BUYING_INFORMATION_TAB,
-                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL))
-                .inputValue(), `The Buy From address is not ${warehouseCnxt.addresses[0]}`).toBe(warehouseCnxt.addresses[0]);
+                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL), `The Buy From address is not ${warehouseCnxt.addresses[0]}`).toHaveValue(warehouseCnxt.addresses[0]);
 
-        expect(await (await LNCommon
+        expect(await LNCommon
                 .getTextField(Orders_Lbl.INVOICE_FROM_ADDRESS_IN_BUYING_INFORMATION_TAB,
                     Orders_Id.INVOICE_FROM_ADDRESS_IN_BUYING_INFORMATION_TAB,
-                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL))
-                .inputValue(), `The Invoice From address is not ${warehouseCnxt.addresses[0]}`)
-            .toBe(warehouseCnxt.addresses[0]);
+                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL), `The Invoice From address is not ${warehouseCnxt.addresses[0]}`)
+            .toHaveValue(warehouseCnxt.addresses[0]);
 
         // Verifying the Details in Tax, Pricing, Hours Expenses, Freight, Fianancial
         // tab
@@ -243,11 +253,10 @@ const priceOriginId = [
         // Verifying the Control tab details
         await LNCommon.selectHeaderTab(LNTabs.CONTROL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL);
 
-        expect(await (await LNCommon
+        expect(await LNCommon
                 .getTextField(Orders_Lbl.USER_IN_CONTROL_TAB, Orders_Id.USER_IN_CONTROL_TAB,
-                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL))
-                .inputValue(), "The user field does not contain " + "3270st02")
-            .toBe("3270st02");
+                    LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL), `The user field does not contain 3270st02`)
+            .toHaveValue("3270st02");
 
         await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL,
             LNMenuActions_Id.SAVE_AND_EXIT);
@@ -266,7 +275,7 @@ const priceOriginId = [
          * Objective : Calling the function as its dependant on the 2 methods above
          * Exercises : 3.2.3
          * ------------------------------------------------------------------------------------*/
-        await this.reviewIntercompanyTradeOrderSalesByDistributionCenter(warehouseCnxt);
+        await LNWarehousing.reviewIntercompanyTradeOrderSalesByDistributionCenter(warehouseCnxt);
 
         console.log("=========>>>>> Ship warehouse transfer (by distribution center) started <<<<<=========");
 
@@ -285,6 +294,8 @@ const priceOriginId = [
 
         await LNCommon.selectRequiredRecord(LNSessionCodes.OUTBOUND_LINES, Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID,
             Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_GRID, warehouseCnxt.orderLine[0]);
+
+        await this.page.waitForTimeout(1000);
         await LNCommon.navigateToLNReferences(LNSessionCodes.OUTBOUND_LINES, LNMenuActions_Lbl.INTERCOMPANY_TRADE_ORDER,
             LNMenuActions_Lbl.PURCHASE_);
 
@@ -302,9 +313,10 @@ const priceOriginId = [
         const rowNum = await LNCommon.selectRequiredRecord(
             LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_ORDER_PURCHASE, Orders_Lbl.TRANSACTION_LINE_GRID,
             Orders_Id.TRANSACTION_LINE_GRID, warehouseCnxt.transactionLine);
+
         expect(await LNCommon.getRequiredValueFromTheGrid(
                 LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_ORDER_PURCHASE,
-                Orders_Lbl.RECEIVED_AMOUNT_GRID, Orders_Id.RECEIVED_AMOUNT_GRID, rowNum)).not.toBeEmpty();
+                Orders_Lbl.RECEIVED_AMOUNT_GRID, Orders_Id.RECEIVED_AMOUNT_GRID, rowNum)).not.toBe('');
 
         await LNCommon.drilldownRequiredRecord(LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_ORDER_PURCHASE,
             String(rowNum));
@@ -338,7 +350,7 @@ const priceOriginId = [
     static async reviewIntercompanyTradeOrderSalesByDistributionCenter(warehouseCnxt) {
 
 		// Initialising page elements
-		const commonPg = new LNPage(this.page);
+		let commonPg = new LNPage(this.page);
 
 		console.log(
 				"=========>>>>> Review intercompany trade order - sales (by distribution center) started <<<<<=========");
@@ -360,20 +372,22 @@ const priceOriginId = [
 		for (let i = 0; i < sections.length; i++) {
 
 			expect(await this.isElementPresent(await commonPg.verifyHeader(sections[i]))).toBeTruthy();
-			await (await LNCommon.getTextField(euLbl[i], euId[i], LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH)).clear();
+			await (await (await LNCommon.getTextField(euLbl[i], euId[i], LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH)).first()).clear();
 			
 		}
 
 		await LNCommon.selectHeaderTab(LNTabs.ADDITIONAL, LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
-		await (await commonPg.statFieldButton(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH,
-				SalesWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY)).click();
+        
+        await this.page.waitForTimeout(1000);
+        await (await commonPg.statFieldButton(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH,
+                SalesWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY)).click();
 		
 		await LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,
 				LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, LNCommons.CONTAINS);
 		await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID,
 				SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,
 				LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,
-				warehouseCnxt.intercompanyTradeNumPurchase.substring(warehouseCnxt.intercompanyTradeNumPurchase.length() - 2));
+				warehouseCnxt.intercompanyTradeNumPurchase.substring(warehouseCnxt.intercompanyTradeNumPurchase.length - 2));
 		await LNCommon.drilldownRequiredRecord(LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,
 				LNCommons.FIRST_RECORD);
 
@@ -389,27 +403,28 @@ const priceOriginId = [
 		// Verifying the Details on Intercompany Trade tab
 		await LNCommon.selectHeaderTab(LNTabs.INTERCOMPANY_TRADE, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
 
-		expect(await (await LNCommon
+		expect(await LNCommon
 						.getTextField(SalesWorkbench_Lbl.FROM_ENTERPRISE_UNIT, SalesWorkbench_Id.FROM_ENTERPRISE_UNIT,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
-						.inputValue(), `The From Enterprise Unit is not ${warehouseCnxt.enterpriseUnits[0]}`).toBe(warehouseCnxt.enterpriseUnits[0]);
+								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL), `The From Enterprise Unit is not ${warehouseCnxt.enterpriseUnits[0]}`).toHaveValue(warehouseCnxt.enterpriseUnits[0]);
 
 		// Verifying the Details on Agreement tab
 		await LNCommon.selectHeaderTab(LNTabs.AGREEMENT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+
 		expect(await this.isElementPresent(await commonPg.verifyHeader(
 						SalesWorkbench_Lbl.TRANSFER_PRICING_RULES)), `${SalesWorkbench_Lbl.TRANSFER_PRICING_RULES} section is not found`).toBeTruthy();
-		expect(await (await LNCommon
+
+		expect(await (await (await LNCommon
 						.getTextField(SalesWorkbench_Lbl.MARKUP_PERCENTAGE, SalesWorkbench_Id.MARKUP_PERCENTAGE,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
-						.inputValue(), "The Markup Percentage field is empty").isNotEmpty();
+								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).first())
+						.inputValue(), "The Markup Percentage field is empty").not.toBe('');
 
 		// Verifying the Details on Financial tab
 		await LNCommon.selectHeaderTab(LNTabs.FINANCIAL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
 
-		expect(await this.isElementPresent(commonPg.verifyHeader,
-						SalesWorkbench_Lbl.ESTIMATED_AMOUNTS), `${SalesWorkbench_Lbl.ESTIMATED_AMOUNTS} section is not found`).toBeTruthy();
-		expect(await (await commonPg.valueInTabular(SalesWorkbench_Lbl.MARGIN,
-						SalesWorkbench_Id.MARGIN, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).textContent(), "The Markup Percentage field is empty").not.toBeEmpty();
+		expect(await this.isElementPresent(await commonPg.verifyHeader(SalesWorkbench_Lbl.ESTIMATED_AMOUNTS)), `${SalesWorkbench_Lbl.ESTIMATED_AMOUNTS} section is not found`).toBeTruthy();
+        
+		expect(await commonPg.valueInTabular(SalesWorkbench_Lbl.MARGIN,
+						SalesWorkbench_Id.MARGIN, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL), "The Markup Percentage field is empty").not.toBeEmpty();
 
 		//screenshot("Review intercompany trade order - sales (by distribution center)");
 

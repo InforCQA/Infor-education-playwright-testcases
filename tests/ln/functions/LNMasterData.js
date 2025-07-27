@@ -1532,6 +1532,7 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 				itemCnxt.item);
 		if (await LNCommon.isRequiredRowPresent(LNSessionCodes.ITEMS, Items_Lbl.ITEM_GRID, Items_Id.ITEM_SEG_2_GRID,
 				itemCnxt.item)) {
+            await this.pause(1);
 			await LNCommon.selectRequiredRecord(LNSessionCodes.ITEMS, Items_Lbl.ITEM_GRID, Items_Id.ITEM_SEG_2_GRID,
 					itemCnxt.item);
 			await LNCommon.clickMainMenuItem(LNSessionCodes.ITEMS, LNMenuActions_Id.DELETE);
@@ -1598,7 +1599,7 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
         }).toPass({ timeout: 10000 });
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM, LNMenuActions_Id.SAVE);
-
+        await this.pause(3);
 		await (await lnPg.verifyHeader(Items_Lbl.SUBENTITIES)).hover();
 
 
@@ -1615,6 +1616,7 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 				await LNCommon.getTextField(Items_Lbl.PURCHASE_PRICE, Items_Id.PURCHASE_PRICE, LNSessionCodes.ITEM_PURCHASE),
 				itemCnxt.itemPurchasePrice);
 		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_PURCHASE, LNMenuActions_Id.SAVE);
+        await this.pause(3);
 
 		// Verifying the Dialogbox title
 		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PURCHASE_TDIPU);
@@ -1622,10 +1624,11 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 
 		// Verifying the Dialogbox title
 		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PURCHASE_TDIPUA);
+        await this.pause(3);
 		await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.REPLACE_AVERAGE_PURCHASE_PRICE_ACTUAL_PRICE, LNCommons.YES);
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_PURCHASE, LNMenuActions_Id.SAVE_AND_EXIT);
-
+        await this.pause(3);
 		// Verify Session Tab
 		await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
 
@@ -1645,7 +1648,7 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 
             expect(await (await LNCommon
                 .getTextField(Items_Lbl.MATERIAL_COSTS, Items_Id.MATERIAL_COSTS, LNSessionCodes.ITEM_COSTING))
-                .innerText()).toContainText(itemCnxt.itemPurchasePrice);
+                .innerText()).toContain(itemCnxt.itemPurchasePrice);
 
         }).toPass({ timeout: 20000 });
 
@@ -1669,14 +1672,14 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 
             expect(await (await LNCommon
                 .getTextField(Items_Lbl.MATERIAL_COSTS, Items_Id.MATERIAL_COSTS, LNSessionCodes.ITEM_COSTING))
-                .innerText()).toContainText(itemCnxt.itemPurchasePrice);
+                .innerText()).toContain(itemCnxt.itemPurchasePrice);
 
         }).toPass({ timeout: 20000 });
 
 		// Verifying the Total Cost
-		expect(await (await LNCommon.getTextField(Items_Lbl.TOTAL_COSTS, Items_Id.TOTAL_COSTS, LNSessionCodes.ITEM_COSTING))
-								.innerText()).toBeGreaterThan(itemCnxt.itemPurchasePrice);
-
+		expect(Number(await (await LNCommon.getTextField(Items_Lbl.TOTAL_COSTS, Items_Id.TOTAL_COSTS, LNSessionCodes.ITEM_COSTING))
+								.innerText())).toBeGreaterThan(Number(itemCnxt.itemPurchasePrice));
+    
 		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_COSTING, LNMenuActions_Id.SAVE_AND_EXIT);
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM, LNMenuActions_Id.SAVE_AND_EXIT);
