@@ -26,8 +26,8 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
             
             await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
         });
-
-       // Create sales order (by the sales center)
+        // 3.1.1, 3.1.2, 3.1.3, 3.1.4, 3.1.5
+        // Create sales order (by the sales center)
 		// Review intercompany trade order - purchase (by the sales center)
 		// Review intercompany trade order - sales (by the distribution center)
 		// Ship sales order (by the distribution center)
@@ -37,12 +37,12 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
             await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
         });
 
-        // 3.1.1
+        // 3.1.6
         test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {
             
             LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(businessCnxt.enterpriseUnits, businessCnxt.interCmpnyTradeNum, 0);
         });
-        // 3.1.2
+        // 3.1.7
         test('Create intercompany trade purchase invoice (by the sales center)', async ({ }) => {
            LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
         });
