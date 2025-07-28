@@ -652,14 +652,14 @@ class LNPage extends LNCustomActions{
         )};
 
     /* gridMenuBtn */
-    gridMenuBtn = (id1, id2) =>
-        this.iframe().locator(
+    gridMenuBtn = async(id1, id2) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'GridMenuButton')][contains(@id,'${id1}') and contains(@id,'${id2}')]`
-        );
+        )};
 
     /* filterOperator */
-    filterOperator = (text) =>
-        this.iframe().locator(`//label[contains(@id,'filterOperatorMenu')][text()='${text}']`);
+    filterOperator = async(text) =>{
+        return await (await this.iframe()).locator(`//label[contains(@id,'filterOperatorMenu')][text()='${text}']`)};
 
     /* menu */
     menu = () =>
@@ -1435,17 +1435,17 @@ class LNPage extends LNCustomActions{
 
     /* gridLabelLastValue - WebElement */
     gridLabelLastValue = (p1, p2) =>
-        this.iframe().locator(`(//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')]//label)[last()]`);
+        this.iframe().locator(`//div[contains(@class,'DataCell')][contains(@id,'${p1}')][contains(@id,'${p2}')]//label)[last()]`);
 
     /* statFieldButton - Buttons */
-    statFieldButton = (p1, p2) =>
-        this.iframe().locator(`//div[contains(@class,'StatField')][contains(@id,'${p1}')]//div[normalize-space() ='${p2}']/parent::div`);
+    statFieldButton = async(p1, p2) =>{
+        return await (await this.iframe()).locator(`//div[contains(@class,'StatField')][contains(@id,'${p1}')]//div[normalize-space()='${p2}']/parent::div`)};
 
     /* valueInTabular - Assert */
-    valueInTabular = (p1, p2, p3) =>
-        this.iframe().locator(
+    valueInTabular = async(p1, p2, p3) =>{
+        return await (await this.iframe()).locator(
             `//label[normalize-space()='${p1}']/ancestor::tr/following-sibling::tr//label[contains(@id,'${p2}')][contains(@id,'${p3}')]`
-        );
+        )};
 
     /* closeOtherSessions - Text */
     closeOtherSessions = () =>

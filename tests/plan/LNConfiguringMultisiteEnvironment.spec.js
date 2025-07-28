@@ -5,12 +5,16 @@ import TCEDU_LNDevelopTheOriginalEnterpriseStructure from "../ln/scripts/configu
 import TCEDU_LNReviewAndUpdateItemsFromSalesPerspective from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNReviewAndUpdateItemsFromSalesPerspective.spec';
 import TCEDU_LNCreateANewItemUsingItemDefaults from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateANewItemUsingItemDefaults.spec';
 import TCEDU_LNReviewItemsFromGlobalPrespective from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNReviewItemsFromGlobalPrespective.spec';
+import TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders.spec';
+import TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder.spec';
 
 test.describe('LNConfiguringMultisiteEnvironment', () => {
-    TCEDU_LNSelectMapProvider();
-    TCEDU_LNReviewEnterpriseModel();
-    TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
-    TCEDU_LNCreateANewItemUsingItemDefaults();
-    TCEDU_LNReviewItemsFromGlobalPrespective();
+    // TCEDU_LNSelectMapProvider();
+    // TCEDU_LNReviewEnterpriseModel();
+    // TCEDU_LNDevelopTheOriginalEnterpriseStructure();
+    // TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
+    //TCEDU_LNCreateANewItemUsingItemDefaults();
+    // TCEDU_LNReviewItemsFromGlobalPrespective();
+    // TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
+    TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
 });

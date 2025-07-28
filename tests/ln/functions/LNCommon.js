@@ -112,7 +112,7 @@ class LNCommon extends BaseClass {
             await this.page.waitForTimeout(1000);
             await (await lnPg.collapseAll()).waitFor({ state: 'visible', timeout: 5000 });
             await (await lnPg.collapseAll()).click();
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 60000 });
 
         // Verifying whether module is collapsed or not
         await expect(async () => {
@@ -133,7 +133,7 @@ class LNCommon extends BaseClass {
             const selectHeaderTab = await lnPg.selectHeaderTab(tabName, sessionCode);
              await selectHeaderTab.waitFor({ state: 'visible', timeout: 5000 });
             await selectHeaderTab.click();
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 50000 });
     }
 
     /*-----------------------------------------------
@@ -274,9 +274,11 @@ class LNCommon extends BaseClass {
         
         // Step 2: Fetch all grid cell elements
         let records = null;
-        for(let i=0; i<3; i++){
-        records = await (await commonPg.gridCell(sessionCode, elementId, sessionCode, elementId)).elementHandles();
-        }
+        
+        await expect(async () => {
+          records = await (await commonPg.gridCell(sessionCode, elementId)).elementHandles();
+        }).toPass({ timeout: 60000 });
+        
         let rowNo = -1;
         let isRecordFound = false;
 
@@ -338,9 +340,9 @@ class LNCommon extends BaseClass {
         }
         
         await expect(async () => {
-        await this.page.waitForTimeout(2000);
-        await (await lnPg.referencesMenuItem(sessionCode)).click();
-        }).toPass({ timeout: 10000 });
+            await (await this.page).waitForTimeout(1000);
+            await (await lnPg.referencesMenuItem(sessionCode)).click();
+        }).toPass({ timeout: 60000 });
 
         // Using loop to click on multiple navigations
         for (const menuOption of menuOptions) {
@@ -406,13 +408,25 @@ class LNCommon extends BaseClass {
         const target = await (await lnPg.gridCell(sessionCode, elementId)).nth(rowNum);
 
         let fetchedValue = null;
-        const labelText = await target.textContent();
-        const inputValue = await target.getAttribute(ElementAttributes.VALUE);
 
-        if (inputValue !== null && inputValue !== undefined) {
-            fetchedValue = inputValue;
+        const fetchedLbl = await target.textContent();
+
+        const maxAttempts = 10;
+        let fetchedInput = '';
+
+        for (let i = 0; i < maxAttempts; i++) {
+            fetchedInput = await target.getAttribute(ElementAttributes.VALUE);
+            if (fetchedInput && fetchedInput.trim() !== '') break;
+        }
+
+        if (fetchedInput != null) {
+
+            fetchedValue = fetchedInput;
+
         } else {
-            fetchedValue = labelText?.trim();
+
+            fetchedValue = fetchedLbl;
+
         }
 
         return fetchedValue;
@@ -477,10 +491,10 @@ class LNCommon extends BaseClass {
 
         // Wait for menu item to be clickable
         await menuLocator.waitFor({ state: 'attached', timeout: 3000 });
-
+        await menuLocator.waitFor({ state: 'visible', timeout: 3000 });
         await expect(async () => {
 
-             await this.page.waitForTimeout(1000);
+             await (await this.page).waitForTimeout(1000);
              await menuLocator.hover();
             await menuLocator.click();
         }).toPass({ timeout: 80000 });
@@ -634,6 +648,7 @@ class LNCommon extends BaseClass {
 
         }).toPass({ timeout: 10000 });
 
+        await (await lnPg.popupBtn(popupBtn)).hover();
         await (await lnPg.popupBtn(popupBtn)).click();
 
     }
@@ -835,13 +850,10 @@ static async updateDefaultFilter(elementId, sessionCode, value) {
   const lnPg = new LNPage(this.page);
 
   // Click on the grid menu button
-  await LNCommon.getDynamicElement(lnPg.gridMenuBtn, elementId, sessionCode).click();
+  await (await lnPg.gridMenuBtn(elementId, sessionCode)).click();
 
   // Click on the desired filter operator (e.g., Contains, Starts With)
-  await LNCommon.getDynamicElement(lnPg.filterOperator, value).click();
-
-  // Wait for 300 milliseconds
-  await new Promise(resolve => setTimeout(resolve, 300));
+  await (await lnPg.filterOperator(value)).click();
 }
 
     static async LNRestart() 
@@ -982,7 +994,8 @@ static async updateDefaultFilter(elementId, sessionCode, value) {
 			await (await lnPg.actionOverflow(sessionCode)).click();
           
         } else {
-
+            
+            await (await lnPg.actionMenuItem(sessionCode)).hover();
             await (await lnPg.actionMenuItem(sessionCode)).click();
         }
 

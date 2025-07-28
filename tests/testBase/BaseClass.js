@@ -82,7 +82,7 @@ class BaseClass {
   static async pause(seconds) {
 
     await expect(async () => {
-      await this.page.waitForTimeout(seconds * 1000);
+      await (await this.page).waitForTimeout(seconds * 1000);
     }).toPass({ timeout: 60000 });
     
   }
@@ -117,9 +117,11 @@ class BaseClass {
 
   static async type(locator, value) {
 
-      await locator.click({ clickCount: 3 });
-      await locator.press('Backspace');
-      await locator.type(value);
+      // await locator.click({ clickCount: 3 });
+      // await locator.press('Backspace');
+      // await locator.type(value);
+
+       await locator.fill(value);
   }
 
   static async selectValueFromDropdown(locator, value) {
