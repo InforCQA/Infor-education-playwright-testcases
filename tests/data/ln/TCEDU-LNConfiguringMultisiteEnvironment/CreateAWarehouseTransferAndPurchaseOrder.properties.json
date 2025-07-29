@@ -12,5 +12,6 @@
   "enterpriseUnits": ["BOSTON", "ATLANT"],
   "buyFromBP": ["MSC", "MSC000003"],
   "toEnterpriseUnit": "ATL",
-  "intercompanyTradeNumSales": ""
+  "intercompanyTradeNumSales": "",
+  "intercompanyTradeNumPurchase": ""
 }

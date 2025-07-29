@@ -22,9 +22,9 @@ class BaseClass {
       ],
     });
 
-    const pages = this.context.pages();
+    const pages = await this.context.pages();
     
-    this.page = this.context.pages()[0];
+    this.page = await this.context.pages()[0];
   }
 
   static async globalTeardown() {
@@ -39,7 +39,7 @@ class BaseClass {
   static async getDynamicElement(webElement, ...strVar) {
     
     
-    const finalLocator = strVar.reduce((s, v) => s.replace('%s', v), webElement);
+    const finalLocator = await strVar.reduce((s, v) => s.replace('%s', v), webElement);
     const locator = await this.page.locator(finalLocator);
 
     return locator;
@@ -48,18 +48,20 @@ class BaseClass {
 
   static async isElementPresent(locator) {
     try {
-        
+
       await expect(async () => {
-        await locator.waitFor({
-          state: 'visible'
-        });
-      }).toPass({ timeout: 60000 });
-    
+        console.log(locator);
+        await locator.waitFor({timeout: 500 });
+
+      }).toPass({ timeout: 20000 });
+
       return true
     } catch (e) {
       if (e instanceof playwright.errors.TimeoutError) {
+        console.log("catch");
         return false;
       }
+        return false;
     }
   }
 

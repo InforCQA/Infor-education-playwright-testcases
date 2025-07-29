@@ -120,12 +120,11 @@ class LNWarehousing extends BaseClass{
             Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID, Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_GRID,
             Number(LNCommons.FIRST_RECORD)), `The value Order line segment one is not ${warehouseCnxt.orderLine[0]}`)
             .toBe(warehouseCnxt.orderLine[0]);
-
         expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.OUTBOUND_LINES,
             Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID, Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_SEGMENT_TWO_GRID,
             Number(LNCommons.FIRST_RECORD)), `The value Order line segment two is not ${warehouseCnxt.orderLine[1]}`)
             .toBe(warehouseCnxt.orderLine[1]);
-
+        
         await this.pause(1);
         await this.page.keyboard.press('Tab');
         await this.page.keyboard.press('Tab');
@@ -181,22 +180,22 @@ class LNWarehousing extends BaseClass{
             + warehouseCnxt.intercompanyTradeNumPurchase + " <<<<<=========");
 
         // Verifying the Price Origin in Intercompany Trade and Agreement Tab
-       const tab = [
-  LNTabs.INTERCOMPANY_TRADE,
-  LNTabs.AGREEMENT,
-];
+        const tab = [
+            LNTabs.INTERCOMPANY_TRADE,
+            LNTabs.AGREEMENT,
+        ];
 
-// Define the priceOrigin labels array
-const priceOriginLbl = [
-  Orders_Lbl.INTERCOMPANY_TRADE_PRICE_ORIGIN_DRP,
-  Orders_Lbl.AGREEMENT_PRICE_ORIGIN_DRP,
-];
+        // Define the priceOrigin labels array
+        const priceOriginLbl = [
+            Orders_Lbl.INTERCOMPANY_TRADE_PRICE_ORIGIN_DRP,
+            Orders_Lbl.AGREEMENT_PRICE_ORIGIN_DRP,
+        ];
 
-// Define the priceOrigin IDs array
-const priceOriginId = [
-  Orders_Id.INTERCOMPANY_TRADE_PRICE_ORIGIN_DRP,
-  Orders_Id.AGREEMENT_PRICE_ORIGIN_DRP,
-];
+        // Define the priceOrigin IDs array
+        const priceOriginId = [
+            Orders_Id.INTERCOMPANY_TRADE_PRICE_ORIGIN_DRP,
+            Orders_Id.AGREEMENT_PRICE_ORIGIN_DRP,
+        ];
         for (let i = 0; i < tab.length; i++) {
             await LNCommon.selectHeaderTab(tab[i], LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL);
 

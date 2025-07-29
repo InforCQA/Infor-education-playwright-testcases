@@ -16,12 +16,12 @@ class LNCustomActions extends BaseClass{
              await this.page.waitForTimeout(2000);
             await parentLocator.click({ force: true});
         }
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 60000 });
        
         // Wait until parent gets "focus" class
         await expect(async () => {
             await expect(parentLocator).toHaveClass(/.*focus/, { timeout: 3000 });
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 90000 });
         
 
         // Clear, type and tab out

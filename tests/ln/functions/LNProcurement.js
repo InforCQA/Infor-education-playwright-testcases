@@ -15,11 +15,11 @@ import BaseClass from "../../testBase/BaseClass";
 
 class LNProcurement extends BaseClass{
 
-    static async createAPurchaseOrderForExternalMaterialDelivery() {
+    static async createAPurchaseOrderForExternalMaterialDelivery(warehouseCnxt) {
 
         
 
-		log().info("=========>>>>> Create purchase order (by distribution center) Started <<<<<=========");
+		console.log("=========>>>>> Create purchase order (by distribution center) Started <<<<<=========");
 
 		// Intializing the page
 		const commonPg =  new LNPage(this.page);
@@ -41,11 +41,11 @@ class LNProcurement extends BaseClass{
 		await LNCommon.verifySessionTab(LNSessionTabs.PURCHASE_ORDER);
 
 		// Verifying the Section
-		expect(await this.isElementPresent(commonPg.verifyHeader(
-						OrderIntakeWorkbench_Lbl.BUY_FROM)), `${OrderIntakeWorkbench_Lbl.BUY_FROM} + " section is not found`).isTrue();
+		expect(await this.isElementPresent(await commonPg.verifyHeader(
+						OrderIntakeWorkbench_Lbl.BUY_FROM)), `${OrderIntakeWorkbench_Lbl.BUY_FROM} section is not found`).toBeTruthy();
 
-		await (await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER,
-				OrderIntakeWorkbench_Id.BUSINESS_PARTNER, LNSessionCodes.PURCHASE_ORDER)).click();
+		await (await (await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER,
+				OrderIntakeWorkbench_Id.BUSINESS_PARTNER, LNSessionCodes.PURCHASE_ORDER)).first()).click();
 
 		// Verifying the Dialogbox title
 		await LNCommon.verifyDialogBoxWindow(LNSessionTabs.BUY_FROM_BUSINESS_PARTNERS);
@@ -111,7 +111,7 @@ class LNProcurement extends BaseClass{
 		// Verifying the Item Description
 		expect(await (await commonPg.gridLabelField(OrderIntakeWorkbench_Lbl.ITEM_GRID,
 				OrderIntakeWorkbench_Id.ITEM_DESCRIPTION_GRID, LNSessionCodes.PURCHASE_ORDER_LINE))
-				.innerText(), "The item description is empty").not.toBeEmpty();
+				.innerText(), "The item description is empty").not.toBe('');
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.PURCHASE_ORDER, LNMenuActions_Id.SAVE);
 
@@ -142,7 +142,7 @@ class LNProcurement extends BaseClass{
 						.getTextField(OrderIntakeWorkbench_Lbl.ORDER_SEGMENT_TWO_IN_INTERCOMPANY_TRADE_ORDER_SALES,
 								OrderIntakeWorkbench_Id.ORDER_SEGMENT_TWO_IN_INTERCOMPANY_TRADE_ORDER_SALES,
 								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES)
-						.inputValue()), "Your intercompany trade number is not displayed").not.toBeEmpty();
+						.inputValue()), "Your intercompany trade number is not displayed").not.toBe('');
 
 		warehouseCnxt.intercompanyTradeNumSales = await (await LNCommon
 				.getTextField(OrderIntakeWorkbench_Lbl.ORDER_SEGMENT_TWO_IN_INTERCOMPANY_TRADE_ORDER_SALES,

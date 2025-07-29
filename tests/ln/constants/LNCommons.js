@@ -201,6 +201,7 @@ class LNCommons {
   static PUT_AWAY = "Put Away";
   static DOES_NOT_EQUALS = "Does Not Equal";
   static STATFIELD_SELECTED = "StatField-selected";
+  static STATFIELD = "StatField";
   static CANCEL = "Cancel";
   static FOUNDATION_FOR_AEROSPACE_AND_DEFENSE = "AerospaceAndDefense";
   static HIDDEN_CHILD = "HiddenChild";
