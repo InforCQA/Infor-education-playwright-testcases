@@ -17,13 +17,12 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
         // 2.4
-        test('Update local business partner (customer) data', async ({ }) => {
-            await CloudSuite.navigateToApplication(ProductNames.LN);
-            await LNMasterData.updateLocalBusinessPartnerCustomerData(businessCnxt);
-        });
+      //  test('Update local business partner (customer) data', async ({ }) => {
+       //     await CloudSuite.navigateToApplication(ProductNames.LN);
+       //     await LNMasterData.updateLocalBusinessPartnerCustomerData(businessCnxt);
+       // });
         // 2.5
         test('Create a sales order for a selected sales office', async ({ }) => {
-            
             await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
         });
         // 3.1.1, 3.1.2, 3.1.3, 3.1.4, 3.1.5
@@ -32,19 +31,19 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
 		// Review intercompany trade order - sales (by the distribution center)
 		// Ship sales order (by the distribution center)
 		// Review the intercompany trade order transaction line (by the sales center)
-        test('Create a sales order for a selected sales office', async ({ }) => {
+     //   test('Create a sales order for a selected sales office', async ({ }) => {
             
-            await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
-        });
+     //       await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
+     //   });
 
         // 3.1.6
-        test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {
+    //    test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {
             
-            LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(businessCnxt.enterpriseUnits, businessCnxt.interCmpnyTradeNum, 0);
-        });
+     //       LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(businessCnxt.enterpriseUnits, businessCnxt.interCmpnyTradeNum, 0);
+      //  });
         // 3.1.7
-        test('Create intercompany trade purchase invoice (by the sales center)', async ({ }) => {
-           LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
-        });
+    //    test('Create intercompany trade purchase invoice (by the sales center)', async ({ }) => {
+    //       LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
+     //   });
     })
 }

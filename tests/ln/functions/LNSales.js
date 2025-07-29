@@ -1,4 +1,5 @@
 import BaseClass from "../../testBase/BaseClass";
+import {expect} from '@playwright/test';
 import LNCommon from "./LNCommon";
 import LNSessionTabs from "../constants/LNSessionTabs";
 import LNTabs from "../constants/LNTabs";
@@ -12,6 +13,7 @@ import LNCommons from "../constants/LNCommons";
 import LNPopupMsg from "../constants/LNPopupMsg";
 import LNCommonFunctions from "./LNCommonFunctions";
 import LNSessionTabActions from "./LNSessionTabActions";
+import ElementAttributes from "../../commons/constants/ElementAttributes";
 
 class LNSales extends BaseClass {
 
@@ -36,7 +38,7 @@ class LNSales extends BaseClass {
       // Verifying the Sold to BP section
       expect(await commonPg.verifyHeader(OrderIntakeWorkbench_Lbl.SOLD_TO_BP_SECTION)).toBeTruthy();
     
-      await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER, OrderIntakeWorkbench_Id.SALES_ORDER_BUSINESS_PARTNER, LNSessionCodes.SALES_ORDER).click();
+      await (await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER, OrderIntakeWorkbench_Id.SALES_ORDER_BUSINESS_PARTNER, LNSessionCodes.SALES_ORDER)).click();
       await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SOLD_TO_BUSINESS_PARTNER);
     
       await LNCommon.filterRequiredRecord(OrderIntakeWorkbench_Lbl.SOLD_TO_BUSINESS_PARTNER_ZOOM_GRID, OrderIntakeWorkbench_Id.SOLD_TO_BUSINESS_PARTNER_ZOOM_GRID, LNSessionCodes.SOLD_TO_BUSINESS_PARTNER, businessCnxt.businessPartner);
@@ -47,15 +49,18 @@ class LNSales extends BaseClass {
       await LNCommon.clickTextMenuItem(LNSessionCodes.SOLD_TO_BUSINESS_PARTNER, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
     
       await LNCommon.verifySessionTab(LNSessionTabs.SALES_ORDER);
-      await actions().sendKeys('Tab').perform();
+      await this.page.waitForTimeout(1000);
+      await this.page.keyboard.press('Tab');
     
+      await this.page.waitForTimeout(1000);
       // Verifying the Address field
-      expect(await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ADDRESS, OrderIntakeWorkbench_Id.ADDRESS, LNSessionCodes.SALES_ORDER).getAttribute(ElementAttributes.VALUE)).not.toBe("");
-      
+      expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ADDRESS,OrderIntakeWorkbench_Id.ADDRESS,LNSessionCodes.SALES_ORDER )).inputValue(),'The Address field is empty')
+      .not.toBe("");
+
       // Verifying the Order type field
-      expect(await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.SALES_ORDER_ORDER_TYPE, OrderIntakeWorkbench_Id.SALES_ORDER_ORDER_TYPE, LNSessionCodes.SALES_ORDER).getAttribute(ElementAttributes.VALUE)).not.toBe("");
+      expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.SALES_ORDER_ORDER_TYPE, OrderIntakeWorkbench_Id.SALES_ORDER_ORDER_TYPE, LNSessionCodes.SALES_ORDER)).inputValue()).not.toBe("");
     
-      await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.SALES_OFFICE, OrderIntakeWorkbench_Id.SALES_OFFICE, LNSessionCodes.SALES_ORDER).click();
+      await (await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.SALES_OFFICE, OrderIntakeWorkbench_Id.SALES_OFFICE, LNSessionCodes.SALES_ORDER)).click();
       await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SALES_OFFICES);
     
       await LNCommon.filterRequiredRecord(OrderIntakeWorkbench_Lbl.SALES_OFFICE_ZOOM_GRID, OrderIntakeWorkbench_Id.SALES_OFFICE_ZOOM_GRID, LNSessionCodes.SALES_OFFICES, businessCnxt.salesOffice);
@@ -66,10 +71,11 @@ class LNSales extends BaseClass {
       await LNCommon.verifySessionTab(LNSessionTabs.SALES_ORDER);
     
       await LNCommon.clickMainMenuItem(LNSessionCodes.SALES_ORDER, LNMenuActions_Id.SAVE);
+      await this.page.waitForTimeout(1000);
       await LNCommon.validateMessageAndHandlePopUpIfExists(LNPopupMsg.DELIVERY_DATE, LNCommons.OK);
     
       // Fetching and Printing the Sales Order Number
-      businessCnxt.salesOrderNum = await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.NUMBER, OrderIntakeWorkbench_Id.NUMBER, LNSessionCodes.SALES_ORDER).getAttribute(ElementAttributes.VALUE);
+      businessCnxt.salesOrderNum = await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.NUMBER, OrderIntakeWorkbench_Id.NUMBER, LNSessionCodes.SALES_ORDER)).inputValue();
       console.log("=========>>>>> The sales order number for selected sales office is " + businessCnxt.salesOrderNum + " <<<<<=========");
     
       await LNCommon.selectGridTab(LNTabs.ORDER_LINES, LNSessionCodes.SALES_ORDER);
@@ -78,7 +84,8 @@ class LNSales extends BaseClass {
       // Verifying the Value in the Line field
       expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.SALES_ORDER_LINE, OrderIntakeWorkbench_Lbl.LINE_GRID, OrderIntakeWorkbench_Id.LINE_IN_ORDER_LINES_GRID, parseInt(LNCommons.FIRST_RECORD))).toBe(businessCnxt.line);
     
-      await actions().sendKeys('Tab', 'Tab').perform();
+      await this.page.keyboard.press('Tab');
+      await this.page.keyboard.press('Tab');
       await LNCommon.pause(2);
     
       await LNCommon.dataCellElement(

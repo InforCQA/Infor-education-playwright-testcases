@@ -1958,25 +1958,25 @@ static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     // Drilldown to Business Partner
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.BUSINESS_PARTNER_GRID, BusinessPartners_Id.BUSINESS_PARTNER_GRID, LNSessionCodes.BUSINESS_PARTNERS, businessCnxt.businessPartner);
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.BUSINESS_PARTNER_GRID, BusinessPartners_Id.BUSINESS_PARTNER_SECOND_SEGMENT_GRID, LNSessionCodes.BUSINESS_PARTNERS, businessCnxt.businessPartnerDesc);
-    await LNCommon.drilldownRequiredRecord(LNSessionCodes.BUSINESS_PARTNERS);
+    await LNCommon.drilldownRequiredRecord(LNSessionCodes.BUSINESS_PARTNERS,LNCommons.FIRST_RECORD);
     await LNCommon.verifySessionTab(LNSessionTabs.BUSINESS_PARTNER);
 
     // Open Sold-to
-    await lnPg.verifyHeader(BusinessPartners_Lbl.ROLES).hover();
-    // Verifying the Roles section
+    await (await lnPg.verifyHeader(BusinessPartners_Lbl.ROLES)).hover(); 
     expect(await this.isElementPresent(await lnPg.verifyHeader(BusinessPartners_Lbl.ROLES))).toBeTruthy();
 
-    await lnPg.hyperlinkText(BusinessPartners_Lbl.SOLD_TO_BUTTON, BusinessPartners_Id.SOLD_TO_BUTTON, LNSessionCodes.BUSINESS_PARTNER).click();
+    await (await lnPg.hyperlinkText(BusinessPartners_Lbl.SOLD_TO_BUTTON, BusinessPartners_Id.SOLD_TO_BUTTON, LNSessionCodes.BUSINESS_PARTNER)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SOLD_TO_BUSINESS_PARTNERS);
     // Verifying the Values in Sold To Business Partner
-    expect(await LNCommon.getTextField(BusinessPartners_Lbl.SOLD_TO_BUSINESS_PARTNER,BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER, LNSessionCodes.BP_SOLD_TO).getAttribute(ElementAttributes.VALUE)).toBeTruthy();
+    expect (await (await LNCommon.getTextField(BusinessPartners_Lbl.SOLD_TO_BUSINESS_PARTNER,BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER, LNSessionCodes.BP_SOLD_TO)).inputValue()).toBeTruthy();
+  
     // Verifying Sold To Business Partner description
     expect(await this.isElementPresent(await lnPg.statusField(BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER_DESCRIPTION, LNSessionCodes.BP_SOLD_TO,businessCnxt.businessPartnerDesc))).toBeTruthy();
     await LNCommon.clickMainMenuItem(LNSessionCodes.BP_SOLD_TO, LNMenuActions_Id.SAVE_AND_EXIT);
 
     await LNCommon.verifySessionTab(LNSessionTabs.BUSINESS_PARTNER);
     // Open Ship-to
-    await lnPg.hyperlinkText(BusinessPartners_Lbl.SHIP_TO_BUTTON, BusinessPartners_Id.SHIP_TO_BUTTON,LNSessionCodes.BUSINESS_PARTNER).click();
+    await (await lnPg.hyperlinkText(BusinessPartners_Lbl.SHIP_TO_BUTTON, BusinessPartners_Id.SHIP_TO_BUTTON,LNSessionCodes.BUSINESS_PARTNER)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER);
     await LNCommon.selectGridTab(LNTabs.SITES, LNSessionCodes.BP_SHIP_TO);
 
@@ -1992,7 +1992,7 @@ static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     // Add new site
     await LNCommon.clickMainMenuItem(LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, LNMenuActions_Id.NEW);
     await LNCommon.verifySessionTab(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER_BY_SITE);
-    await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.SITE, BusinessPartners_Id.SITE, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE).click();
+    await (await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.SITE, BusinessPartners_Id.SITE, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SITES);
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.SITE_ZOOM_GRID, BusinessPartners_Id.SITE_ZOOM_GRID, LNSessionCodes.SITES, businessCnxt.site);
     await LNCommon.selectRequiredRecord(LNSessionCodes.SITES, BusinessPartners_Lbl.SITE_GRID, BusinessPartners_Id.SITE_GRID, businessCnxt.site);
@@ -2001,7 +2001,7 @@ static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     await LNCommon.verifySessionTab(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER_BY_SITE);
 
     // Select carrier
-    await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.CARRIER_LSP, BusinessPartners_Id.CARRIER_LSP, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE).click();
+    await (await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.CARRIER_LSP, BusinessPartners_Id.CARRIER_LSP, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.CARRIERS_LSP);
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.CARRIER_LSP_ZOOM_GRID, BusinessPartners_Id.CARRIER_LSP_DESCRIPTION_ZOOM_GRID, LNSessionCodes.CARRIERS_LSP, businessCnxt.carrierDesc);
     await LNCommon.selectRequiredRecord(LNSessionCodes.CARRIERS_LSP, BusinessPartners_Lbl.CARRIER_LSP_ZOOM_GRID, BusinessPartners_Id.CARRIER_LSP_DESCRIPTION_ZOOM_GRID, businessCnxt.carrierDesc);

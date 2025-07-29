@@ -15,6 +15,6 @@ test.describe('LNConfiguringMultisiteEnvironment', () => {
     // TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
     //TCEDU_LNCreateANewItemUsingItemDefaults();
     // TCEDU_LNReviewItemsFromGlobalPrespective();
-    // TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
-    TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
+     TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
+   // TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
 });

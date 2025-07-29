@@ -490,14 +490,12 @@ class LNCommon extends BaseClass {
         const menuLocator = await lnPg.menuItem(sessionCode, menuItem);
 
         // Wait for menu item to be clickable
-        await menuLocator.waitFor({ state: 'attached', timeout: 3000 });
-        await menuLocator.waitFor({ state: 'visible', timeout: 3000 });
         await expect(async () => {
 
              await (await this.page).waitForTimeout(1000);
              await menuLocator.hover();
             await menuLocator.click();
-        }).toPass({ timeout: 80000 });
+        }).toPass({ timeout: 30000 });
     }
 
     /*--------------------------------------------------------------------------------------------
@@ -825,7 +823,7 @@ static async validateMessageAndHandlePopUpIfExists(popupText, popupBtn) {
   // Check if popup button is present
   const isPresent = await lnPg.popupBtn(popupBtn);
   if (isPresent) {
-    const popupTexts = await lnPg.popupText.allTextContents();
+    const popupTexts = await (await lnPg.popupText()).allTextContents();
     for (let i = popupTexts.length - 1; i >= 0; i--) {
       if (popupTexts[i].toLowerCase().includes(popupText.toLowerCase())) {
         console.log(`=========>>>>> Pop Up message: ${popupTexts[i]} <<<<<=========`);
