@@ -87,7 +87,8 @@ class LNCommon extends BaseClass {
         try {
 
             await expect(async () => {
-                await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'visible', timeout: 1000 });
+                await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'visible', timeout: 500 });
+                await (await lnPg.textMenu(sessionCode, id, label)).hover();
                 await (await lnPg.textMenu(sessionCode, id, label)).click();
             }).toPass({ timeout: 10000 });
 
@@ -280,12 +281,18 @@ class LNCommon extends BaseClass {
         }).toPass({ timeout: 60000 });
         
         let rowNo = -1;
-        let isRecordFound = false;
+        let isRecordFound = false, inputValue='';
+        const maxAttempts = 10;
 
         // Step 3: Search through each record
         for (let i = 0; i < records.length; i++) {
             const label = (await records[i].innerText()).trim();
-            const inputValue = await records[i].getAttribute(ElementAttributes.VALUE);
+
+            for (let j = 0; j < maxAttempts; j++) {
+                inputValue = await records[i].getAttribute(ElementAttributes.VALUE);
+                if (inputValue && inputValue.trim() !== null) { break };
+            }
+
             const fetchedValue = inputValue !== null ? inputValue : label;
 
             if (fetchedValue.toLowerCase() === value.toLowerCase()) {
@@ -320,6 +327,7 @@ class LNCommon extends BaseClass {
 
         // Wait until it's visible and enabled (similar to ExpectedConditions.elementToBeClickable)
         await drilldownBtn.waitFor({ state: 'visible', timeout: 1000 });
+        await drilldownBtn.hover();
         await drilldownBtn.click();
     }
 
@@ -363,7 +371,6 @@ class LNCommon extends BaseClass {
 
         // Verifying the dialog window Tab
         expect(await this.isElementPresent(await lnPg.dialogWindowTab(tabName))).toBeTruthy();
- 
     }
 
     /*---------------------------------------------------------------------------------
@@ -406,16 +413,17 @@ class LNCommon extends BaseClass {
 
         // Get the target row element
         const target = await (await lnPg.gridCell(sessionCode, elementId)).nth(rowNum);
-
+        await expect(target).toBeVisible()
         let fetchedValue = null;
 
         const fetchedLbl = await target.textContent();
-
-        const maxAttempts = 10;
-        let fetchedInput = '';
-
+        console.log(fetchedLbl);
+        const maxAttempts = 15;
+        let fetchedInput = null;
+        
         for (let i = 0; i < maxAttempts; i++) {
-            fetchedInput = await target.getAttribute(ElementAttributes.VALUE);
+            fetchedInput = await target.evaluate(el => el.value);
+            
             if (fetchedInput && fetchedInput.trim() !== '') break;
         }
 
@@ -424,12 +432,11 @@ class LNCommon extends BaseClass {
             fetchedValue = fetchedInput;
 
         } else {
-
             fetchedValue = fetchedLbl;
 
         }
-
-        return fetchedValue;
+       return fetchedValue;
+        
     }
 
     /*---------------------------------------------------------------------------------
@@ -490,14 +497,12 @@ class LNCommon extends BaseClass {
         const menuLocator = await lnPg.menuItem(sessionCode, menuItem);
 
         // Wait for menu item to be clickable
-        await menuLocator.waitFor({ state: 'attached', timeout: 3000 });
-        await menuLocator.waitFor({ state: 'visible', timeout: 3000 });
         await expect(async () => {
 
              await (await this.page).waitForTimeout(1000);
              await menuLocator.hover();
             await menuLocator.click();
-        }).toPass({ timeout: 80000 });
+        }).toPass({ timeout: 30000 });
     }
 
     /*--------------------------------------------------------------------------------------------
@@ -766,6 +771,7 @@ class LNCommon extends BaseClass {
         await (await lnPg.display()).click();
         await lnPg.triggerInputField(await lnPg.device(), LNCommons.DEVICE_D);
         await (await lnPg.continueIcon()).click();
+        
         if (await this.isElementPresent(await lnPg.closeProcess())) {
             await (await lnPg.closeProcess()).click();
         }
@@ -845,29 +851,28 @@ static async validateMessageAndHandlePopUpIfExists(popupText, popupBtn) {
  * Objective : To update default filter value in the grids
  * --------------------------------------------------------
  */
-static async updateDefaultFilter(elementId, sessionCode, value) {
-  // Initializing the page
-  const lnPg = new LNPage(this.page);
+    static async updateDefaultFilter(elementId, sessionCode, value) {
+        // Initializing the page
+        const lnPg = new LNPage(this.page);
 
-  // Click on the grid menu button
-  await (await lnPg.gridMenuBtn(elementId, sessionCode)).click();
+        // Click on the grid menu button
+        await (await lnPg.gridMenuBtn(elementId, sessionCode)).click();
 
-  // Click on the desired filter operator (e.g., Contains, Starts With)
-  await (await lnPg.filterOperator(value)).click();
-}
+        // Click on the desired filter operator (e.g., Contains, Starts With)
+        await (await lnPg.filterOperator(value)).click();
+    }
 
-    static async LNRestart() 
-	{
-		// Intializing the page
-		const lnPg = new LNPage(this.page);
-		
-		await (await lnPg.lnOptions()).click();
-		
-		await (await lnPg.lnRestart()).click();
+    static async LNRestart() {
+        // Intializing the page
+        const lnPg = new LNPage(this.page);
 
-		await LNCommon.handleYesPopUp();
-		await LNCommon.handlePopUp();
-	}
+        await (await lnPg.lnOptions()).click();
+
+        await (await lnPg.lnRestart()).click();
+
+        await LNCommon.handleYesPopUp();
+        await LNCommon.handlePopUp();
+    }
 
 
     static async handleYesPopUp() {

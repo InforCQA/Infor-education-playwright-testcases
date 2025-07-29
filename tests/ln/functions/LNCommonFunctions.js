@@ -1,3 +1,4 @@
+import ElementAttributes from "../../commons/constants/ElementAttributes";
 import BaseClass from "../../testBase/BaseClass";
 import LNMenuActions_Id from "../constants/elementIds/LNMenuActions_Id";
 import PurchaseDashboard_Id from "../constants/elementIds/PurchaseDashboard_Id";
@@ -8,12 +9,14 @@ import PurchaseDashboard_Lbl from "../constants/elementLbls/PurchaseDashboard_Lb
 import PurchaseWorkbench_Lbl from "../constants/elementLbls/PurchaseWorkbench_Lbl";
 import SalesWorkbench_Lbl from "../constants/elementLbls/SalesWorkbench_Lbl";
 import LNCommons from "../constants/LNCommons";
+import LNPopupMsg from "../constants/LNPopupMsg";
 import LNSessionCodes from "../constants/LNSessionCodes";
 import LNSessionTabs from "../constants/LNSessionTabs";
 import LNTabs from "../constants/LNTabs";
 import LNPage from "../pages/LNPage";
 import LNCommon from "./LNCommon";
 import LNSessionTabActions from "./LNSessionTabActions";
+import { expect } from "@playwright/test";
 
 
 
@@ -35,16 +38,17 @@ class LNCommonFunctions extends BaseClass{
 		// Verify Session Tab
 		await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
 
-		const sections = [ SalesWorkbench_Lbl.FINANCIAL_ENTITY, SalesWorkbench_Lbl.INTERCOMPANY_CUSTOMER ];
+		const sections = [ SalesWorkbench_Lbl.FINANCIAL_ENTITY, SalesWorkbench_Lbl.INTERCOMPANY_CUSTOMER];
 		const euLbl = [ SalesWorkbench_Lbl.ENTERPRISE_UNIT_FINANCIAL_ENTITY,
-				SalesWorkbench_Lbl.ENTERPRISE_UNIT_FINANCIAL_ENTITY ];
-		const euId = [ SalesWorkbench_Id.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER,
+				SalesWorkbench_Lbl.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER ];
+		const euId = [ SalesWorkbench_Id.ENTERPRISE_UNIT_FINANCIAL_ENTITY,
 				SalesWorkbench_Id.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER ];
 
 		for (let i = 0; i < sections.length; i++) {
 			// Verifying the sections
 			expect(await this.isElementPresent(await commonPg.verifyHeader(sections[i])), `${sections[i]} section is not found`).toBeTruthy();
-
+           
+			await (await LNCommon.getTextboxLookUpIcon(euLbl[i], euId[i], LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH)).hover();
 			await (await LNCommon.getTextboxLookUpIcon(euLbl[i], euId[i], LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH)).click();
 
 			// Verifying the Dialogbox title
@@ -81,16 +85,19 @@ class LNCommonFunctions extends BaseClass{
 			LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,
 					SalesWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,
 					LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,
-					intercompanyTradeNum.substring(intercompanyTradeNum.length() - 2));
+					intercompanyTradeNum.substring(intercompanyTradeNum.length - 2));
+			await this.page.waitForTimeout(2000);
 		}
 
 		// Fetching the row number to Drill down the record
-		const rowNum = await LNCommon.selectRequiredRecord(
+
+		let rowNum = await LNCommon.selectRequiredRecord(
 				LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,
 				SalesWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,
 				SalesWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID, intercompanyTradeNum);
+
 		await LNCommon.drilldownRequiredRecord(LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,
-				String.valueOf(rowNum));
+				String(rowNum));
 
 		// Verify Session Tab
 		await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES);
@@ -98,10 +105,10 @@ class LNCommonFunctions extends BaseClass{
 		await LNCommon.selectGridTab(LNTabs.COS, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES);
 
 		// Verifying the Material costs and Inventory/Warehouse surcharges
-		expect(await (await commonPg.gridLabelField(SalesWorkbench_Lbl.COST_OF_SALES_GRID,
+		expect(await (await(await commonPg.gridLabelField(SalesWorkbench_Lbl.COST_OF_SALES_GRID,
 						SalesWorkbench_Id.COST_OF_SALES_GRID,
-						LNSessionCodes.COS_IN_INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES))
-						.innerText(), "The Material costs and Inventory/Warehouse surcharges are not displayed").isNotEmpty();
+						LNSessionCodes.COS_IN_INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES)).first())
+						.innerText(), "The Material costs and Inventory/Warehouse surcharges are not displayed").not.toBe('');
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES,
 				LNMenuActions_Id.SAVE_AND_CLOSE);
@@ -115,7 +122,7 @@ class LNCommonFunctions extends BaseClass{
 		await LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,
 				LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, LNCommons.CONTAINS);
 
-		const tradeNum = await intercompanyTradeNum.substring(intercompanyTradeNum.length() - 2);
+		const tradeNum = await intercompanyTradeNum.substring(intercompanyTradeNum.length - 2);
 		await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID,
 				SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,
 				LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, tradeNum);
@@ -195,21 +202,24 @@ class LNCommonFunctions extends BaseClass{
 		if (flag == 1 || flag == 2) {
 			// Clearing Enterprise Unit fields
 			const euLbl = [ PurchaseWorkbench_Lbl.ENTERPRISE_UNIT_FINANCIAL_ENTITY,
-					PurchaseWorkbench_Lbl.ENTERPRISE_UNIT_FINANCIAL_ENTITY ];
-			const euId = [ PurchaseWorkbench_Id.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER,
+					PurchaseWorkbench_Lbl.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER ];
+			const euId = [ PurchaseWorkbench_Id.ENTERPRISE_UNIT_FINANCIAL_ENTITY,
 					PurchaseWorkbench_Id.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER ];
 
 			for (let i = 0; i < euLbl.length; i++) {
-				await (await LNCommon.getTextField(euLbl[i], euId[i], LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH)).clear();
+				await (await (await LNCommon.getTextField(euLbl[i], euId[i], LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH)).first()).clear();
 			}
 			await LNCommon.selectHeaderTab(LNTabs.ADDITIONAL, LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH);
 		}
 
 		// To Verify and Enable the Internal material delivery filter
 		if (flag == 1) {
-			if (!await (await commonPg.statFieldButton(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,
-					PurchaseWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY).getAttribute(ElementAttributes.CLASS)
-					.includes(LNCommons.STATFIELD_SELECTED))) {
+			await expect(await commonPg.statFieldButton(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,
+					PurchaseWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY)).toContainClass(LNCommons.STATFIELD);
+
+			if (!await (await (await commonPg.statFieldButton(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,
+					PurchaseWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY)).evaluate(el => el.className))
+					?.includes(LNCommons.STATFIELD_SELECTED)) {
 				await (await commonPg.statFieldButton(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,
 						PurchaseWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY)).click();
 				
@@ -266,9 +276,9 @@ class LNCommonFunctions extends BaseClass{
 
 		// Handling Device as it may open multiple times as per workbook
 		do {
+			await this.page.waitForLoadState('domcontentloaded');
 			await LNCommon.handleDevice();
-			
-		} while (await this.isElementPresent(commonPg.device));
+		} while (await this.isElementPresent(await commonPg.display()));
 
 		// Verifying the Session title, Report and closing it
 		await LNCommon.verifySessionTab(LNSessionTabs.PROCESS_REPORT);

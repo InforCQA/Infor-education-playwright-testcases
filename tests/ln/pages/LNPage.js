@@ -918,10 +918,10 @@ class LNPage extends LNCustomActions{
         );
 
     /* gridLabelField - WebElement */
-    gridLabelField = (p1, p2, p3) =>
-        this.iframe().locator(
+    gridLabelField = async(p1, p2, p3) =>{
+        return await (await this.iframe()).locator(
             `//label[normalize-space()='${p1}']/ancestor::div/following-sibling::div[@class='Section DataSection']//child::div[contains(@class,'DataCell')][contains(@id,'${p2}')][contains(@id,'${p3}')]//label`
-        );
+        )};
 
     /* getValueWithLabel - WebElement */
     getValueWithLabel = (p1, p2, p3) =>
