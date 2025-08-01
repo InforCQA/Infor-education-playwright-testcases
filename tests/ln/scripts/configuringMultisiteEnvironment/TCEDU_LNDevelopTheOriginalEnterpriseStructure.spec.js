@@ -13,7 +13,7 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
 
     test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
         test('login', async ({ }) => {
-            
+
             // Input Data Returned From Data Mapping
             await GetDataLN_DevelopTheOriginalEnterpriseStructure.getLNDevelopTheOriginalEnterpriseStructureContext(structureCnxt);
 
@@ -23,15 +23,15 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
 
         // 1.4.1
         test('Create an address', async ({ }) => {
-             await CloudSuite.navigateToApplication(ProductNames.LN);
-             await LNMasterData.createAnAddress(structureCnxt);
-         });
+            await CloudSuite.navigateToApplication(ProductNames.LN);
+            await LNMasterData.createAnAddress(structureCnxt);
+        });
 
         // 1.4.2
         test('Create an enterprise unit', async ({ }) => {
             await LNMasterData.createAnEnterpriseUnit(structureCnxt);
         });
-        
+
         // 1.4.3
         test('Create a planning cluster', async ({ }) => {
             await LNMasterData.createPlanningCluster(structureCnxt.planningCluster, structureCnxt.planningClusterDesc);
@@ -41,20 +41,20 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
         test('Create a site', async ({ }) => {
             await LNMasterData.createSite(structureCnxt);
         });
-        
+
         // 1.4.5
         test('Create a sales office and warehouse', async ({ }) => {
             await LNMasterData.createSalesOfficeAndWarehouse(structureCnxt);
         });
-        
+
         // 1.4.6
         test('Create a sales setting by site', async ({ }) => {
             await LNMasterData.createSalesSettingBySite(structureCnxt);
-        }); 
+        });
 
         // 1.4.7
         test('Review the new site details in the Enterprise Model Workbench', async ({ }) => {
             await LNMasterData.reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt);
-        }); 
+        });
     })
 }

@@ -13,6 +13,7 @@
     "jest-expect-message": "^1.1.3"
   },
   "dependencies": {
-    "playwright-zoom": "^1.1.0"
+    "playwright-zoom": "^1.1.0",
+    "winston": "^3.17.0"
   }
 }

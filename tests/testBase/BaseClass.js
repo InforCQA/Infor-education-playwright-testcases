@@ -23,6 +23,7 @@ class BaseClass {
     });
 
     const pages = await this.context.pages();
+    await this.context.clearCookies();
     
     this.page = await this.context.pages()[0];
   }
@@ -50,7 +51,7 @@ class BaseClass {
     try {
 
       await expect(async () => {
-        console.log(locator);
+       
         await locator.waitFor({timeout: 500 });
 
       }).toPass({ timeout: 20000 });
@@ -58,7 +59,7 @@ class BaseClass {
       return true
     } catch (e) {
       if (e instanceof playwright.errors.TimeoutError) {
-        console.log("catch");
+        
         return false;
       }
         return false;
@@ -118,10 +119,6 @@ class BaseClass {
   }
 
   static async type(locator, value) {
-
-      // await locator.click({ clickCount: 3 });
-      // await locator.press('Backspace');
-      // await locator.type(value);
 
        await locator.fill(value);
   }

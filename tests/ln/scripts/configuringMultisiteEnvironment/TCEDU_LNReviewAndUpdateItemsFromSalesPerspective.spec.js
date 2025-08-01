@@ -12,22 +12,22 @@ export default function TCEDU_LNReviewAndUpdateItemsFromSalesPerspective() {
 
     test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
         test('login', async ({ }) => {
-            
+
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
 
-        
-        test('Review item by site and update purchase price', async ({ }) => {
-             await CloudSuite.navigateToApplication(ProductNames.LN);
-             await LNMasterData.reviewItemBySiteAndUpdatePurchasePrice(itemsBySiteCnxt);
-         });
 
-       
+        test('Review item by site and update purchase price', async ({ }) => {
+            await CloudSuite.navigateToApplication(ProductNames.LN);
+            await LNMasterData.reviewItemBySiteAndUpdatePurchasePrice(itemsBySiteCnxt);
+        });
+
+
         test('Calculate standard cost per enterprise unit (sales center)', async ({ }) => {
             await LNMasterData.calculateStandardCostPerEnterpriseUnitSalesCenter(itemsBySiteCnxt);
         });
-        
+
         // 1.4.3
         test('Review item by sales office and update sales price', async ({ }) => {
             await LNMasterData.reviewItemBySalesOfficeAndUpdateSalesPrice(itemsBySiteCnxt);
