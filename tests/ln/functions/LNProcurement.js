@@ -14,10 +14,16 @@ import LNPage from "../pages/LNPage";
 import BaseClass from "../../testBase/BaseClass";
 
 class LNProcurement extends BaseClass{
-
+    /*-----------------------------------------------------------------------------------------------
+	 * Objective: Create purchase order (by distribution center)
+	 * 			  Review intercompany trade order - sales (by purchase office at distribution center)
+	 * 			  Review intercompany trade order - purchase (by sales center)
+	 * 			  Receive the purchase order (by your sales center)
+	 * 			  Review the intercompany trade order transaction line (by distribution center)
+	 * Workbook : LN Cloud: Configuring Multisite Environment
+	 * Exercise : 3.3.1, 3.3.2, 3.3.3, 3.3.4, 3.3.5
+	 *-----------------------------------------------------------------------------------------------*/
     static async createAPurchaseOrderForExternalMaterialDelivery(warehouseCnxt) {
-
-        
 
 		console.log("=========>>>>> Create purchase order (by distribution center) Started <<<<<=========");
 

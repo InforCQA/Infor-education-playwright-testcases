@@ -35,9 +35,30 @@ import ItemDefaults_Id from "../constants/elementIds/ItemDefaults_Id";
 import BusinessPartners_Lbl from "../constants/elementLbls/BusinessPartners_Lbl";
 import BusinessPartners_Id from "../constants/elementIds/BusinessPartners_Id";
 
+/**---------------------------------------------------------------------------------------------------------------
+ * Purpose : This class contains methods related to Tools Module.
+ *          
+ * Date             Author          Reviewer       Methods
+ * 15/07/2025                                      Review the enterprise model in LN CE
+ * 15/07/2025                                      Review a site in LN CE
+ * 16/07/2025                                      Create an address Type the step
+ * 16/07/2025                                      Create an enterprise unit 
+ *                                                 Create a planning cluster  
+ *                                                 Create a site
+ *                                                 Create a sales office and warehouse
+ *                                                 Create a sales setting by site
+ *                                                 Review the new site details in the Enterprise Model Workbench
+ *-----------------------------------------------------------------------------------------------------------------*/
+
 class LNMasterData extends BaseClass {
 
-    static async reviewEnterpriseModelInInforLN(enterpriseMdlCnxt) {
+    /*---------------------------------------------------------------------------------------
+	* Objective : Review the enterprise model in LN CE
+	* Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	* Exercise	: 1.2.1
+	* -----------------------------------------------------------------------------------------*/
+    static async reviewEnterpriseModelInLNCE(enterpriseMdlCnxt) {
+        console.log('=========>>>>> Review the enterprise model in LN CE started <<<<<=========');
 
         // Intializing the page
         const emwPg = new EnterpriseModelWorkbenchPage(this.page);
@@ -114,9 +135,15 @@ class LNMasterData extends BaseClass {
 
         // Verify the Details pane
         expect(await this.isElementPresent(await emwPg.paneOptionLabel(enterpriseMdlCnxt.purchaseOffice))).toBeTruthy();
+        console.log('=========>>>>> Review the enterprise model in LN CE completed <<<<<=========');
     }
-
-    static async reviewASiteInInforLN(enterpriseMdlCnxt) {
+    /*---------------------------------------------------------------------------------------
+	* Objective : Review a site in LN CE
+	* Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	* Exercise	: 1.2.2
+	* -----------------------------------------------------------------------------------------*/
+    static async reviewASiteInLNCE(enterpriseMdlCnxt) {
+        console.log('=========>>>>> Review a site in LN CE started <<<<<=========');
 
         // Intializing the page
         const lnPg = new LNPage(this.page);
@@ -522,10 +549,15 @@ class LNMasterData extends BaseClass {
         await LNSessionTabActions.closeTab(LNSessionTabs.ENTERPRISE_MODEL_WORKBENCH);
 
         await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+        console.log('=========>>>>> Review a site in LN CE completed <<<<<=========');
     }
-    // Create an address
-    static async  createAnAddress(structureCnxt) {
-        console.log('=========>>>>> Create an address started <<<<<=========');
+    /*-------------------------------------------------------------------------------------
+	 * Objective : Create an address Type the step
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 1.3.1
+	 * ------------------------------------------------------------------------------------*/
+    static async  createAnAddressTypeTheStep(structureCnxt) {
+        console.log('=========>>>>> Create an address Type the step started <<<<<=========');
 
         // Navigating to Master Data ---> Addresses ---> Addresses
         await LNCommon.navigateToLNModule( LNSessionTabs.MASTER_DATA, LNSessionTabs.ADDRESSES, LNSessionTabs.ADDRESSES);
@@ -586,9 +618,13 @@ class LNMasterData extends BaseClass {
 
         await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
-        console.log('=========>>>>> Create an address completed successfully <<<<<=========');
+        console.log('=========>>>>> Create an address Type the step completed <<<<<=========');
     }
-
+    /*-------------------------------------------------------------------------------------
+	 * Objective : Create an enterprise unit 
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 1.3.2
+	 * ------------------------------------------------------------------------------------*/
     static async createAnEnterpriseUnit(structureCnxt) {
     console.log('=========>>>>> Create an enterprise unit started <<<<<=========');
 
@@ -655,7 +691,11 @@ class LNMasterData extends BaseClass {
 
     console.log('=========>>>>> Create an enterprise unit completed successfully <<<<<=========');
 }
-
+ /*-------------------------------------------------------------------------------------
+ * Objective : Create a planning cluster
+ * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 1.3.3
+ * ------------------------------------------------------------------------------------*/
 static async createPlanningCluster(planningClusters, planningClusterDescs) {
     console.log("=========>>>>> Create a planning cluster started <<<<<=========");
 
@@ -687,9 +727,13 @@ static async createPlanningCluster(planningClusters, planningClusterDescs) {
     // Close all LN Modules
     await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
-    console.log("=========>>>>> Create a planning cluster completed successfully <<<<<=========");
+    console.log("=========>>>>> Create a planning cluster completed <<<<<=========");
 }
-
+/*-------------------------------------------------------------------------------------
+ * Objective : Create a site
+ * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 1.3.4
+ * ------------------------------------------------------------------------------------*/
 static async createSite(structureCnxt) {
   console.log("=========>>>>> Create a site started <<<<<=========");
 
@@ -783,7 +827,11 @@ static async createSite(structureCnxt) {
 
   console.log("=========>>>>> Create a site completed successfully <<<<<=========");
 }
-
+/*-------------------------------------------------------------------------------------
+ * Objective : Create a sales office and warehouse
+ * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 1.3.5
+ * ------------------------------------------------------------------------------------*/
 static async createSalesOfficeAndWarehouse(structureCnxt) {
 
   console.log(">>>>>>> Create a sales office and warehouse started <<<<<<<<");
@@ -856,9 +904,13 @@ static async createSalesOfficeAndWarehouse(structureCnxt) {
   await LNCommon.clickMainMenuItem(LNSessionCodes.ENTERPRISE_UNITS, LNMenuActions_Id.SAVE_AND_EXIT);
   await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
-  console.log(">>>>>>> Create a sales office and warehouse completed successfully <<<<<<<<");
+  console.log(">>>>>>> Create a sales office and warehouse completed <<<<<<<<");
 }
-
+/*-------------------------------------------------------------------------------------
+ * Objective : Create a sales setting by site
+ * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 1.3.6
+ * ------------------------------------------------------------------------------------*/
 static async createSalesSettingBySite(structureCnxt) {
   console.log("=========>>>>> Create a sales setting by site started <<<<<=========");
 
@@ -934,13 +986,13 @@ static async createSalesSettingBySite(structureCnxt) {
   // Collapse Master Data menu
   await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
-  console.log("=========>>>>> Create a sales setting by site completed successfully <<<<<=========");
+  console.log("=========>>>>> Create a sales setting by site completed <<<<<=========");
 }
 
 /*------------------------------------------------------------------------
  * Objective : Review the new site details in the Enterprise Model Workbench
- * Workbook  : LN Cloud: Configuring Multisite Environment
- * Exercise  : 1.4.7
+ * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercise  : 1.3.7
  *------------------------------------------------------------------------*/
 static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
    
@@ -1174,7 +1226,7 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
         // Close all LN Modules
         await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
-        console.log("=========>>>>> Review item by site and update purchase price completed sucessfully <<<<<=========");
+        console.log("=========>>>>> Review item by site and update purchase price completed <<<<<=========");
     }
 
 
@@ -1283,7 +1335,7 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
         // Close all LN Modules
         await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
 
-        console.log('=== Calculate standard cost completed successfully ===');
+        console.log('=== Calculate standard cost completed ===');
     }
 
     
@@ -1358,7 +1410,11 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 
         console.log('=== Completed reviewItemBySalesOfficeAndUpdateSalesPrice ===');
     }
-
+    /*-------------------------------------------------------------------------------------
+	 * Objective : Review item defaults
+	 * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 2.3.1
+	 * ------------------------------------------------------------------------------------*/
     static async reviewItemDefaults(itemCnxt) {
 
         // Initialising page elements
@@ -1513,7 +1569,11 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 
         console.log("=========>>>>> Review item defaults completed sucessfully <<<<<=========");
     }
-
+    /*-------------------------------------------------------------------------------------
+	 * Objective : Create a new item
+	 * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 2.3.2
+	 * ------------------------------------------------------------------------------------*/
     static async createANewItem(itemCnxt) {
 
 		// Initialising page elements
@@ -1693,7 +1753,7 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
 
 /* -------------------------------------------------------------------------------------
 * Objective : Review the item at an enterprise level
-* Workbook  : LN Cloud: Configuring Multisite Environment
+* Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
 * Exercises : 2.1.1
 * -------------------------------------------------------------------------------------*/
 static async reviewItemAtEnterpriseLevel(itemCnxt) {
@@ -1730,13 +1790,11 @@ static async reviewItemAtEnterpriseLevel(itemCnxt) {
 
   console.log("=========>>>>> Review the item at an enterprise level completed successfully <<<<<=========");
 }
-
-// -------------------------------------------------------------------------------------
-// Objective : Review the domain-specific data
-// Workbook  : LN Cloud: Configuring Multisite Environment
-// Exercises : 2.1.2
-// -------------------------------------------------------------------------------------
-
+/*-------------------------------------------------------------------------------------
+ * Objective : Review the domain-specific data
+ * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 2.1.2
+ * ------------------------------------------------------------------------------------*/
 static async reviewDomainSpecificData() {
 
   console.log("=========>>>>> Review the domain-specific data started <<<<<=========");
@@ -1757,11 +1815,11 @@ static async reviewDomainSpecificData() {
 
   console.log("=========>>>>> Review the domain-specific data completed successfully <<<<<=========");
 }
-    /*-------------------------------------------------------------------------------------
-	 * Objective : Review Purchase Data for the Item
-	 * Workbook	 : LN Cloud: Configuring Multisite Environment
-	 * Exercises : 2.1.3
-	 * ------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------
+ * Objective : Review Purchase Data for the Item
+ * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 2.1.3
+ * ------------------------------------------------------------------------------------*/
 static async reviewPurchaseDataForItem(itemCnxt) {
 
   console.log("=========>>>>> Review Purchase Data for the Item started <<<<<=========");
@@ -1804,7 +1862,7 @@ static async reviewPurchaseDataForItem(itemCnxt) {
 }
 /*-------------------------------------------------------------------------------------
 * Objective : Review sales office for the item
-* Workbook	 : LN Cloud: Configuring Multisite Environment
+* Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
 * Exercises : 2.1.4
 * ------------------------------------------------------------------------------------*/
 static async reviewSalesOfficeForItem() {
@@ -1849,7 +1907,7 @@ static async reviewSalesOfficeForItem() {
 
 /* -------------------------------------------------------------------------------------
 * Objective : Review standard costs by enterprise unit
-* Workbook  : LN Cloud: Configuring Multisite Environment
+* Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
 * Exercises : 2.1.5
 * -------------------------------------------------------------------------------------*/
 static async reviewStandardCostsByEnterpriseUnit(itemCnxt) {
@@ -1940,12 +1998,11 @@ static async reviewStandardCostsByEnterpriseUnit(itemCnxt) {
 
   console.log("=========>>>>> Review standard costs by enterprise unit completed successfully <<<<<=========");
 }
-
-// -----------------------------------------------------------------------------
-// Objective : Update local business partner (customer) data
-// Workbook  : LN Cloud: Configuring Multisite Environment
-// Exercises : 2.4
-// -----------------------------------------------------------------------------
+/*-------------------------------------------------------------------------------------
+* Objective : Update local business partner (customer) data
+* Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+* Exercises : 2.4
+* ------------------------------------------------------------------------------------*/
 static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     console.log('=========>>>>> Update local business partner (customer) data started <<<<<=========');
 
@@ -1958,25 +2015,25 @@ static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     // Drilldown to Business Partner
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.BUSINESS_PARTNER_GRID, BusinessPartners_Id.BUSINESS_PARTNER_GRID, LNSessionCodes.BUSINESS_PARTNERS, businessCnxt.businessPartner);
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.BUSINESS_PARTNER_GRID, BusinessPartners_Id.BUSINESS_PARTNER_SECOND_SEGMENT_GRID, LNSessionCodes.BUSINESS_PARTNERS, businessCnxt.businessPartnerDesc);
-    await LNCommon.drilldownRequiredRecord(LNSessionCodes.BUSINESS_PARTNERS);
+    await LNCommon.drilldownRequiredRecord(LNSessionCodes.BUSINESS_PARTNERS,LNCommons.FIRST_RECORD);
     await LNCommon.verifySessionTab(LNSessionTabs.BUSINESS_PARTNER);
 
     // Open Sold-to
-    await lnPg.verifyHeader(BusinessPartners_Lbl.ROLES).hover();
-    // Verifying the Roles section
+    await (await lnPg.verifyHeader(BusinessPartners_Lbl.ROLES)).hover(); 
     expect(await this.isElementPresent(await lnPg.verifyHeader(BusinessPartners_Lbl.ROLES))).toBeTruthy();
 
-    await lnPg.hyperlinkText(BusinessPartners_Lbl.SOLD_TO_BUTTON, BusinessPartners_Id.SOLD_TO_BUTTON, LNSessionCodes.BUSINESS_PARTNER).click();
+    await (await lnPg.hyperlinkText(BusinessPartners_Lbl.SOLD_TO_BUTTON, BusinessPartners_Id.SOLD_TO_BUTTON, LNSessionCodes.BUSINESS_PARTNER)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SOLD_TO_BUSINESS_PARTNERS);
     // Verifying the Values in Sold To Business Partner
-    expect(await LNCommon.getTextField(BusinessPartners_Lbl.SOLD_TO_BUSINESS_PARTNER,BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER, LNSessionCodes.BP_SOLD_TO).getAttribute(ElementAttributes.VALUE)).toBeTruthy();
+    expect (await (await LNCommon.getTextField(BusinessPartners_Lbl.SOLD_TO_BUSINESS_PARTNER,BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER, LNSessionCodes.BP_SOLD_TO)).inputValue()).toBeTruthy();
+  
     // Verifying Sold To Business Partner description
     expect(await this.isElementPresent(await lnPg.statusField(BusinessPartners_Id.SOLD_TO_BUSINESS_PARTNER_DESCRIPTION, LNSessionCodes.BP_SOLD_TO,businessCnxt.businessPartnerDesc))).toBeTruthy();
     await LNCommon.clickMainMenuItem(LNSessionCodes.BP_SOLD_TO, LNMenuActions_Id.SAVE_AND_EXIT);
 
     await LNCommon.verifySessionTab(LNSessionTabs.BUSINESS_PARTNER);
     // Open Ship-to
-    await lnPg.hyperlinkText(BusinessPartners_Lbl.SHIP_TO_BUTTON, BusinessPartners_Id.SHIP_TO_BUTTON,LNSessionCodes.BUSINESS_PARTNER).click();
+    await (await lnPg.hyperlinkText(BusinessPartners_Lbl.SHIP_TO_BUTTON, BusinessPartners_Id.SHIP_TO_BUTTON,LNSessionCodes.BUSINESS_PARTNER)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER);
     await LNCommon.selectGridTab(LNTabs.SITES, LNSessionCodes.BP_SHIP_TO);
 
@@ -1992,7 +2049,7 @@ static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     // Add new site
     await LNCommon.clickMainMenuItem(LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE, LNMenuActions_Id.NEW);
     await LNCommon.verifySessionTab(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER_BY_SITE);
-    await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.SITE, BusinessPartners_Id.SITE, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE).click();
+    await (await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.SITE, BusinessPartners_Id.SITE, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SITES);
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.SITE_ZOOM_GRID, BusinessPartners_Id.SITE_ZOOM_GRID, LNSessionCodes.SITES, businessCnxt.site);
     await LNCommon.selectRequiredRecord(LNSessionCodes.SITES, BusinessPartners_Lbl.SITE_GRID, BusinessPartners_Id.SITE_GRID, businessCnxt.site);
@@ -2001,7 +2058,7 @@ static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     await LNCommon.verifySessionTab(LNSessionTabs.SHIP_TO_BUSINESS_PARTNER_BY_SITE);
 
     // Select carrier
-    await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.CARRIER_LSP, BusinessPartners_Id.CARRIER_LSP, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE).click();
+    await (await LNCommon.getTextboxLookUpIcon(BusinessPartners_Lbl.CARRIER_LSP, BusinessPartners_Id.CARRIER_LSP, LNSessionCodes.SHIP_TO_BUSINESS_PARTNER_BY_SITE)).click();
     await LNCommon.verifyDialogBoxWindow(LNSessionTabs.CARRIERS_LSP);
     await LNCommon.filterRequiredRecord(BusinessPartners_Lbl.CARRIER_LSP_ZOOM_GRID, BusinessPartners_Id.CARRIER_LSP_DESCRIPTION_ZOOM_GRID, LNSessionCodes.CARRIERS_LSP, businessCnxt.carrierDesc);
     await LNCommon.selectRequiredRecord(LNSessionCodes.CARRIERS_LSP, BusinessPartners_Lbl.CARRIER_LSP_ZOOM_GRID, BusinessPartners_Id.CARRIER_LSP_DESCRIPTION_ZOOM_GRID, businessCnxt.carrierDesc);

@@ -17,11 +17,19 @@ import OrderIntakeWorkbench_Id from "../constants/elementIds/OrderIntakeWorkbenc
 
 class LNWarehousing extends BaseClass {
 
-    //To close the Tab in LN
-    static async createAWarehouseTransferForInternalMaterialDelivery(log, warehouseCnxt) {
-            
-            // Initialising page elements
-            let commonPg = new LNPage(this.page);
+    /*-------------------------------------------------------------------------------------------------------------
+	 * Objective 	: Create warehouse transfer (by sales center)
+	 * 				  Review intercompany trade order - purchase (by sales center)
+	 * 				  Review intercompany trade order - sales (by distribution center)
+	 * 				  Ship warehouse transfer (by distribution center)
+	 * 				  Review the intercompany trade order transaction line (by sales center)
+	 * Workbook 	: LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercise		: 3.2.1, 3.2.2, 3.2.3, 3.2.4, 3.2.5
+	 *--------------------------------------------------------------------------------------------------------------*/
+    static async createAWarehouseTransferForInternalMaterialDelivery(warehouseCnxt) {
+
+		// Initialising page elements
+		let commonPg = new LNPage(this.page);
 
             log.info("=========>>>>> Create warehouse transfer (by sales center) started <<<<<=========");
 
@@ -347,7 +355,7 @@ class LNWarehousing extends BaseClass {
         //     console.error(e.stack);
         // }
     }
-
+    // Exercises : 3.2.3
     static async reviewIntercompanyTradeOrderSalesByDistributionCenter(warehouseCnxt) {
 
         try {

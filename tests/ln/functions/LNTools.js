@@ -8,12 +8,19 @@ import LNSessionCodes from "../constants/LNSessionCodes";
 import LNMenuActions_Id from "../constants/elementIds/LNMenuActions_Id";
 import LNMenuActions_Lbl from "../constants/elementLbls/LNMenuActions_Lbl";
 
+/**-------------------------------------------------------------------
+ * Purpose : This class contains methods related to Tools Module.         
+ * Date             Author          Reviewer       Methods
+ * 
+ * 14/07/2025       Sathish         Sathish        Select a map provider                
+ * -------------------------------------------------------------------*/
+
 class LNTools extends BaseClass {
 
     /*---------------------------------------------------------------------------------------
 	* Objective : Select a map provider
-	* Workbook  : LN Cloud: Configuring Multisite Environment
-	* Exercise	: 1.2
+	* Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	* Exercise	: 1.1
 	* -----------------------------------------------------------------------------------------*/
     static async selectMapProvider(mapCnxt) {
 

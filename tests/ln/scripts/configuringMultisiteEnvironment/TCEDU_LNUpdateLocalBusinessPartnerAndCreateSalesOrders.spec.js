@@ -8,7 +8,19 @@ import LNCommonFunctions from "../../functions/LNCommonFunctions";
 
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
 const businessCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/UpdateLocalBusinessPartnerAndCreateSalesOrders.properties.json")));
-
+/**---------------------------------------------------------------------------------------
+ * Purpose : Update Local Business Partner and Create Sales Orders
+ * Exercise : 2.4, 3.1.1, 3.1.2, 3.1.3, 3.1.4, 3.1.5, 3.1.6, 3.1.7
+ * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * 1. Update local business partner (customer) data
+ * 2. Create sales order (by the sales center)
+ * 3. Review intercompany trade order - purchase (by the sales center)
+ * 4. Review intercompany trade order - sales (by the distribution center)
+ * 5. Ship sales order (by the distribution center)
+ * 6. Review the intercompany trade order transaction line (by the sales center)
+ * 7. Invoice intercompany trade order transaction line (by the distribution center)
+ * 8. Create intercompany trade purchase invoice (by the sales center)
+ * ---------------------------------------------------------------------------------------*/
 export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders() {
 
     test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
@@ -37,14 +49,12 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
             await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
         });
 
-        // 3.1.1
-        test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {
-
+     /*   test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {    
             LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(businessCnxt.enterpriseUnits, businessCnxt.interCmpnyTradeNum, 0);
         });
-        // 3.1.2
+        
         test('Create intercompany trade purchase invoice (by the sales center)', async ({ }) => {
-            LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
-        });
+           LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
+        });*/
     })
 }

@@ -24,7 +24,11 @@ import { expect } from "@playwright/test";
 
 class LNCommonFunctions extends BaseClass{
 
-
+     /*-------------------------------------------------------------------------------------------
+	 * Objective : Invoice intercompany trade order transaction line (by distribution center)
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.2.6
+	 * ------------------------------------------------------------------------------------------*/
      static async invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(enterpriseUnits, intercompanyTradeNum, flag) {
 
 		// Initialising page elements
@@ -174,7 +178,12 @@ class LNCommonFunctions extends BaseClass{
 		console.log(
 				"=========>>>>> Invoice intercompany trade order transaction line (by the distribution center) completed sucessfully <<<<<=========");
 	}
-
+    /*-------------------------------------------------------------------------------------------
+	 * Objective : Create intercompany trade purchase invoice (by the sales center)
+	 * 			   Create intercompany trade purchase invoice (by sales center)
+	 * Workbook	 : LN Cloud: Configuring Multisite Environment
+	 * Exercises : 3.1.7, 3.2.7, 3.3.7
+	 * ------------------------------------------------------------------------------------------*/
     static async createIntercompanyTradePurchaseInvoiceByTheSalesCenter(intercompanyTradeNum, toEnterpriseUnit, flag) {
 
 		// Initialising page elements
@@ -307,7 +316,11 @@ class LNCommonFunctions extends BaseClass{
 		console.log(
 				"=========>>>>> Create intercompany trade purchase invoice (by the sales center) completed sucessfully <<<<<=========");
 	}
-
+    /*----------------------------------------------------------------------------------------------------------
+	 * Objective : Invoice intercompany trade order transaction line (by purchase office of distribution center)
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.3.6
+	 * ---------------------------------------------------------------------------------------------------------*/
 	static async invoiceIntercompanyTradeOrderTransactionLineByPurchaseOfficeOfDistributionCenter(warehouseCnxt) {
 
 		// Initialising page elements
@@ -493,7 +506,11 @@ class LNCommonFunctions extends BaseClass{
 		console.log(
 				"=========>>>>> Invoice intercompany trade order transaction line (by purchase office of distribution center) completed sucessfully <<<<<=========");
 	}
-
+    /*---------------------------------------------------------------
+	 * Objective : Review the Intercompany Trade Sales Dashboard
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.4.1
+	 * --------------------------------------------------------------*/
 	static async reviewTheIntercompanyTradeSalesDashboard(warehouseCnxt) {
 
 		// Initialising page elements
@@ -568,7 +585,11 @@ class LNCommonFunctions extends BaseClass{
 
 		console.log("=========>>>>> Review the Intercompany Trade Sales Dashboard completed sucessfully <<<<<=========");
 	}
-
+     /*-----------------------------------------------------------------------------------
+	 * Objective : Review the Intercompany Trade Purchase Dashboard
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.4.2
+	 * -----------------------------------------------------------------------------------*/
 	 static async reviewTheIntercompanyTradePurchaseDashboard(warehouseCnxt) {
 
 		// Initialising page elements
@@ -821,6 +842,80 @@ class LNCommonFunctions extends BaseClass{
 		console.log(
 				"=========>>>>> Review intercompany trade order - purchase (by sales center) completed sucessfully <<<<<=========");
 	}
+/*-------------------------------------------------------------------------------------
+ * Objective : Review intercompany trade order - sales (by the distribution center)
+ * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 3.1.3
+ * ------------------------------------------------------------------------------------*/
+static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCnxt) {
+  console.log("=========>>>>> Review intercompany trade order - sales (by the distribution center) started <<<<<=========");
+
+  // Initialising page elements
+  const commonPg = new LNPage(this.page);
+  // Navigate to Common > Intercompany Trade > Sales Workbench
+  await LNCommon.navigateToLNModule(LNSessionTabs.COMMON, LNSessionTabs.INTERCOMPANY_TRADE, LNSessionTabs.SALES_WORKBENCH);
+
+  // Verify session
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // Clear additional filter if enabled
+  const isClearEnabled = !(await commonPg.textMenuWithoutLabel( LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER).getAttribute('class')).includes(LNCommons.DISABLED);
+  if (isClearEnabled) {
+    await LNCommon.clickTextMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER, LNMenuActions_Lbl.CLEAR_ADDITIONAL_FILTER);
+  }
+
+  // Adjust filter and filter record
+  await LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID, LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, LNCommons.CONTAINS);
+  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID, SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID, LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, businessCnxt.interCmpnyTradeNum.slice(-2));
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, LNCommons.FIRST_RECORD);
+
+  // Verify session
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_SALES);
+
+  // Navigate to references > Intercompany Trade Order Details
+  await LNCommon.navigateToLNReferences(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES, LNMenuActions_Lbl.INTERCOMPANY_TRADE_ORDER_DETAILS);
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_SALES);
+
+  // Intercompany trade tab assertions
+  await LNCommon.selectHeaderTab(LNTabs.INTERCOMPANY_TRADE, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.FROM_ENTERPRISE_UNIT, SalesWorkbench_Id.FROM_ENTERPRISE_UNIT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.enterpriseUnits[0]);
+  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.TO_ENTERPRISE_UNIT, SalesWorkbench_Id.TO_ENTERPRISE_UNIT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.enterpriseUnits[1]);
+
+  // Project/Item tab
+  await LNCommon.selectHeaderTab(LNTabs.PROJECT_ITEM, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.FROM_ITEM, SalesWorkbench_Id.FROM_ITEM_SEGMENT_TWO, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.item[1]);
+  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.TO_ITEM, SalesWorkbench_Id.TO_ITEM_SEGMENT_TWO, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.item[1]);
+
+  // Operational tab
+  await LNCommon.selectHeaderTab(LNTabs.OPERATIONAL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.SHIP_FROM_SITE, SalesWorkbench_Id.SHIP_FROM_SITE, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.enterpriseUnits[0]);
+  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.SHIP_TO_BUSINESS_PARTNER, SalesWorkbench_Id.SHIP_TO_BUSINESS_PARTNER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.businessPartner);
+
+  // Control tab
+  await LNCommon.selectHeaderTab(LNTabs.CONTROL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  const userId = getParameter(Commons.USER_NAME).substring(0, 8);
+  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.USER, SalesWorkbench_Id.USER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(userId);
+
+  // Tabs for screenshot
+  const tabs = [LNTabs.AGREEMENT, LNTabs.SELLING_INFORMATION, LNTabs.TAX, LNTabs.PRICING, LNTabs.HOURS_EXPENSES, LNTabs.FREIGHT, LNTabs.FINANCIAL];
+  for (const tab of tabs) {
+    await LNCommon.selectHeaderTab(tab, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+    await screenshot(`${tab} Tab details`);
+  }
+
+  await screenshot("Review intercompany trade order - sales (by the distribution center)");
+
+  // Closing all sessions
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL, LNMenuActions_Id.SAVE_AND_CLOSE);
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES, LNMenuActions_Id.SAVE_AND_CLOSE);
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.SAVE_AND_CLOSE);
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL, LNMenuActions_Id.SAVE_AND_CLOSE);
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE, LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  await LNCommon.verifySessionTab(LNSessionTabs.SALES_ORDER);
+  console.log("=========>>>>> Review intercompany trade order - sales (by the distribution center) completed successfully <<<<<=========");
+}
+
 }
 
 export default LNCommonFunctions;

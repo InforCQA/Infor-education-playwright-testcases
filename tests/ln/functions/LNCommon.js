@@ -154,7 +154,6 @@ class LNCommon extends BaseClass {
         // Used try catch method to select tabs
         try {
 
-
             const selectFooterTab = await lnPg.selectFooterTab(tabName, sessionCode);
             await this.pause(1);
             await selectFooterTab.hover();
@@ -837,7 +836,7 @@ static async validateMessageAndHandlePopUpIfExists(popupText, popupBtn) {
   // Check if popup button is present
   const isPresent = await lnPg.popupBtn(popupBtn);
   if (isPresent) {
-    const popupTexts = await lnPg.popupText.allTextContents();
+    const popupTexts = await (await lnPg.popupText()).allTextContents();
     for (let i = popupTexts.length - 1; i >= 0; i--) {
       if (popupTexts[i].toLowerCase().includes(popupText.toLowerCase())) {
         console.log(`=========>>>>> Pop Up message: ${popupTexts[i]} <<<<<=========`);

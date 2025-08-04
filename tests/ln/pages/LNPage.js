@@ -883,10 +883,10 @@ class LNPage extends LNCustomActions{
             )};
 
     /* statusField - WebElement */
-    statusField = (p1, p2, p3) =>
-        this.iframe().locator(
+    statusField = async(p1, p2, p3) =>{
+        return await (await this.iframe()).locator(
             `//label[contains(@id,'${p1}') and contains(@id,'${p2}') and normalize-space()='${p3}']`
-        );
+        )};
 
     /* gridRadioButton - WebElement */
     gridRadioButton = (p1, p2) =>
