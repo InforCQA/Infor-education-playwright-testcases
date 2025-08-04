@@ -22,7 +22,11 @@ import { expect } from "@playwright/test";
 
 class LNCommonFunctions extends BaseClass{
 
-
+     /*-------------------------------------------------------------------------------------------
+	 * Objective : Invoice intercompany trade order transaction line (by distribution center)
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.2.6
+	 * ------------------------------------------------------------------------------------------*/
      static async invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(enterpriseUnits, intercompanyTradeNum, flag) {
 
 		// Initialising page elements
@@ -172,7 +176,12 @@ class LNCommonFunctions extends BaseClass{
 		console.log(
 				"=========>>>>> Invoice intercompany trade order transaction line (by the distribution center) completed sucessfully <<<<<=========");
 	}
-
+    /*-------------------------------------------------------------------------------------------
+	 * Objective : Create intercompany trade purchase invoice (by the sales center)
+	 * 			   Create intercompany trade purchase invoice (by sales center)
+	 * Workbook	 : LN Cloud: Configuring Multisite Environment
+	 * Exercises : 3.1.7, 3.2.7, 3.3.7
+	 * ------------------------------------------------------------------------------------------*/
     static async createIntercompanyTradePurchaseInvoiceByTheSalesCenter(intercompanyTradeNum, toEnterpriseUnit, flag) {
 
 		// Initialising page elements
@@ -304,7 +313,11 @@ class LNCommonFunctions extends BaseClass{
 		console.log(
 				"=========>>>>> Create intercompany trade purchase invoice (by the sales center) completed sucessfully <<<<<=========");
 	}
-
+    /*----------------------------------------------------------------------------------------------------------
+	 * Objective : Invoice intercompany trade order transaction line (by purchase office of distribution center)
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.3.6
+	 * ---------------------------------------------------------------------------------------------------------*/
 	static async invoiceIntercompanyTradeOrderTransactionLineByPurchaseOfficeOfDistributionCenter(warehouseCnxt) {
 
 		// Initialising page elements
@@ -485,7 +498,11 @@ class LNCommonFunctions extends BaseClass{
 		console.log(
 				"=========>>>>> Invoice intercompany trade order transaction line (by purchase office of distribution center) completed sucessfully <<<<<=========");
 	}
-
+    /*---------------------------------------------------------------
+	 * Objective : Review the Intercompany Trade Sales Dashboard
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.4.1
+	 * --------------------------------------------------------------*/
 	static async reviewTheIntercompanyTradeSalesDashboard(warehouseCnxt) {
 
 		// Initialising page elements
@@ -560,7 +577,11 @@ class LNCommonFunctions extends BaseClass{
 
 		console.log("=========>>>>> Review the Intercompany Trade Sales Dashboard completed sucessfully <<<<<=========");
 	}
-
+     /*-----------------------------------------------------------------------------------
+	 * Objective : Review the Intercompany Trade Purchase Dashboard
+	 * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.4.2
+	 * -----------------------------------------------------------------------------------*/
 	 static async reviewTheIntercompanyTradePurchaseDashboard(warehouseCnxt) {
 
 		// Initialising page elements
@@ -781,11 +802,11 @@ class LNCommonFunctions extends BaseClass{
 		log().info(
 				"=========>>>>> Review intercompany trade order - purchase (by sales center) completed sucessfully <<<<<=========");
 	}
-	/*-------------------------------------------------------------------------------------
-	 * Objective : Review intercompany trade order - sales (by the distribution center)
-	 * Workbook	 : LN Cloud: Configuring Multisite Environment
-	 * Exercises : 3.1.3
-	 * ------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------
+ * Objective : Review intercompany trade order - sales (by the distribution center)
+ * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * Exercises : 3.1.3
+ * ------------------------------------------------------------------------------------*/
 static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCnxt) {
   console.log("=========>>>>> Review intercompany trade order - sales (by the distribution center) started <<<<<=========");
 

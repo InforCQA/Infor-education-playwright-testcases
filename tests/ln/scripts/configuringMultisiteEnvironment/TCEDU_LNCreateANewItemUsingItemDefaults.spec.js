@@ -8,7 +8,13 @@ import GetDataLN_CreateANewItemUsingItemDefaults from '../../dataMapping/configu
 // Property data for testcases
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
 const itemCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/CreateANewItemUsingItemDefaults.properties.json")));
-
+/**---------------------------------------------------------------------------------------
+ * Purpose : Create a new item using item defaults
+ * Exercise : 2.3.1, 2.3.2
+ * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+ * 1. Review item defaults
+ * 2. Create a new item
+ * ---------------------------------------------------------------------------------------*/
 export default function TCEDU_LNCreateANewItemUsingItemDefaults() {
 
     test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
@@ -16,19 +22,15 @@ export default function TCEDU_LNCreateANewItemUsingItemDefaults() {
             
             // Input Data Returned From Data Mapping
             await GetDataLN_CreateANewItemUsingItemDefaults.getItemContext(itemCnxt);
-
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-
-      
+    
         test('Review item defaults', async ({ }) => {
              await CloudSuite.navigateToApplication(ProductNames.LN);
-
              await LNMasterData.reviewItemDefaults(itemCnxt);
-         });
-
-       
+        });
+   
         test('Create a new item', async ({ }) => {
             test.slow(); 
             await LNMasterData.createANewItem(itemCnxt);

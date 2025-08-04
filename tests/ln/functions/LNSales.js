@@ -19,7 +19,7 @@ class LNSales extends BaseClass {
 
      /*-------------------------------------------------------------------------------------
      * Objective : Create a sales order for a selected sales office
-     * Workbook	 : LN Cloud: Configuring Multisite Environment
+     * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
      * Exercises : 2.5
      * ------------------------------------------------------------------------------------*/
       static async createASalesOrderForASelectedSalesOffice(businessCnxt) {
@@ -86,13 +86,12 @@ class LNSales extends BaseClass {
     
       await this.page.keyboard.press('Tab');
       await this.page.keyboard.press('Tab');
-      await LNCommon.pause(2);
     
       await LNCommon.dataCellElement(
         await LNCommon.getDataCell(OrderIntakeWorkbench_Lbl.ITEM_GRID, OrderIntakeWorkbench_Id.ITEM_SEGMENT_2_GRID, LNSessionCodes.SALES_ORDER_LINE),
-        parseInt(LNCommons.FIRST_RECORD), businessCnxt.item[0]
+        Number(LNCommons.FIRST_RECORD), businessCnxt.item[0]
       );
-    
+      //await LNCommon.validateMessageAndHandlePopUpIfExists(LNPopupMsg.SALES_ORDER, LNCommons.OK);
       await LNCommon.clickMainMenuItem(LNSessionCodes.SALES_ORDER, LNMenuActions_Id.SAVE);
     
       // Verifying the Ordered Quantity
@@ -105,15 +104,15 @@ class LNSales extends BaseClass {
       await LNCommon.selectHeaderTab(LNTabs.ITEM, LNSessionCodes.SALES_ORDER_LINE);
     
       // Verifying the Item details
-      expect(await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ITEM, OrderIntakeWorkbench_Id.ITEM_IN_SALES_ORDER_SEG_TWO, LNSessionCodes.SALES_ORDER_LINE).getAttribute(ElementAttributes.VALUE)).toBe(businessCnxt.item[0]);
+      expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ITEM, OrderIntakeWorkbench_Id.ITEM_IN_SALES_ORDER_SEG_TWO, LNSessionCodes.SALES_ORDER_LINE)).inputValue()).toBe(businessCnxt.item[0]);
     
       await LNCommon.selectHeaderTab(LNTabs.SELLING, LNSessionCodes.SALES_ORDER_LINE);
       // Verifying the Selling details
-      expect(await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ORDER_DATE, OrderIntakeWorkbench_Id.ORDER_DATE_IN_SALES_ORDER, LNSessionCodes.SALES_ORDER_LINE).getAttribute(ElementAttributes.VALUE)).toBe(DateFunctions.getCurrentDate(DateFormats.M_D_YYYY));
+      expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ORDER_DATE, OrderIntakeWorkbench_Id.ORDER_DATE_IN_SALES_ORDER, LNSessionCodes.SALES_ORDER_LINE)).inputValue()).toBe(DateFunctions.getCurrentDate(DateFormats.M_D_YYYY));
     
       await LNCommon.selectHeaderTab(LNTabs.SHIPPING, LNSessionCodes.SALES_ORDER_LINE);
       // Verifying the Shipping details
-      expect(await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.SHIP_TO_BUSINESS_PARTNER, OrderIntakeWorkbench_Id.SHIP_TO_BUSINESS_PARTNER, LNSessionCodes.SALES_ORDER_LINE).getAttribute(ElementAttributes.VALUE)).toBe(businessCnxt.businessPartner);
+      expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.SHIP_TO_BUSINESS_PARTNER, OrderIntakeWorkbench_Id.SHIP_TO_BUSINESS_PARTNER, LNSessionCodes.SALES_ORDER_LINE)).inputValue()).toBe(businessCnxt.businessPartner);
     
       await LNCommon.screenshot("Create a sales order for a selected sales office");
     
@@ -124,8 +123,14 @@ class LNSales extends BaseClass {
       await LNCommon.collapseLNModule(LNSessionTabs.SALES);
       console.log("=========>>>>> Create a sales order for a selected sales office completed successfully <<<<<=========");
     }
-
-    // 3.1.1, 3.1.2, 3.1.3, 3.1.4, 3.1.5
+  /*---------------------------------------------------------------------------------------
+	 * Objective : Create sales order (by the sales center)
+	 * 			       Review intercompany trade order - purchase (by the sales center)
+	 * 			       Ship sales order (by the distribution center)
+	 * 			       Review the intercompany trade order transaction line (by the sales center)
+	 * Workbook  : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercises : 3.1.1, 3.1.2, 3.1.4, 3.1.5
+	 * --------------------------------------------------------------------------------------*/
     static async createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt){
 
         const commonPg = new LNPage(this.page);
@@ -139,7 +144,7 @@ class LNSales extends BaseClass {
         await LNCommon.verifySessionTab(LNSessionTabs.SALES_ORDER_INTAKE_WORKBENCH);
 
         // Step 3: Click Sales Orders tab
-        await LNCommon.selectHeaderTab(LNTabs.SALES_ORDERS, LNSessionCodes.SALES_ORDER_INTAKE_WORKBENCH);
+        await LNCommon.selectGridTab(LNTabs.SALES_ORDERS, LNSessionCodes.SALES_ORDER_INTAKE_WORKBENCH);
 
         // Step 4: Click New Sales Order
         await LNCommon.clickMainMenuItem(LNSessionCodes.SALES_ORDER_LINES, LNMenuActions_Id.NEW);
@@ -150,7 +155,7 @@ class LNSales extends BaseClass {
         .toBeTruthy();
 
         // Step 5: Click Zoom on Business Partner
-        await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER,OrderIntakeWorkbench_Id.SALES_ORDER_BUSINESS_PARTNER,LNSessionCodes.SALES_ORDER).click();
+        await (await LNCommon.getTextboxLookUpIcon(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER,OrderIntakeWorkbench_Id.SALES_ORDER_BUSINESS_PARTNER,LNSessionCodes.SALES_ORDER)).click();
         await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SOLD_TO_BUSINESS_PARTNER);
 
         // Step 6–8: Filter and select MSC000010 MS Cus Chair US
@@ -165,22 +170,26 @@ class LNSales extends BaseClass {
 
         // Verify Session Tab
         await LNCommon.verifySessionTab(LNSessionTabs.SALES_ORDER);
+        await expect(async () => {
+          // Verifying the Business Partner
+          expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER,OrderIntakeWorkbench_Id.SALES_ORDER_BUSINESS_PARTNER,LNSessionCodes.SALES_ORDER)).inputValue(),'The Business Partner is not ' + businessCnxt.businessPartner).toBe(businessCnxt.businessPartner);
+        }).toPass({ timeout: 10000 });
         // Verifying the Business Partner
-        expect(await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER,OrderIntakeWorkbench_Id.SALES_ORDER_BUSINESS_PARTNER,LNSessionCodes.SALES_ORDER).getAttribute('value'),'The Business Partner is not ' + businessCnxt.businessPartner).toBe(businessCnxt.businessPartner);
+       // expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.BUSINESS_PARTNER,OrderIntakeWorkbench_Id.SALES_ORDER_BUSINESS_PARTNER,LNSessionCodes.SALES_ORDER)).inputValue(),'The Business Partner is not ' + businessCnxt.businessPartner).toBe(businessCnxt.businessPartner);
 
         // Step 9: Press TAB
-        await page.keyboard.press("Tab");
+        await this.page.keyboard.press("Tab");
 
         // Verifying the Address field
-        expect((await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ADDRESS,OrderIntakeWorkbench_Id.ADDRESS,LNSessionCodes.SALES_ORDER).getAttribute('value')),'The Address field is empty')
+        expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.ADDRESS,OrderIntakeWorkbench_Id.ADDRESS,LNSessionCodes.SALES_ORDER)).inputValue(),'The Address field is empty')
         .not.toBeNull();
 
         // Verifying the Order type field
-        expect((await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.SALES_ORDER_ORDER_TYPE,OrderIntakeWorkbench_Id.SALES_ORDER_ORDER_TYPE,LNSessionCodes.SALES_ORDER).getAttribute('value')),'The Order type field is empty')
+        expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.SALES_ORDER_ORDER_TYPE,OrderIntakeWorkbench_Id.SALES_ORDER_ORDER_TYPE,LNSessionCodes.SALES_ORDER)).inputValue(),'The Order type field is empty')
         .not.toBeNull();
 
         // Step 10: Click Zoom on Sales Office
-        await LNCommon.getTextboxLookUpIcon( OrderIntakeWorkbench_Lbl.SALES_OFFICE,OrderIntakeWorkbench_Id.SALES_OFFICE,LNSessionCodes.SALES_ORDER).click();
+        await (await LNCommon.getTextboxLookUpIcon( OrderIntakeWorkbench_Lbl.SALES_OFFICE,OrderIntakeWorkbench_Id.SALES_OFFICE,LNSessionCodes.SALES_ORDER)).click();
         await LNCommon.verifyDialogBoxWindow(LNSessionTabs.SALES_OFFICES);
 
         // Adjusting the Filter option to Contains
@@ -194,7 +203,11 @@ class LNSales extends BaseClass {
         await LNCommon.verifySessionTab(LNSessionTabs.SALES_ORDER);
         // Verifying the Sales Office
         const salesOfficeField = await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.SALES_OFFICE,OrderIntakeWorkbench_Id.SALES_OFFICE,LNSessionCodes.SALES_ORDER);
-        expect(await salesOfficeField.getAttribute('value'), `The Sales Office is not ${businessCnxt.salesOffice}`).toBe(businessCnxt.salesOffice);
+        await this.page.waitForTimeout(3000);
+        await expect(async () => {
+          expect(await salesOfficeField.getAttribute('value'), `The Sales Office is not ${businessCnxt.salesOffice}`).toBe(businessCnxt.salesOffice);
+        }).toPass({ timeout: 10000 });
+       // expect(await salesOfficeField.getAttribute('value'), `The Sales Office is not ${businessCnxt.salesOffice}`).toBe(businessCnxt.salesOffice);
 
         // Step 16: Press TAB
         await page.keyboard.press("Tab");
@@ -321,6 +334,7 @@ class LNSales extends BaseClass {
 
   log().info("=========>>>>> Review intercompany trade order - purchase completed <<<<<=========");
 
+  // 3.1.3
   await LNCommonFunctions.reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCnxt);
   // Part 3: Ship Sales Order
   log().info("=========>>>>> Ship sales order (by the distribution center) started <<<<<=========");

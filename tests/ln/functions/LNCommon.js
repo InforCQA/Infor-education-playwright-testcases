@@ -148,7 +148,6 @@ class LNCommon extends BaseClass {
         // Used try catch method to select tabs
         try {
 
-
             const selectFooterTab = await lnPg.selectFooterTab(tabName, sessionCode);
             await this.pause(1);
             await selectFooterTab.hover();

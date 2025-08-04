@@ -17,9 +17,16 @@ import OrderIntakeWorkbench_Id from "../constants/elementIds/OrderIntakeWorkbenc
 
 class LNWarehousing extends BaseClass{
 
-    //To close the Tab in LN
+    /*-------------------------------------------------------------------------------------------------------------
+	 * Objective 	: Create warehouse transfer (by sales center)
+	 * 				  Review intercompany trade order - purchase (by sales center)
+	 * 				  Review intercompany trade order - sales (by distribution center)
+	 * 				  Ship warehouse transfer (by distribution center)
+	 * 				  Review the intercompany trade order transaction line (by sales center)
+	 * Workbook 	: LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
+	 * Exercise		: 3.2.1, 3.2.2, 3.2.3, 3.2.4, 3.2.5
+	 *--------------------------------------------------------------------------------------------------------------*/
     static async createAWarehouseTransferForInternalMaterialDelivery(warehouseCnxt) {
-
 
 		// Initialising page elements
 		let commonPg = new LNPage(this.page);
@@ -285,11 +292,9 @@ class LNWarehousing extends BaseClass{
         
         //screenshot("Ship warehouse transfer (by distribution center)");
 
-        console.log(
-            "=========>>>>> Ship warehouse transfer (by distribution center) completed sucessfully <<<<<=========");
+        console.log("=========>>>>> Ship warehouse transfer (by distribution center) completed sucessfully <<<<<=========");
 
-        console.log(
-            "=========>>>>> Review the intercompany trade order transaction line (by sales center) started <<<<<=========");
+        console.log("=========>>>>> Review the intercompany trade order transaction line (by sales center) started <<<<<=========");
 
         await LNCommon.selectRequiredRecord(LNSessionCodes.OUTBOUND_LINES, Orders_Lbl.ORDER_LINE_IN_OUTBOUND_LINES_GRID,
             Orders_Id.ORDER_LINE_IN_OUTBOUND_LINES_GRID, warehouseCnxt.orderLine[0]);
@@ -345,7 +350,7 @@ class LNWarehousing extends BaseClass{
         console.log(
             "=========>>>>> Review the intercompany trade order transaction line (by sales center) completed sucessfully <<<<<=========");
     }
-
+    // Exercises : 3.2.3
     static async reviewIntercompanyTradeOrderSalesByDistributionCenter(warehouseCnxt) {
 
 		// Initialising page elements
