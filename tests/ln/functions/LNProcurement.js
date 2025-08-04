@@ -68,18 +68,21 @@ class LNProcurement extends BaseClass{
 		// Verifying the Session title
 		await LNCommon.verifySessionTab(LNSessionTabs.PURCHASE_ORDER);
 
+		await this.page.waitForTimeout(1000);
 		await this.page.keyboard.press('Tab');
 
 		// Verifying the Populated fields
-		expect(await (await LNCommon
-						.getTextField(OrderIntakeWorkbench_Lbl.ADDRESS_IN_BUY_FROM,
-								OrderIntakeWorkbench_Id.ADDRESS_IN_BUY_FROM, LNSessionCodes.PURCHASE_ORDER)
-						.inputValue()), "The Buy from address field is empty").not.toBeEmpty();
+		await expect(async () => {
 
-		expect(
-				await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.PURCHASE_OFFICE, OrderIntakeWorkbench_Id.PURCHASE_OFFICE,
-						LNSessionCodes.PURCHASE_ORDER)).inputValue())
-				.as("The Purchase Office field is empty").not.toBeEmpty();
+			expect(await (await LNCommon
+				.getTextField(OrderIntakeWorkbench_Lbl.ADDRESS_IN_BUY_FROM,
+					OrderIntakeWorkbench_Id.ADDRESS_IN_BUY_FROM, LNSessionCodes.PURCHASE_ORDER))
+				.inputValue(), "The Buy from address field is empty").not.toBe('');
+
+		}).toPass({ timeout: 10000 });
+
+		expect(await (await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.PURCHASE_OFFICE, OrderIntakeWorkbench_Id.PURCHASE_OFFICE,
+						LNSessionCodes.PURCHASE_ORDER)).first()).inputValue(), `The Purchase Office field is empty`).not.toBe('');
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.PURCHASE_ORDER, LNMenuActions_Id.SAVE);
 
@@ -89,8 +92,9 @@ class LNProcurement extends BaseClass{
 		// Verifying the Line
 		expect(await (await commonPg.gridInputField(OrderIntakeWorkbench_Lbl.LINE_GRID,
 						OrderIntakeWorkbench_Id.LINE_GRID, LNSessionCodes.PURCHASE_ORDER_LINE))
-						.inputValue(), `"The new line is not ${warehouseCnxt.orderLine[0]}`).toBe(warehouseCnxt.orderLine[0]);
+						.inputValue(), `The new line is not ${warehouseCnxt.orderLine[0]}`).toBe(warehouseCnxt.orderLine[0]);
 
+		await this.page.waitForTimeout(1000);
 		await this.page.keyboard.press('Tab');
 		
 		await (await LNCommon.getTextboxLookUpIconInGrid(OrderIntakeWorkbench_Lbl.SITE_GRID, OrderIntakeWorkbench_Id.SITE_GRID,
@@ -107,7 +111,8 @@ class LNProcurement extends BaseClass{
 
 		// Verifying the Session title
 		await LNCommon.verifySessionTab(LNSessionTabs.PURCHASE_ORDER);
-
+        
+		await this.page.waitForTimeout(1000);
 		await this.page.keyboard.press('Tab');
 		
 		await LNCommon.dataCellElement(await LNCommon.getDataCell(OrderIntakeWorkbench_Lbl.ITEM_GRID,
@@ -117,7 +122,7 @@ class LNProcurement extends BaseClass{
 		// Verifying the Item Description
 		expect(await (await commonPg.gridLabelField(OrderIntakeWorkbench_Lbl.ITEM_GRID,
 				OrderIntakeWorkbench_Id.ITEM_DESCRIPTION_GRID, LNSessionCodes.PURCHASE_ORDER_LINE))
-				.innerText(), "The item description is empty").not.toBe('');
+				.innerText(), `The item description is empty`).not.toBe('');
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.PURCHASE_ORDER, LNMenuActions_Id.SAVE);
 
@@ -147,8 +152,8 @@ class LNProcurement extends BaseClass{
 		expect(await (await LNCommon
 						.getTextField(OrderIntakeWorkbench_Lbl.ORDER_SEGMENT_TWO_IN_INTERCOMPANY_TRADE_ORDER_SALES,
 								OrderIntakeWorkbench_Id.ORDER_SEGMENT_TWO_IN_INTERCOMPANY_TRADE_ORDER_SALES,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES)
-						.inputValue()), "Your intercompany trade number is not displayed").not.toBe('');
+								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES))
+						.inputValue(), `Your intercompany trade number is not displayed`).not.toBe('');
 
 		warehouseCnxt.intercompanyTradeNumSales = await (await LNCommon
 				.getTextField(OrderIntakeWorkbench_Lbl.ORDER_SEGMENT_TWO_IN_INTERCOMPANY_TRADE_ORDER_SALES,
@@ -184,38 +189,50 @@ class LNProcurement extends BaseClass{
 		// Switching to Project/Item tab and verifying the values
 		await LNCommon.selectHeaderTab(LNTabs.PROJECT_ITEM, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
 
-		expect(await (await LNCommon
+		expect(await (await (await LNCommon
 						.getTextField(OrderIntakeWorkbench_Lbl.FROM_ITEM, OrderIntakeWorkbench_Id.FROM_ITEM_SEGMENT_TWO,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
+								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).first())
 						.inputValue(), `The value in From Item is not ${warehouseCnxt.items[1]}`).toBe(warehouseCnxt.items[1]);
 
-		expect(await (await LNCommon
-						.getTextField(OrderIntakeWorkbench_Lbl.TO_ITEM, OrderIntakeWorkbench_Id.TO_ITEM_SEGMENT_TWO,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
-						.inputValue(), `The value in To Item is not ${warehouseCnxt.items[1]}`).toBe(warehouseCnxt.items[1]);
+		await expect(async () => {
+			expect(await (await LNCommon
+				.getTextField(OrderIntakeWorkbench_Lbl.TO_ITEM, OrderIntakeWorkbench_Id.TO_ITEM_SEGMENT_TWO,
+					LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
+				.inputValue(), `The value in To Item is not ${warehouseCnxt.items[1]}`).toBe(warehouseCnxt.items[1]);
+
+		}).toPass({ timeout: 10000 });
 
 		// Switching to Operational tab and verifying the values
 		await LNCommon.selectHeaderTab(LNTabs.OPERATIONAL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+        
+		await expect(async () => {
 
-		expect(await (await LNCommon
-						.getTextField(OrderIntakeWorkbench_Lbl.SHIP_FROM_BUSINESS_PARTNER_IN_INTERCOMPANY,
-								OrderIntakeWorkbench_Id.SHIP_FROM_BUSINESS_PARTNER_IN_INTERCOMPANY,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
-						.inputValue(), `The value in Business Partner field of Ship from section is not ${warehouseCnxt.buyFromBP[1]}`)
+			expect(await (await LNCommon
+				.getTextField(OrderIntakeWorkbench_Lbl.SHIP_FROM_BUSINESS_PARTNER_IN_INTERCOMPANY,
+					OrderIntakeWorkbench_Id.SHIP_FROM_BUSINESS_PARTNER_IN_INTERCOMPANY,
+					LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
+				.inputValue(), `The value in Business Partner field of Ship from section is not ${warehouseCnxt.buyFromBP[1]}`)
 				.toBe(warehouseCnxt.buyFromBP[1]);
+
+		}).toPass({ timeout: 10000 });
 
 		// Switching to Control tab and verifying the values
 		await LNCommon.selectHeaderTab(LNTabs.CONTROL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+        
+		await expect(async () => {
 
-		expect(await (await LNCommon
-						.getTextField(OrderIntakeWorkbench_Lbl.USER, OrderIntakeWorkbench_Id.USER,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
-						.inputValue(), `The value in User is not`)
+			expect(await (await LNCommon
+				.getTextField(OrderIntakeWorkbench_Lbl.USER, OrderIntakeWorkbench_Id.USER,
+					LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL))
+				.inputValue(), `The value in User is not`)
 				.toBe("3270st02");
+
+		}).toPass({ timeout: 10000 });
 
 		// Switching to Tabs and verifying the values
 		const tabs = [ LNTabs.AGREEMENT, LNTabs.SELLING_INFORMATION, LNTabs.TAX, LNTabs.PRICING,
 				LNTabs.HOURS_EXPENSES, LNTabs.FREIGHT, LNTabs.FINANCIAL ];
+				
 		for (let i = 0; i < tabs.length; i++) {
 			
             await LNCommon.selectHeaderTab(tabs[i], LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
@@ -290,11 +307,15 @@ class LNProcurement extends BaseClass{
 				LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES);
 
 		// Verifying the Data in Transaction line
-		expect(await (await LNCommon
-						.getTextField(OrderIntakeWorkbench_Lbl.COMPANY, OrderIntakeWorkbench_Id.COMPANY,
-								LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES))
-						.inputValue(), `The Order is not`)
-				.toBe("3270st02");
+		await expect(async () => {
+
+			expect(await (await LNCommon
+				.getTextField(OrderIntakeWorkbench_Lbl.COMPANY, OrderIntakeWorkbench_Id.COMPANY,
+					LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES))
+				.inputValue(), `The Order is not`)
+				.toBe("3270");
+
+		}).toPass({ timeout: 10000 });
 
 		await LNCommon.selectGridTab(LNTabs.COS, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES);
 
@@ -302,12 +323,12 @@ class LNProcurement extends BaseClass{
 		expect(await (await commonPg.gridLabelField(OrderIntakeWorkbench_Lbl.COST_COMPONENT_GRID,
 						OrderIntakeWorkbench_Id.COST_COMPONENT_GRID,
 						LNSessionCodes.COS_IN_INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES))
-						.innerText(), "The Cost component line is missing").not.toBeEmpty();
+						.innerText(), "The Cost component line is missing").not.toBe('');
 
 		//screenshot("Review the intercompany trade order transaction line (by distribution center)");
 
 		await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES,
-				LNMenuActions_Id.SAVE_AND_CLOSE);
+			LNMenuActions_Id.SAVE_AND_CLOSE);
 		await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES, LNMenuActions_Id.SAVE_AND_CLOSE);
 		await LNCommon.clickMainMenuItem(LNSessionCodes.PURCHASE_ORDER, LNMenuActions_Id.SAVE_AND_CLOSE);
 		await LNCommon.clickMainMenuItem(LNSessionCodes.PURCHASE_ORDER_INTAKE_WORKBENCH, LNMenuActions_Id.SAVE_AND_CLOSE);

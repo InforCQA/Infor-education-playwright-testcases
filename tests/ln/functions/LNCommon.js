@@ -498,10 +498,10 @@ class LNCommon extends BaseClass {
         // Wait for menu item to be clickable
         await expect(async () => {
 
-             await (await this.page).waitForTimeout(1000);
-             await menuLocator.hover();
+            await (await this.page).waitForTimeout(1000);
+            await menuLocator.hover();
             await menuLocator.click();
-        }).toPass({ timeout: 30000 });
+        }).toPass({ timeout: 50000 });
     }
 
     /*--------------------------------------------------------------------------------------------

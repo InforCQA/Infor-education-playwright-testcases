@@ -4,6 +4,7 @@ import BaseClass from '../../testBase/BaseClass.js';
 import Commons from  '../constants/Commons.js';
 import ElementAttributes from '../constants/ElementAttributes.js';
 import { expect } from '@playwright/test';
+import log from '../../../utils/logger.js';
 
 /* --------------------------------------------------------
 	 * Objective : Login to Cloudsuite
@@ -23,7 +24,9 @@ class CloudSuite extends BaseClass {
     
     static async navigateToApplication(appName) {
         const homePg = new Homepages();
-
+        
+        log.info("navigation to LN");
+        
         let element = null;
         await this.pause(9);
         const appTitle = (await homePg.appNameTitle().textContent())?.trim();

@@ -912,10 +912,10 @@ class LNPage extends LNCustomActions{
         )};
 
     /* gridInputField - WebElement */
-    gridInputField = (p1, p2, p3) =>
-        this.iframe().locator(
+    gridInputField = async(p1, p2, p3) =>{
+        return await (await this.iframe()).locator(
             `//label[normalize-space()='${p1}']/ancestor::div/following-sibling::div[@class='Section DataSection']//child::div[contains(@class,'DataCell')][contains(@id,'${p2}')][contains(@id,'${p3}')]//input`
-        );
+        )};
 
     /* gridLabelField - WebElement */
     gridLabelField = async(p1, p2, p3) =>{

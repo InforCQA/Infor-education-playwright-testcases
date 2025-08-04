@@ -41,7 +41,8 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
 		* Ship sales order (by the distribution center)
 		* Review the intercompany trade order transaction line (by the sales center)*/
         test('Create a sales order for a selected sales office', async ({ }) => {
-           await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
+
+            await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
         });
 
      /*   test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {    

@@ -25,7 +25,7 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
 
     test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
         test('login', async ({ }) => {
-            
+
             // Input Data Returned From Data Mapping
             await GetDataLN_DevelopTheOriginalEnterpriseStructure.getLNDevelopTheOriginalEnterpriseStructureContext(structureCnxt);
 
@@ -56,10 +56,10 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
         
         test('Create a sales setting by site', async ({ }) => {
             await LNMasterData.createSalesSettingBySite(structureCnxt);
-        }); 
+        });
 
         test('Review the new site details in the Enterprise Model Workbench', async ({ }) => {
             await LNMasterData.reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt);
-        }); 
+        });
     })
 }
