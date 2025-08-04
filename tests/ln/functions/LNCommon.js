@@ -15,30 +15,36 @@ class LNCommon extends BaseClass {
      *-------------------------------------------------------------------------------*/
     static async navigateToLNModule(module, ...subModules) {
 
-        // Intializing the page
-        const lnPg = new LNPage(this.page);
 
-        await setBrowserZoom(this.page, 50);
+            // Intializing the page
+            const lnPg = new LNPage(this.page);
 
-        // Using condition to verify whether it is displaying or not
-        if (await this.isElementPresent(await lnPg.inforMainModules(module))) {
-            await (await lnPg.inforMainModules(module)).click();
+            await setBrowserZoom(this.page, 50);
 
-            // Using loop to navigate to expand and use multiple sub modules
-            for (let i = 0; i < subModules.length; i++) {
+            // Using condition to verify whether it is displaying or not
+            if (await this.isElementPresent(this.getLocators(await lnPg.inforMainModules(module)))) {
+                await (await lnPg.inforMainModules(module)).click();
 
-                const subModule = subModules[i];
-                if (!(i == subModules.length - 1)) {
-                    await (await lnPg.inforLNSubModule(subModule, i + 2)).waitFor({ state: 'visible' });
-                    await (await lnPg.inforLNSubModule(subModule, i + 2)).hover();
-                    await (await lnPg.inforLNSubModule(subModule, i + 2)).click();
-                } else {
-                    await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).waitFor({ state: 'visible' });
-                    await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).hover();
-                    await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).click();
+                // Using loop to navigate to expand and use multiple sub modules
+                for (let i = 0; i < subModules.length; i++) {
+
+                    const subModule = subModules[i];
+                    if (!(i == subModules.length - 1)) {
+                        await (await lnPg.inforLNSubModule(subModule, i + 2)).waitFor({ state: 'visible' });
+                        await (await lnPg.inforLNSubModule(subModule, i + 2)).hover();
+                        await (await lnPg.inforLNSubModule(subModule, i + 2)).click();
+                    } else {
+                        await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).waitFor({ state: 'visible' });
+                        await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).hover();
+                        await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).click();
+                    }
                 }
             }
-        }
+        // } catch (e) {
+        //     console.error(`navigateToLNModule failed at line approx ${new Error().stack.split('\n')[1].trim()}`);
+        //     console.error(err.stack);
+        //     throw err;
+        // }
     }
 
     /*---------------------------------------------------------------------------------

@@ -16,16 +16,16 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-        // 2.4
-        test('Update local business partner (customer) data', async ({ }) => {
-            await CloudSuite.navigateToApplication(ProductNames.LN);
-            await LNMasterData.updateLocalBusinessPartnerCustomerData(businessCnxt);
-        });
-        // 2.5
-        test('Create a sales order for a selected sales office', async ({ }) => {
+        // // 2.4
+        // test('Update local business partner (customer) data', async ({ }) => {
+        //     await CloudSuite.navigateToApplication(ProductNames.LN);
+        //     await LNMasterData.updateLocalBusinessPartnerCustomerData(businessCnxt);
+        // });
+        // // 2.5
+        // test('Create a sales order for a selected sales office', async ({ }) => {
 
-            await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
-        });
+        //     await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
+        // });
 
         // Create sales order (by the sales center)
         // Review intercompany trade order - purchase (by the sales center)

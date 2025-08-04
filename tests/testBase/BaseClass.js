@@ -46,6 +46,15 @@ class BaseClass {
     return locator;
   }
 
+  static async getLocators(selector) {
+
+    try {
+      return selector;
+    } catch (e) {
+      console.log("1");
+      console.error(e.stack);
+    }
+  }
 
   static async isElementPresent(locator) {
     try {

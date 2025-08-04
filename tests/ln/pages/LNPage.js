@@ -5,7 +5,6 @@ import LNCustomActions from "./LNCustomActions";
 
 class LNPage extends LNCustomActions{
 
-
     constructor(page) {
         super(page);
         this.page = page;

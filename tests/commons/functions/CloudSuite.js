@@ -4,7 +4,9 @@ import BaseClass from '../../testBase/BaseClass.js';
 import Commons from  '../constants/Commons.js';
 import ElementAttributes from '../constants/ElementAttributes.js';
 import { expect } from '@playwright/test';
-import log from '../../../utils/logger.js';
+import { log } from 'console';
+import { getLoggerForTestClass } from '../../../utils/logger.js';
+const { getCurrentLogger } = require('../../../utils/logContext.js');
 
 /* --------------------------------------------------------
 	 * Objective : Login to Cloudsuite
@@ -22,7 +24,7 @@ class CloudSuite extends BaseClass {
         await homePg.submit().click();
     }
     
-    static async navigateToApplication(appName) {
+    static async navigateToApplication(log, appName) {
         const homePg = new Homepages();
         
         log.info("navigation to LN");
