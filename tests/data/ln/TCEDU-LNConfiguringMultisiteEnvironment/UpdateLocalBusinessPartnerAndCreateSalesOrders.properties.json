@@ -11,5 +11,7 @@
   "orderedQuan": "1",
   "price": "1000.00",
   "enterpriseUnits": ["BOSTON", "ATLANT"],
-  "transactionLine": "1"
+  "transactionLine": "1",
+  "interCmpnyTradeNum": "",
+  "plannedDate": ""
 }

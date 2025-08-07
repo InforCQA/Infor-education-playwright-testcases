@@ -1,0 +1,41 @@
+class DateFormats {
+  static YYYYMMDD = "yyyyMMdd";
+  static YYMMDD = "yyMMdd";
+  static YYYY = "yyyy";
+  static MM_DD_YYYY = "MM/dd/yyyy";
+  static M_D_YYYY = "M/d/yyyy";
+  static M = "M";
+  static MDDYYYY = "M/dd/yyyy";
+  static YY_MM_DD = "yy/MM/dd";
+  static YYMM = "yyMM";
+  static YY = "yy";
+  static MM = "MM";
+  static HHMMSS = "HHmmss";
+  static MMYYDD = "MMYYDD";
+  static DMYYYY = "d/M/yyyy";
+  static DDMMYYYY = "dd/MM/yyyy";
+  static MM_DD = "MM/dd";
+  static MMDD = "MM/dd/";
+  static D = "d";
+  static HMMSSA = "h:mm:ss a";
+  static MONTH_YYYY = "MMMM yyyy"; 
+  static M_D_YY = "M/dd/yy";
+  static HH_MM = "0-HH:MM";
+  static YYYYMM = "yyyyMM";
+  static M_D = "M/d";
+  static YYYY_MM_DD = "yyyy-MM-dd";
+  static D_MMM_YYYY = "d/MMM/yyyy";
+  static MM__DD = "MM-dd";
+  static MM_D_YYYY = "MM/d/yyyy";
+  static M_DD_YYYY = "M/dd/yyyy";
+  static YY_01_01 = "yy/01/01";
+  static M_D_yyyy = "1/1/yyyy";
+  static MMM = "MMM";
+  static DD = "DD";
+  static HH_MM_SS = "HH:mm:ss";
+  static YYMDD = "yy%sdd";
+  static MMYY = "MMyy";
+  static HMMSS = "Hmmss";
+}
+
+export default DateFormats;

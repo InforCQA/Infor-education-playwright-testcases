@@ -1303,10 +1303,10 @@ class LNPage extends LNCustomActions{
         return await (await this.iframe()).locator(`(//div[contains(@class,'Button')][contains(@id,'${p1}')][contains(@id,'close')])[1]`)};
 
     /* textMenuWithoutLabel -- Button */
-    textMenuWithoutLabel = (p1, p2) =>
-        this.iframe().locator(
+    textMenuWithoutLabel = async(p1, p2) =>{
+        return await (await this.iframe()).locator(
             `//div[contains(@class,'FramedWindow') and not(@aria-hidden='true')]//div[contains(@class,'Button')][contains(@id,'${p1}') and contains(@id,'${p2}')]`
-        );
+        )};
 
     /* gridRadioBtnLast - WebElement */
     gridRadioBtnLast = (p1, p2) =>

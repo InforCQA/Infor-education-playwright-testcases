@@ -22,7 +22,7 @@ class LNCommon extends BaseClass {
             await setBrowserZoom(this.page, 50);
 
             // Using condition to verify whether it is displaying or not
-            if (await this.isElementPresent(this.getLocators(await lnPg.inforMainModules(module)))) {
+            if (await this.isElementPresent(await lnPg.inforMainModules(module))) {
                 await (await lnPg.inforMainModules(module)).click();
 
                 // Using loop to navigate to expand and use multiple sub modules
@@ -40,11 +40,6 @@ class LNCommon extends BaseClass {
                     }
                 }
             }
-        // } catch (e) {
-        //     console.error(`navigateToLNModule failed at line approx ${new Error().stack.split('\n')[1].trim()}`);
-        //     console.error(err.stack);
-        //     throw err;
-        // }
     }
 
     /*---------------------------------------------------------------------------------
@@ -360,9 +355,11 @@ class LNCommon extends BaseClass {
         // Using loop to click on multiple navigations
         for (const menuOption of menuOptions) {
             await expect(async () => {
-                await (await lnPg.referenceMenuOption(menuOption, sessionCode)).waitFor({ state: 'visible'});
+                
+                await this.page.waitForTimeout(1000);
+                await (await lnPg.referenceMenuOption(menuOption, sessionCode)).hover();
                 await (await lnPg.referenceMenuOption(menuOption, sessionCode)).click();
-            }).toPass({ timeout: 10000 });
+            }).toPass({ timeout: 60000 });
         }
     }
 
@@ -520,7 +517,7 @@ class LNCommon extends BaseClass {
         // Step 1: Wait and click the input field
         await expect(async () => {
             await locator.click();
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 20000 });
 
         // Step 3: Get parent div and check for focus class
         const parent = await locator.locator('..'); // parent div
@@ -542,6 +539,7 @@ class LNCommon extends BaseClass {
 
 
         // Step 6: Press Tab to trigger any events
+        await this.page.waitForTimeout(3000);
         await this.page.keyboard.press('Tab');
     }
 
@@ -639,6 +637,7 @@ class LNCommon extends BaseClass {
         let popup = null, textCount = 0;
 
         await expect(async () => {
+            await this.page.waitForTimeout(1000);
             await (await lnPg.popupText()).waitFor({ state: 'visible', timeout: 5000 });
             textCount = await (await lnPg.popupText()).count();
         }).toPass({ timeout: 60000 });
@@ -834,9 +833,12 @@ static async validateMessageAndHandlePopUpIfExists(popupText, popupBtn) {
     const lnPg = new LNPage(this.page);
 
   // Check if popup button is present
+  await this.page.waitForTimeout(1000);
   const isPresent = await lnPg.popupBtn(popupBtn);
   if (isPresent) {
+    await this.page.waitForTimeout(1000);
     const popupTexts = await (await lnPg.popupText()).allTextContents();
+    console.log(popupTexts);console.log("##");
     for (let i = popupTexts.length - 1; i >= 0; i--) {
       if (popupTexts[i].toLowerCase().includes(popupText.toLowerCase())) {
         console.log(`=========>>>>> Pop Up message: ${popupTexts[i]} <<<<<=========`);

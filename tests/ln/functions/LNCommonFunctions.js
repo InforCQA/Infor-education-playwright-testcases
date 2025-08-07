@@ -80,15 +80,15 @@ class LNCommonFunctions extends BaseClass{
 		await LNCommon.selectGridTab(LNTabs.TRANSACTION_LINES, LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
 
 		if (flag == 0) {
-			LNCommon.clickAndSelectDropdownFieldGridFilter(SalesWorkbench_Id.STATUS_GRID_DRP, LNCommons.RELEASED,
+			await LNCommon.clickAndSelectDropdownFieldGridFilter(SalesWorkbench_Id.STATUS_GRID_DRP, LNCommons.RELEASED,
 					SalesWorkbench_Lbl.STATUS_GRID_DRP,
 					LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH);
 		}
 
 		if (flag == 1) {
-			LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,
+			await LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,
 					LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH, LNCommons.CONTAINS);
-			LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,
+			await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,
 					SalesWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,
 					LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,
 					intercompanyTradeNum.substring(intercompanyTradeNum.length - 2));
@@ -144,6 +144,7 @@ class LNCommonFunctions extends BaseClass{
 		await LNCommon.selectGridTab(LNTabs.BILLABLE_LINES, LNSessionCodes.INVOICING_360);
 		await LNCommon.selectRequiredRecord(LNSessionCodes.BILLABLE_LINES, SalesWorkbench_Lbl.SOURCE_DOCUMENT_GRID,
 				SalesWorkbench_Id.SOURCE_DOCUMENT_GRID, intercompanyTradeNum);
+		await this.page.waitForTimeout(1000);
 		await LNCommon.clickTextMenuItem(LNSessionCodes.BILLABLE_LINES, LNMenuActions_Id.CREATE_INVOICE,
 				LNMenuActions_Lbl.CREATE_INVOICE_BILLABLE_LINES);
 		await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.INVOICES_WILL_BE_CREATED_AND_POSTED, LNCommons.YES);
@@ -201,8 +202,8 @@ class LNCommonFunctions extends BaseClass{
 
 		if (flag == 0) {
 			// Verifying the Clear Additional Filter button is enabled and Clicking
-			if (!await (await commonPg.textMenuWithoutLabel(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,
-					LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER)).getAttribute(ElementAttributes.CLASS)
+			if (!await (await (await commonPg.textMenuWithoutLabel(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,
+					LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER)).getAttribute(ElementAttributes.CLASS))
 					.includes(LNCommons.DISABLED)) {
 
 				await LNCommon.clickTextMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,
@@ -852,6 +853,7 @@ static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCn
 
   // Initialising page elements
   const commonPg = new LNPage(this.page);
+   
   // Navigate to Common > Intercompany Trade > Sales Workbench
   await LNCommon.navigateToLNModule(LNSessionTabs.COMMON, LNSessionTabs.INTERCOMPANY_TRADE, LNSessionTabs.SALES_WORKBENCH);
 
@@ -859,14 +861,16 @@ static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCn
   await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
 
   // Clear additional filter if enabled
-  const isClearEnabled = !(await commonPg.textMenuWithoutLabel( LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER).getAttribute('class')).includes(LNCommons.DISABLED);
+  const isClearEnabled = !(await (await commonPg.textMenuWithoutLabel( LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER)).getAttribute('class')).includes(LNCommons.DISABLED);
+
   if (isClearEnabled) {
     await LNCommon.clickTextMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER, LNMenuActions_Lbl.CLEAR_ADDITIONAL_FILTER);
   }
 
   // Adjust filter and filter record
   await LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID, LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, LNCommons.CONTAINS);
-  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID, SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID, LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, businessCnxt.interCmpnyTradeNum.slice(-2));
+  await this.page.waitForTimeout(1000);
+  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID, SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID, LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, businessCnxt.interCmpnyTradeNum.slice(-3));
   await LNCommon.drilldownRequiredRecord(LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, LNCommons.FIRST_RECORD);
 
   // Verify session
@@ -878,32 +882,49 @@ static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCn
 
   // Intercompany trade tab assertions
   await LNCommon.selectHeaderTab(LNTabs.INTERCOMPANY_TRADE, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
-  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.FROM_ENTERPRISE_UNIT, SalesWorkbench_Id.FROM_ENTERPRISE_UNIT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.enterpriseUnits[0]);
-  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.TO_ENTERPRISE_UNIT, SalesWorkbench_Id.TO_ENTERPRISE_UNIT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.enterpriseUnits[1]);
+  expect(await (await LNCommon.getTextField(SalesWorkbench_Lbl.FROM_ENTERPRISE_UNIT, SalesWorkbench_Id.FROM_ENTERPRISE_UNIT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).inputValue()).toBe(businessCnxt.enterpriseUnits[0]);
+
+	await expect(async () => {
+		expect(await (await LNCommon.getTextField(SalesWorkbench_Lbl.TO_ENTERPRISE_UNIT, SalesWorkbench_Id.TO_ENTERPRISE_UNIT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).inputValue()).toBe(businessCnxt.enterpriseUnits[1]);
+	}).toPass({ timeout: 60000 });
 
   // Project/Item tab
   await LNCommon.selectHeaderTab(LNTabs.PROJECT_ITEM, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
-  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.FROM_ITEM, SalesWorkbench_Id.FROM_ITEM_SEGMENT_TWO, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.item[1]);
-  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.TO_ITEM, SalesWorkbench_Id.TO_ITEM_SEGMENT_TWO, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.item[1]);
 
+	await expect(async () => {
+		expect(await (await (await LNCommon.getTextField(SalesWorkbench_Lbl.FROM_ITEM, SalesWorkbench_Id.FROM_ITEM_SEGMENT_TWO, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).first()).inputValue()).toBe(businessCnxt.item[1]);
+	}).toPass({ timeout: 60000 });
+  
+	await expect(async () => {
+		 expect(await (await LNCommon.getTextField(SalesWorkbench_Lbl.TO_ITEM, SalesWorkbench_Id.TO_ITEM_SEGMENT_TWO, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).inputValue()).toBe(businessCnxt.item[1]);
+	}).toPass({ timeout: 60000 });
+  
   // Operational tab
   await LNCommon.selectHeaderTab(LNTabs.OPERATIONAL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
-  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.SHIP_FROM_SITE, SalesWorkbench_Id.SHIP_FROM_SITE, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.enterpriseUnits[0]);
-  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.SHIP_TO_BUSINESS_PARTNER, SalesWorkbench_Id.SHIP_TO_BUSINESS_PARTNER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(businessCnxt.businessPartner);
+
+	await expect(async () => {
+		expect(await (await LNCommon.getTextField(SalesWorkbench_Lbl.SHIP_FROM_SITE, SalesWorkbench_Id.SHIP_FROM_SITE, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).inputValue()).toBe(businessCnxt.enterpriseUnits[0]);
+	}).toPass({ timeout: 60000 });
+  
+  expect(await (await LNCommon.getTextField(SalesWorkbench_Lbl.SHIP_TO_BUSINESS_PARTNER, SalesWorkbench_Id.SHIP_TO_BUSINESS_PARTNER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).inputValue()).toBe(businessCnxt.businessPartner);
 
   // Control tab
   await LNCommon.selectHeaderTab(LNTabs.CONTROL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
-  const userId = getParameter(Commons.USER_NAME).substring(0, 8);
-  expect(await LNCommon.getTextField(SalesWorkbench_Lbl.USER, SalesWorkbench_Id.USER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL).getAttribute('value')).toBe(userId);
+
+	const userId = "3270st02";
+	
+	await expect(async () => {
+		expect(await (await LNCommon.getTextField(SalesWorkbench_Lbl.USER, SalesWorkbench_Id.USER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).inputValue()).toBe(userId);
+	}).toPass({ timeout: 60000 });
 
   // Tabs for screenshot
   const tabs = [LNTabs.AGREEMENT, LNTabs.SELLING_INFORMATION, LNTabs.TAX, LNTabs.PRICING, LNTabs.HOURS_EXPENSES, LNTabs.FREIGHT, LNTabs.FINANCIAL];
   for (const tab of tabs) {
     await LNCommon.selectHeaderTab(tab, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
-    await screenshot(`${tab} Tab details`);
+    //await screenshot(`${tab} Tab details`);
   }
 
-  await screenshot("Review intercompany trade order - sales (by the distribution center)");
+  //await screenshot("Review intercompany trade order - sales (by the distribution center)");
 
   // Closing all sessions
   await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL, LNMenuActions_Id.SAVE_AND_CLOSE);

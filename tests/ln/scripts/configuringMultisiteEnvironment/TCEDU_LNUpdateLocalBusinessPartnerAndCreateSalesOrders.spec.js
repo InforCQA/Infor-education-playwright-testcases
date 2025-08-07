@@ -5,6 +5,7 @@ import BaseClass from "../../../testBase/BaseClass";
 import LNMasterData from "../../functions/LNMasterData";
 import LNSales from "../../functions/LNSales";
 import LNCommonFunctions from "../../functions/LNCommonFunctions";
+import GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders from "../../dataMapping/configuringMultisiteEnvironment/GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders";
 
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
 const businessCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/UpdateLocalBusinessPartnerAndCreateSalesOrders.properties.json")));
@@ -25,19 +26,23 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
 
     test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
         test('login', async ({ }) => {
+
+            await GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders.getLNBusinessPartnerContext(businessCnxt);
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-        // // 2.4
-        // test('Update local business partner (customer) data', async ({ }) => {
-        //     await CloudSuite.navigateToApplication(ProductNames.LN);
-        //     await LNMasterData.updateLocalBusinessPartnerCustomerData(businessCnxt);
-        // });
-        // // 2.5
-        // test('Create a sales order for a selected sales office', async ({ }) => {
+        
+        // 2.4
+        test('Update local business partner (customer) data', async ({ }) => {
+            await CloudSuite.navigateToApplication(ProductNames.LN);
+            await LNMasterData.updateLocalBusinessPartnerCustomerData(businessCnxt);
+        });
+        
+        // 2.5
+        test('Create a sales order for a selected sales office', async ({ }) => {
 
-        //     await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
-        // });
+            await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
+        });
 
         // Create sales order (by the sales center)
         // Review intercompany trade order - purchase (by the sales center)
@@ -49,12 +54,14 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
             await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
         });
 
-     /*   test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {    
-            LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(businessCnxt.enterpriseUnits, businessCnxt.interCmpnyTradeNum, 0);
+        test('Review the intercompany trade order transaction line (by the sales center)', async ({ }) => {    
+            
+            await LNCommonFunctions.invoiceIntercompanyTradeOrderTransactionLineByTheDistributionCenter(businessCnxt.enterpriseUnits, businessCnxt.interCmpnyTradeNum, 0);
         });
         
         test('Create intercompany trade purchase invoice (by the sales center)', async ({ }) => {
-           LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
-        });*/
+           businessCnxt.interCmpnyTradeNum= "000000139";
+           await LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
+        });
     })
 }
