@@ -5,13 +5,13 @@ class GetDataLN_DevelopTheOriginalEnterpriseStructure {
 
     static async getLNDevelopTheOriginalEnterpriseStructureContext(structureCnxt) {
 
-        log().info("INFO : ========>>>>> Data mapping for Develop the original enterprise structure started <<<<<========= ");
+        console.log("INFO : ========>>>>> Data mapping for Develop the original enterprise structure started <<<<<========= ");
 
         structureCnxt.name += "04";
         structureCnxt.houseNum            = structureCnxt.houseNum.replace('%s', '04');
         structureCnxt.enterpriseUnit      = structureCnxt.enterpriseUnit.replace('%s', "04");
-        structureCnxt.planningCluster     = structureCnxt.planningClusters.replace('%s', "04");
-        structureCnxt.planningClusterDesc = structureCnxt.planningClusterDescs.replace('%s', "04");
+        structureCnxt.planningCluster     = structureCnxt.planningCluster.replace('%s', "04");
+        structureCnxt.planningClusterDesc = structureCnxt.planningClusterDesc.replace('%s', "04");
         structureCnxt.warehouseDesc       = structureCnxt.warehouseDesc.replace('%s', '04');
         structureCnxt.site+="04";
         structureCnxt.siteDesc            =structureCnxt.siteDesc.replace('%s', '04');
@@ -23,7 +23,7 @@ class GetDataLN_DevelopTheOriginalEnterpriseStructure {
         structureCnxt.offices[0]          = structureCnxt.offices[0] + structureCnxt.salesOfficeDesc;
         structureCnxt.offices[1]          = structureCnxt.offices[1] + structureCnxt.warehouseDesc;
 
-        log().info("INFO : ========>>>>> Data mapping for Develop the original enterprise structure is successfully completed <<<<<========= ");
+        console.log("INFO : ========>>>>> Data mapping for Develop the original enterprise structure is successfully completed <<<<<========= ");
     }
 
 }

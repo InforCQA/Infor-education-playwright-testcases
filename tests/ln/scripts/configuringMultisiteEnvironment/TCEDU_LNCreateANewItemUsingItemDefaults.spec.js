@@ -18,7 +18,8 @@ const itemCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNCon
 export default function TCEDU_LNCreateANewItemUsingItemDefaults() {
 
     test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
-        test('login', async ({ }) => {
+
+        test.beforeAll(async ({ }) => {
             
             // Input Data Returned From Data Mapping
             await GetDataLN_CreateANewItemUsingItemDefaults.getItemContext(itemCnxt);
@@ -34,6 +35,10 @@ export default function TCEDU_LNCreateANewItemUsingItemDefaults() {
         test('Create a new item', async ({ }) => {
             test.slow(); 
             await LNMasterData.createANewItem(itemCnxt);
+        });
+
+        test.afterAll(async () => {
+            await BaseClass.page.close();
         });
     })
 }

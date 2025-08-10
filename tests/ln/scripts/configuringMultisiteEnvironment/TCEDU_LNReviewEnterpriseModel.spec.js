@@ -19,18 +19,24 @@ const enterpriseMdlCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TC
 export default function TCEDU_LNReviewEnterpriseModel() {
 
     test.describe('TCEDU_LNReviewEnterpriseModel', () => {
-        test('login', async ({ }) => {
+
+        test.beforeAll(async () => {
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
-        
+
         test('Review the enterprise model in LN CE', async ({ }) => {
             await CloudSuite.navigateToApplication(ProductNames.LN);
             await LNMasterData.reviewEnterpriseModelInLNCE(enterpriseMdlCnxt);
         });
-        
+
         test('Review a site in LN CE', async ({ }) => {
             await LNMasterData.reviewASiteInLNCE(enterpriseMdlCnxt);
         });
+
+        test.afterAll(async () => {
+            await BaseClass.page.close();
+        });
+
     })
 }

@@ -31,7 +31,7 @@ class LNWarehousing extends BaseClass {
 		// Initialising page elements
 		let commonPg = new LNPage(this.page);
 
-            log.info("=========>>>>> Create warehouse transfer (by sales center) started <<<<<=========");
+            console.log("=========>>>>> Create warehouse transfer (by sales center) started <<<<<=========");
 
             // Navigating to Warehousing --> Orders --> Orders
             await LNCommon.navigateToLNModule(LNSessionTabs.WAREHOUSING, LNSessionTabs.ORDERS, LNSessionTabs.ORDERS);

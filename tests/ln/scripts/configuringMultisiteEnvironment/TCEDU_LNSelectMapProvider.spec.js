@@ -17,7 +17,8 @@ const mapCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConf
 export default function TCEDU_LNSelectMapProvider() {
 
     test.describe('TCEDU_LNSelectMapProvider', () => {
-        test('login', async ({ }) => {
+        
+        test.beforeAll(async ({ }) => {
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
@@ -25,6 +26,10 @@ export default function TCEDU_LNSelectMapProvider() {
         test('Select a map provider', async ({ }) => {
             await CloudSuite.navigateToApplication(ProductNames.LN);
             await LNTools.selectMapProvider(mapCnxt);
+        });
+
+        test.afterAll(async () => {
+            await BaseClass.page.close();
         });
     })
 }

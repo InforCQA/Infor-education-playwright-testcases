@@ -20,7 +20,8 @@ const itemCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNCon
 export default function TCEDU_LNReviewItemsFromGlobalPrespective() {
 
     test.describe('TCEDU_LNReviewItemsFromGlobalPrespective', () => {
-      test('login', async ({ }) => {
+
+      test.beforeAll(async ({ }) => {
         await BaseClass.globalSetup();
         await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
       });
@@ -45,5 +46,10 @@ export default function TCEDU_LNReviewItemsFromGlobalPrespective() {
       test('Review standard costs by enterprise unit', async ({ }) => {
         await LNMasterData.reviewStandardCostsByEnterpriseUnit(itemCnxt);
       });
+
+      test.afterAll(async () => {
+        await BaseClass.page.close();
+      });
+      
     })
 }
