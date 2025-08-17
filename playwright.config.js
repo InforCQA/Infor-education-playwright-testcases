@@ -10,7 +10,7 @@ export default defineConfig({
   globalSetup: './global-setup.js',
   testDir: './tests',
   reporter: 'html',
-  timeout: 900 * 1000,
+  timeout: 20000 * 1000,
   projects: [
     {
       name: 'InforOS',

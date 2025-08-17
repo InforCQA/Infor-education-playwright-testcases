@@ -96,6 +96,8 @@ class LNCommon extends BaseClass {
                 await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'attached', timeout: 500 });
                 await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'visible', timeout: 500 });
                 await (await lnPg.textMenu(sessionCode, id, label)).hover();
+
+                await expect(await lnPg.textMenu(sessionCode, id, label)).toBeVisible({ timeout: 10000 });
                 await (await lnPg.textMenu(sessionCode, id, label)).click();
             }).toPass({ timeout: 60000 });
 
@@ -250,6 +252,8 @@ class LNCommon extends BaseClass {
                 const classAttr = await (await lnPg.dropdownStsValue(elementId)).getAttribute('class');
                 if (!classAttr.includes(LNCommons.IS_ACTIVE)) {
                     await (await lnPg.drpValueGridFilter(elementId)).waitFor({ state: 'visible', timeout: 1000 });
+
+                    await expect(await lnPg.drpValueGridFilter(elementId)).toBeVisible({ timeout: 10000 });
                     await (await lnPg.drpValueGridFilter(elementId)).click();
                 } else {
                     break;
@@ -260,6 +264,8 @@ class LNCommon extends BaseClass {
             const itemToSelect = await lnPg.selectListItem(listItem);
             await itemToSelect.hover();
             await itemToSelect.waitFor({ state: 'visible', timeout: 1000 });
+
+            await expect(itemToSelect).toBeVisible({ timeout: 10000 });
             await itemToSelect.click();
         }
 
@@ -457,6 +463,7 @@ class LNCommon extends BaseClass {
         // Verifying the label (assuming you have a utility function or method for this)
         await this.verifyColumnHeader(sessionCode, label);
 
+        await expect(await lnPg.filterInput(elementId, sessionCode)).toBeVisible({ timeout: 10000 });
         await this.type(await lnPg.filterInput(elementId, sessionCode), filterItem);
 
         await this.page.keyboard.press('Tab');
@@ -522,6 +529,8 @@ class LNCommon extends BaseClass {
 
         // Step 1: Wait and click the input field
         await expect(async () => {
+
+            await expect(locator).toBeVisible({ timeout: 10000 });
             await locator.click();
         }).toPass({ timeout: 20000 });
 

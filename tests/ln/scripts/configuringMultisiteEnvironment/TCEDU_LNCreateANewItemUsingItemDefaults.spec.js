@@ -33,7 +33,7 @@ export default function TCEDU_LNCreateANewItemUsingItemDefaults() {
         });
    
         test('Create a new item', async ({ }) => {
-            test.slow(); 
+            
             await LNMasterData.createANewItem(itemCnxt);
         });
 

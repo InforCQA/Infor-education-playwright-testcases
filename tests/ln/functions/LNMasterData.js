@@ -696,7 +696,7 @@ class LNMasterData extends BaseClass {
  * Workbook	 : LN Cloud Configuring Multisite and Intercompany Trade Training Workbook
  * Exercises : 1.3.3
  * ------------------------------------------------------------------------------------*/
-static async createPlanningCluster(planningClusters, planningClusterDescs) {
+static async createPlanningCluster(planningCluster, planningClusterDesc) {
     console.log("=========>>>>> Create a planning cluster started <<<<<=========");
 
     // Navigating to Master Data --> Enterprise Model --> Enterprise Structure --> Planning Clusters
@@ -715,7 +715,7 @@ static async createPlanningCluster(planningClusters, planningClusterDescs) {
 
         await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID,PlanningClusters_Id.PLANNING_CLUSTER_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusters);
 
-        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_DESCRIPTION_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusterDescs );
+        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_DESCRIPTION_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusterDesc );
 
         await LNCommon.clickMainMenuItem(LNSessionCodes.PLANNING_CLUSTERS, LNMenuActions_Id.SAVE);
     }
@@ -1276,8 +1276,8 @@ static async reviewNewSiteDetailsInEnterpriseModelWorkbench(structureCnxt) {
         await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.CLEAR_FIELDS,
             LNMenuActions_Lbl.CLEAR_FIELDS);
         await LNCommon.selectRadioBtn(ItemsBySite_Lbl.ITEM_SITE_RDN, ItemsBySite_Id.ITEM_SITE_RDN);
-        await LNCommon.triggerInputField(await LNCommon.getTextField(ItemsBySite_Lbl.ITEM, ItemsBySite_Id.ITEM_SEGMENT_TWO,
-            LNSessionCodes.ITEMS_BY_SITE), itemsBySiteCnxt.item[0]);
+        await LNCommon.triggerInputField(await (await LNCommon.getTextField(ItemsBySite_Lbl.ITEM, ItemsBySite_Id.ITEM_SEGMENT_TWO,
+            LNSessionCodes.ITEMS_BY_SITE)).first(), itemsBySiteCnxt.item[0]);
         await LNCommon.clickTextMenuItem(LNSessionCodes.ITEMS_BY_SITE, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
 
         // Verify Session Tab
