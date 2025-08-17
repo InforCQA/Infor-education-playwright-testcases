@@ -64,6 +64,8 @@ class LNCommon extends BaseClass {
         // Intializing the page
         const lnPg = new LNPage(this.page);
 
+        if(!(await (await (await lnPg.dropdownValueLabel(label, elementId)).textContent()).includes(listItem))) {
+
         await expect(async () => {
             await (await lnPg.clickDropdownLabel(label, elementId)).waitFor({ state: 'visible', timeout: 5000 });
             await (await lnPg.clickDropdownLabel(label, elementId)).hover();
@@ -71,7 +73,10 @@ class LNCommon extends BaseClass {
         }).toPass({ timeout: 10000 });
 
         await (await lnPg.selectListItem(listItem)).waitFor({ state: 'visible', timeout: 5000 });
+        await (await lnPg.selectListItem(listItem)).hover();
         await (await lnPg.selectListItem(listItem)).click();
+
+    }
 
         const drpValue = await (await lnPg.dropdownValueLabel(label, elementId)).textContent();
         expect(drpValue.trim()).toBe(listItem);
@@ -88,10 +93,11 @@ class LNCommon extends BaseClass {
         try {
 
             await expect(async () => {
+                await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'attached', timeout: 500 });
                 await (await lnPg.textMenu(sessionCode, id, label)).waitFor({ state: 'visible', timeout: 500 });
                 await (await lnPg.textMenu(sessionCode, id, label)).hover();
                 await (await lnPg.textMenu(sessionCode, id, label)).click();
-            }).toPass({ timeout: 10000 });
+            }).toPass({ timeout: 60000 });
 
         } catch (e) {
             await (await lnPg.moreButton(sessionCode)).click();

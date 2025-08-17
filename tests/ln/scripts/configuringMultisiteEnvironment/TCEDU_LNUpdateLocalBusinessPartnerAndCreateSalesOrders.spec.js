@@ -25,7 +25,8 @@ const businessCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-L
 export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders() {
 
     test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
-        test('login', async ({ }) => {
+
+        test.beforeAll(async ({ }) => {
 
             await GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders.getLNBusinessPartnerContext(businessCnxt);
             await BaseClass.globalSetup();
@@ -49,7 +50,7 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
         // Review intercompany trade order - sales (by the distribution center)
         // Ship sales order (by the distribution center)
         // Review the intercompany trade order transaction line (by the sales center)
-        test('Create a sales order for a selected sales office', async ({ }) => {
+        test('Create a sales order And Review Intercompany Trade Oder Purchase By Sales Center', async ({ }) => {
 
             await LNSales.createSalesOrderAndReviewIntercompanyTradeOrderPurchaseBySalesCenter(businessCnxt);
         });
@@ -60,8 +61,13 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
         });
         
         test('Create intercompany trade purchase invoice (by the sales center)', async ({ }) => {
-           businessCnxt.interCmpnyTradeNum= "000000139";
-           await LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
+
+            await LNCommonFunctions.createIntercompanyTradePurchaseInvoiceByTheSalesCenter(businessCnxt.interCmpnyTradeNum, null, 0);
         });
+
+        test.afterAll(async () => {
+            await BaseClass.page.close();
+        });
+
     })
 }

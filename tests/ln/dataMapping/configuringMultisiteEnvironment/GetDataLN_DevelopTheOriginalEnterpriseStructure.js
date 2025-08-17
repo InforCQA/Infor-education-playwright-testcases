@@ -12,6 +12,8 @@ class GetDataLN_DevelopTheOriginalEnterpriseStructure {
         structureCnxt.enterpriseUnit      = structureCnxt.enterpriseUnit.replace('%s', "04");
         structureCnxt.planningCluster     = structureCnxt.planningCluster.replace('%s', "04");
         structureCnxt.planningClusterDesc = structureCnxt.planningClusterDesc.replace('%s', "04");
+        structureCnxt.planningCluster     = structureCnxt.planningCluster.replace('%s', "04");
+        structureCnxt.planningClusterDesc = structureCnxt.planningClusterDesc.replace('%s', "04");
         structureCnxt.warehouseDesc       = structureCnxt.warehouseDesc.replace('%s', '04');
         structureCnxt.site+="04";
         structureCnxt.siteDesc            =structureCnxt.siteDesc.replace('%s', '04');

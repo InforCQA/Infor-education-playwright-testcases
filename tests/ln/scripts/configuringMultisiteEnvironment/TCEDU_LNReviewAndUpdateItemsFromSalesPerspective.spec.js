@@ -18,7 +18,8 @@ const itemsBySiteCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCED
 export default function TCEDU_LNReviewAndUpdateItemsFromSalesPerspective() {
 
     test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
-        test('login', async ({ }) => { 
+        
+        test.beforeAll(async ({ }) => { 
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
         });
@@ -35,5 +36,10 @@ export default function TCEDU_LNReviewAndUpdateItemsFromSalesPerspective() {
         test('Review item by sales office and update sales price', async ({ }) => {
             await LNMasterData.reviewItemBySalesOfficeAndUpdateSalesPrice(itemsBySiteCnxt);
         });
+
+        test.afterAll(async () => {
+            await BaseClass.page.close();
+        });
+
     })
 }
