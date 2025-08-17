@@ -27,7 +27,7 @@ class CloudSuite extends BaseClass {
     static async navigateToApplication(appName) {
         const homePg = new Homepages();
         
-        console.log("navigation to LN");
+       //log.info("navigation to LN");
         
         let element = null;
         await this.pause(9);

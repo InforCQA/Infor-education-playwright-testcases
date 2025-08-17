@@ -713,7 +713,7 @@ static async createPlanningCluster(planningCluster, planningClusterDesc) {
     if (!isPresent) {
         await LNCommon.clickMainMenuItem(LNSessionCodes.PLANNING_CLUSTERS, LNMenuActions_Id.NEW);
 
-        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID,PlanningClusters_Id.PLANNING_CLUSTER_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusters);
+        await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID,PlanningClusters_Id.PLANNING_CLUSTER_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningCluster);
 
         await LNCommon.dataCellElement(await LNCommon.getDataCell(PlanningClusters_Lbl.PLANNING_CLUSTER_GRID, PlanningClusters_Id.PLANNING_CLUSTER_DESCRIPTION_GRID, LNSessionCodes.PLANNING_CLUSTERS ), 0, planningClusterDesc );
 
