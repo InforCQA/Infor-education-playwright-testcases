@@ -12,9 +12,9 @@ test.describe('LNConfiguringMultisiteEnvironment', () => {
    // TCEDU_LNSelectMapProvider();
     //TCEDU_LNReviewEnterpriseModel();
    // TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-   //TCEDU_LNReviewItemsFromGlobalPrespective();
+   TCEDU_LNReviewItemsFromGlobalPrespective();
     //TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
    // TCEDU_LNCreateANewItemUsingItemDefaults();
-    TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
+   //  TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
    // TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
 });

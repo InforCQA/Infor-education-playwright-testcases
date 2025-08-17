@@ -1928,43 +1928,56 @@ static async reviewStandardCostsByEnterpriseUnit(itemCnxt) {
 
   // Validate costing details in grid for each enterprise unit
   for (let i = 0; i < itemCnxt.enterpriseUnitsDesc.length; i++) {
-    const unitDesc = itemCnxt.enterpriseUnitsDesc[i];
 
-    // Select row by enterprise unit description
-    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID,Items_Lbl.ENTERPRISE_UNIT_GRID);
-    const rowIndex = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEM_COSTING,Items_Lbl.ENTERPRISE_UNIT_GRID,Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID,unitDesc);
+			await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING, Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID,
+					Items_Lbl.ENTERPRISE_UNIT_GRID);
+			const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEM_COSTING, Items_Lbl.ENTERPRISE_UNIT_GRID,
+					Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID, itemCnxt.enterpriseUnitsDesc[i]);
 
-    // Costing Source check
-    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.COSTING_SOURCE_GRID,Items_Lbl.COSTING_SOURCE_GRID);
-    const costingSource = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.COSTING_SOURCE_GRID,Items_Id.COSTING_SOURCE_GRID,rowIndex);
-    expect(costingSource).not.toBe("");
+			// Verifying costing source
+			await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING, Items_Id.COSTING_SOURCE_GRID,
+					Items_Lbl.COSTING_SOURCE_GRID);
+			expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,
+							Items_Lbl.COSTING_SOURCE_GRID, Items_Id.COSTING_SOURCE_GRID, rowNo), `Costing source is not defined for enterprise unit ${itemCnxt.enterpriseUnitsDesc[i]}`)
+					.not.toBeNull();
 
-    // Standard Cost value
-    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.STANDARD_COST_CURRENCY_GRID,Items_Lbl.STANDARD_COST_GRID);
-    const stdCost = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.STANDARD_COST_GRID,Items_Id.STANDARD_COST_GRID,rowIndex);
-    expect(stdCost).not.toBe("");
+			// Verifying standard costs
+			await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING, Items_Id.STANDARD_COST_CURRENCY_GRID,
+					Items_Lbl.STANDARD_COST_GRID);
 
-    // Standard Cost currency
-    const currency = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.STANDARD_COST_GRID,Items_Id.STANDARD_COST_CURRENCY_GRID,rowIndex);
-    expect(currency).not.toBe("");
+			expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,
+							Items_Lbl.STANDARD_COST_GRID, Items_Id.STANDARD_COST_GRID, rowNo), `Standard cost is not defined for enterprise unit ${itemCnxt.enterpriseUnitsDesc[i]}`)
+					.not.toBeNull();
 
-    // Supplying EU validation for BER and MUNICH
-    await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID);
+			// Verifying standard costs currency
+			expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,
+							Items_Lbl.STANDARD_COST_GRID, Items_Id.STANDARD_COST_CURRENCY_GRID, rowNo), `Standard cost currency is not defined for enterprise unit ${itemCnxt.enterpriseUnitsDesc[i]}`)
+					.not.toBeNull();
 
-   // const supplyingEU = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex);
+			// Verify Supplying enterprise unit
+			if (i == 2 || i == 3) {
+				await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING, Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID,
+						Items_Lbl.ENTERPRISE_UNIT_GRID);
+				const rowNum = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEM_COSTING, Items_Lbl.ENTERPRISE_UNIT_GRID,
+						Items_Id.ENTERPRISE_UNIT_SEC_SEG_GRID, itemCnxt.enterpriseUnitsDesc[1]);
 
-    if (i === 2 || i === 3) {
-      // Expect Amsterdam (itemCnxt.enterpriseUnitsDesc[1]) as supplying EU
-      await expect(async () => {
-        expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex)).toBe(itemCnxt.enterpriseUnitsDesc[1]);
-      }).toPass({ timeout: 10000 });
-    } else {
-      // For BOSTON and AMSTERDAM, it should be empty
-      await expect(async () => {
-       expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID,Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID,rowIndex)).toBe("");
-      }).toPass({ timeout: 10000 }); 
-    }
-  }
+				const supplyingEU = await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,
+						Items_Lbl.ENTERPRISE_UNIT_GRID, Items_Id.ENTERPRISE_UNIT_GRID, rowNum);
+
+				await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,
+						Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID, Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID);
+				expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,
+						Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID, Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID, rowNo), `Supplying enterprise unit is not ${itemCnxt.enterpriseUnitsDesc[1]} for enterprise unit ${itemCnxt.enterpriseUnitsDesc[i]}`)
+						.toBe(supplyingEU);
+			} else {
+
+				await LNCommon.moveToRequiredColumnHeader(LNSessionCodes.ITEM_COSTING,
+						Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID, Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID);
+				expect(await LNCommon.getRequiredValueFromTheGrid(LNSessionCodes.ITEM_COSTING,
+						Items_Lbl.SUPPLYING_ENTERPRISE_UNIT_GRID, Items_Id.SUPPLYING_ENTERPRISE_UNIT_GRID, rowNo), `Supplying enterprise unit is defined for enterprise unit ${itemCnxt.enterpriseUnitsDesc[i]}`)
+						.not.toBeNull();
+			}
+		}
 
   // Drill into each enterprise unit and verify costing source + components
   for (let i = 0; i < itemCnxt.enterpriseUnits.length; i++) {
