@@ -5,17 +5,17 @@ class GetDataLN_DevelopTheOriginalEnterpriseStructure {
 
     static async getLNDevelopTheOriginalEnterpriseStructureContext(structureCnxt) {
 
-        log().info("INFO : ========>>>>> Data mapping for Develop the original enterprise structure started <<<<<========= ");
+       // log().info("INFO : ========>>>>> Data mapping for Develop the original enterprise structure started <<<<<========= ");
 
         structureCnxt.name += "04";
         structureCnxt.houseNum            = structureCnxt.houseNum.replace('%s', '04');
         structureCnxt.enterpriseUnit      = structureCnxt.enterpriseUnit.replace('%s', "04");
-        structureCnxt.planningCluster     = structureCnxt.planningClusters.replace('%s', "04");
-        structureCnxt.planningClusterDesc = structureCnxt.planningClusterDescs.replace('%s', "04");
+        structureCnxt.planningCluster     = structureCnxt.planningCluster.replace('%s', "04");
+        structureCnxt.planningClusterDesc = structureCnxt.planningClusterDesc.replace('%s', "04");
         structureCnxt.warehouseDesc       = structureCnxt.warehouseDesc.replace('%s', '04');
         structureCnxt.site+="04";
         structureCnxt.siteDesc            =structureCnxt.siteDesc.replace('%s', '04');
-        structureCnxt.logisticCompany     ="3270";
+        structureCnxt.logisticCompany     ="3470";
         structureCnxt.salesOffice+='04';
         structureCnxt.salesOfficeDesc+="04";
         structureCnxt.warehouse+='04';
@@ -23,7 +23,7 @@ class GetDataLN_DevelopTheOriginalEnterpriseStructure {
         structureCnxt.offices[0]          = structureCnxt.offices[0] + structureCnxt.salesOfficeDesc;
         structureCnxt.offices[1]          = structureCnxt.offices[1] + structureCnxt.warehouseDesc;
 
-        log().info("INFO : ========>>>>> Data mapping for Develop the original enterprise structure is successfully completed <<<<<========= ");
+      //  log().info("INFO : ========>>>>> Data mapping for Develop the original enterprise structure is successfully completed <<<<<========= ");
     }
 
 }

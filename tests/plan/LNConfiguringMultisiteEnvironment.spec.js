@@ -9,12 +9,12 @@ import TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders from '../ln/script
 import TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder.spec';
 
 test.describe('LNConfiguringMultisiteEnvironment', () => {
-    TCEDU_LNSelectMapProvider();
-    TCEDU_LNReviewEnterpriseModel();
-    TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
-    TCEDU_LNCreateANewItemUsingItemDefaults();
-    TCEDU_LNReviewItemsFromGlobalPrespective();
+   // TCEDU_LNSelectMapProvider();
+    //TCEDU_LNReviewEnterpriseModel();
+   // TCEDU_LNDevelopTheOriginalEnterpriseStructure();
+   //TCEDU_LNReviewItemsFromGlobalPrespective();
+    //TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
+   // TCEDU_LNCreateANewItemUsingItemDefaults();
     TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
-    TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
+   // TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
 });

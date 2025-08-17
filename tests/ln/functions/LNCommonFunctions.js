@@ -911,7 +911,7 @@ static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCn
   // Control tab
   await LNCommon.selectHeaderTab(LNTabs.CONTROL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
 
-	const userId = "3270st02";
+	const userId = "3470st01";
 	
 	await expect(async () => {
 		expect(await (await LNCommon.getTextField(SalesWorkbench_Lbl.USER, SalesWorkbench_Id.USER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL)).inputValue()).toBe(userId);

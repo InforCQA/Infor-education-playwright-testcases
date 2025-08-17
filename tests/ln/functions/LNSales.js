@@ -356,7 +356,7 @@ class LNSales extends BaseClass {
     await LNCommon.selectHeaderTab(LNTabs.CONTROL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL);
 
     await expect(async () => {
-      expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.USER, OrderIntakeWorkbench_Id.USER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL)).inputValue()).toBe("3270st02");
+      expect(await (await LNCommon.getTextField(OrderIntakeWorkbench_Lbl.USER, OrderIntakeWorkbench_Id.USER, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_PURCHASE_DETAIL)).inputValue()).toBe("3470st01");
     }).toPass({ timeout: 10000 });
 
     // Screenshot for tabs
@@ -435,7 +435,7 @@ class LNSales extends BaseClass {
         OrderIntakeWorkbench_Lbl.ORDER_IN_TRANSACTION_LINE_PURCHASE,
         OrderIntakeWorkbench_Id.ORDER_IN_TRANSACTION_LINE_PURCHASE,
         LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_PURCHASE
-      )).inputValue()).toBe("3270");
+      )).inputValue()).toBe("3470");
     }).toPass({ timeout: 60000 });
 
     //await screenshot("Transaction Line Verified");

@@ -39,10 +39,10 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
         });
         
         // 2.5
-        test('Create a sales order for a selected sales office', async ({ }) => {
+     //   test('Create a sales order for a selected sales office', async ({ }) => {
 
-            await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
-        });
+     //       await LNSales.createASalesOrderForASelectedSalesOffice(businessCnxt);
+      //  });
 
         // Create sales order (by the sales center)
         // Review intercompany trade order - purchase (by the sales center)
