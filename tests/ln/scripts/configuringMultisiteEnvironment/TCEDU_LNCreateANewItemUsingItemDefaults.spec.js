@@ -17,6 +17,8 @@ const itemCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNCon
  * ---------------------------------------------------------------------------------------*/
 export default function TCEDU_LNCreateANewItemUsingItemDefaults() {
 
+    test.describe.configure({ mode: 'serial' });
+    
     test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
 
         test.beforeAll(async ({ }) => {

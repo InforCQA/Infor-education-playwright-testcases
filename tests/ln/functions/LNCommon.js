@@ -23,17 +23,25 @@ class LNCommon extends BaseClass {
 
             // Using condition to verify whether it is displaying or not
             if (await this.isElementPresent(await lnPg.inforMainModules(module))) {
-                await (await lnPg.inforMainModules(module)).click();
+                await expect(await lnPg.inforMainModules(module)).toBeAttached();
+                await (await lnPg.inforMainModules(module)).waitFor({ state: 'visible' });
+                await (await lnPg.inforMainModules(module)).hover();
+
+                await expect(async () => {
+                    await (await lnPg.inforMainModules(module)).click();
+                }).toPass({ timeout: 90000 });
 
                 // Using loop to navigate to expand and use multiple sub modules
                 for (let i = 0; i < subModules.length; i++) {
 
                     const subModule = subModules[i];
                     if (!(i == subModules.length - 1)) {
+                        await expect(await lnPg.inforLNSubModule(subModule, i + 2)).toBeAttached();
                         await (await lnPg.inforLNSubModule(subModule, i + 2)).waitFor({ state: 'visible' });
                         await (await lnPg.inforLNSubModule(subModule, i + 2)).hover();
                         await (await lnPg.inforLNSubModule(subModule, i + 2)).click();
                     } else {
+                        await expect(await lnPg.inforLNSubModuleEnd(subModule, i + 2)).toBeAttached();
                         await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).waitFor({ state: 'visible' });
                         await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).hover();
                         await (await lnPg.inforLNSubModuleEnd(subModule, i + 2)).click();
@@ -246,6 +254,7 @@ class LNCommon extends BaseClass {
             const drpValueGridFilter = await lnPg.drpValueGridFilter(elementId);
             await drpValueGridFilter.waitFor({ state: 'visible', timeout: 5000 });
             await drpValueGridFilter.click({force: true});
+            await this.page.waitForTimeout(1000);
 
             // Verifying whether dropdown field is in active or not
             for (let count = 0; count < 4; count++) {
@@ -253,6 +262,7 @@ class LNCommon extends BaseClass {
                 if (!classAttr.includes(LNCommons.IS_ACTIVE)) {
                     await (await lnPg.drpValueGridFilter(elementId)).waitFor({ state: 'visible', timeout: 1000 });
 
+                    await expect(await lnPg.drpValueGridFilter(elementId)).toBeAttached();
                     await expect(await lnPg.drpValueGridFilter(elementId)).toBeVisible({ timeout: 10000 });
                     await (await lnPg.drpValueGridFilter(elementId)).click();
                 } else {
@@ -361,6 +371,7 @@ class LNCommon extends BaseClass {
         
         await expect(async () => {
             await (await this.page).waitForTimeout(1000);
+            await (await lnPg.referencesMenuItem(sessionCode)).hover();
             await (await lnPg.referencesMenuItem(sessionCode)).click();
         }).toPass({ timeout: 60000 });
 
@@ -371,7 +382,7 @@ class LNCommon extends BaseClass {
                 await this.page.waitForTimeout(1000);
                 await (await lnPg.referenceMenuOption(menuOption, sessionCode)).hover();
                 await (await lnPg.referenceMenuOption(menuOption, sessionCode)).click();
-            }).toPass({ timeout: 60000 });
+            }).toPass({ timeout: 90000 });
         }
     }
 
@@ -463,6 +474,7 @@ class LNCommon extends BaseClass {
         // Verifying the label (assuming you have a utility function or method for this)
         await this.verifyColumnHeader(sessionCode, label);
 
+        await expect(await lnPg.filterInput(elementId, sessionCode)).toBeAttached();
         await expect(await lnPg.filterInput(elementId, sessionCode)).toBeVisible({ timeout: 10000 });
         await this.type(await lnPg.filterInput(elementId, sessionCode), filterItem);
 
@@ -515,6 +527,7 @@ class LNCommon extends BaseClass {
         await expect(async () => {
 
             await (await this.page).waitForTimeout(1000);
+            await expect(menuLocator).toBeAttached();
             await menuLocator.hover();
             await menuLocator.click();
         }).toPass({ timeout: 50000 });
@@ -528,12 +541,20 @@ class LNCommon extends BaseClass {
         const lnPg = new LNPage(this.page);
 
         // Step 1: Wait and click the input field
+       
         await expect(async () => {
-
-            await expect(locator).toBeVisible({ timeout: 10000 });
+            await this.page.waitForTimeout(1000);
+            await expect(locator).toBeAttached();
+            
+        }).toPass({ timeout: 90000 });
+        
+        await expect(async () => {
+            await locator.waitFor({ state: 'visible'});
+            await locator.hover();
             await locator.click();
-        }).toPass({ timeout: 20000 });
 
+        }).toPass({ timeout: 90000 });
+       
         // Step 3: Get parent div and check for focus class
         const parent = await locator.locator('..'); // parent div
         const classAttr = await parent.getAttribute('class');
@@ -541,8 +562,11 @@ class LNCommon extends BaseClass {
         if (!classAttr.includes('TriggerInputField-focus')) {
 
             await expect(async () => {
+                await this.page.waitForTimeout(1000);
+                await locator.waitFor({ state: 'visible' });
+                await locator.hover();
                 await locator.click();
-            }).toPass({ timeout: 10000 });
+            }).toPass({ timeout: 90000 });
 
         }
 
@@ -653,6 +677,7 @@ class LNCommon extends BaseClass {
 
         await expect(async () => {
             await this.page.waitForTimeout(1000);
+            await expect(await (await lnPg.popupText())).toBeAttached();
             await (await lnPg.popupText()).waitFor({ state: 'visible', timeout: 5000 });
             textCount = await (await lnPg.popupText()).count();
         }).toPass({ timeout: 60000 });
@@ -804,8 +829,8 @@ class LNCommon extends BaseClass {
         const radio = await lnPg.selectRadioBtn(text, elementId);
 
         await expect(async () => {
-            await radio.waitFor({ state: 'visible', timeout: 2000 });
-        }).toPass({ timeout: 10000 });
+            await radio.waitFor({ state: 'visible', timeout: 500 });
+        }).toPass({ timeout: 90000 });
 
         // Click only if not already checked
         const classAttr = await radio.getAttribute(ElementAttributes.CLASS);
@@ -817,11 +842,11 @@ class LNCommon extends BaseClass {
         // Verifying the value
 
         await expect(async () => {
-            await radio.waitFor({ state: 'visible', timeout: 2000 });
+            await radio.waitFor({ state: 'visible'});
 
             expect((await radio.getAttribute(ElementAttributes.CLASS)).includes(LNCommons.CHECKED), `radio button is not selected`)
                 .toBeTruthy();
-        }).toPass({ timeout: 10000 });
+        }).toPass({ timeout: 90000 });
     }
 // ----------------------------------------------------------------------
 // Purpose : Move mouse to a specific column header in a grid

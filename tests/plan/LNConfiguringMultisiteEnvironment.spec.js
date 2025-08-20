@@ -8,13 +8,39 @@ import TCEDU_LNReviewItemsFromGlobalPrespective from '../ln/scripts/configuringM
 import TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders.spec';
 import TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder.spec';
 
-test.describe('LNConfiguringMultisiteEnvironment', () => {
-   // TCEDU_LNSelectMapProvider();
-    //TCEDU_LNReviewEnterpriseModel();
-   // TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-   TCEDU_LNReviewItemsFromGlobalPrespective();
-    //TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
-   // TCEDU_LNCreateANewItemUsingItemDefaults();
-   //  TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
-   // TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
+test.describe.configure({ mode: 'parallel' });
+
+test.describe('TCEDU_LNSelectMapProvider', () => {
+   TCEDU_LNSelectMapProvider();
 });
+
+test.describe('TCEDU_LNReviewEnterpriseModel', () => {
+   TCEDU_LNReviewEnterpriseModel();
+});
+
+test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
+   TCEDU_LNDevelopTheOriginalEnterpriseStructure();
+});
+
+test.describe('TCEDU_LNReviewItemsFromGlobalPrespective', () => {
+   TCEDU_LNReviewItemsFromGlobalPrespective();
+});
+
+test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
+   TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
+});
+
+// test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
+//     TCEDU_LNCreateANewItemUsingItemDefaults();
+// });
+
+test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
+   TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
+});
+
+// test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
+   // TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
+// });
+   
+   
+   

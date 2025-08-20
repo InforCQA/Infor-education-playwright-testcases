@@ -17,6 +17,8 @@ const itemsBySiteCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCED
  * ---------------------------------------------------------------------------------------*/
 export default function TCEDU_LNReviewAndUpdateItemsFromSalesPerspective() {
 
+    test.describe.configure({ mode: 'serial' });
+    
     test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
         
         test.beforeAll(async ({ }) => { 

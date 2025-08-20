@@ -34,6 +34,8 @@ const warehouseCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-
  * ---------------------------------------------------------------------------------------*/
 export default function TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder() {
 
+    test.describe.configure({ mode: 'serial' });
+    
     test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
 
         test.beforeAll(async ({}) => {

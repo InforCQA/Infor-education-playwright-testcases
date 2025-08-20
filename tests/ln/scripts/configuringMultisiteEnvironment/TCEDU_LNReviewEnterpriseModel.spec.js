@@ -18,6 +18,8 @@ const enterpriseMdlCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TC
 
 export default function TCEDU_LNReviewEnterpriseModel() {
 
+    test.describe.configure({ mode: 'serial' });
+    
     test.describe('TCEDU_LNReviewEnterpriseModel', () => {
 
         test.beforeAll(async () => {

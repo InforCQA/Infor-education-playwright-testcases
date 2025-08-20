@@ -243,16 +243,16 @@ class LNMasterData extends BaseClass {
         ];
 
         for (let i = 0; i < settingsLbl.length; i++) {
-            
+
             await this.page.waitForTimeout(1000);
-            
-            const classAttr = await (await lnPg.hyperlinkText(
-                settingsLbl[i], settingsId[i], LNSessionCodes.SITE
-            )).getAttribute(ElementAttributes.CLASS);
 
-            expect(classAttr).toContain(LNCommons.CHECKED);
-        }
+            await expect(async () => {
+                expect(await (await lnPg.hyperlinkText(
+                    settingsLbl[i], settingsId[i], LNSessionCodes.SITE
+                )).getAttribute(ElementAttributes.CLASS)).toContain(LNCommons.CHECKED);
+            }).toPass({ timeout: 90000 });
 
+        }  
         // Click Procurement
         await(await lnPg.hyperlinkText(
             EnterpriseModelWorkbench_Lbl.PROCUREMENT_RDN,

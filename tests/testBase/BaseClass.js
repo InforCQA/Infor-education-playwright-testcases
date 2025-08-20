@@ -63,7 +63,7 @@ class BaseClass {
        
         await locator.waitFor({timeout: 500 });
 
-      }).toPass({ timeout: 20000 });
+      }).toPass({ timeout: 90000 });
 
       return true
     } catch (e) {

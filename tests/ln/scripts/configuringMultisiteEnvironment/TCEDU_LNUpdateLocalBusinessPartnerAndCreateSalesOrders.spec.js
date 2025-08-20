@@ -24,6 +24,8 @@ const businessCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-L
  * ---------------------------------------------------------------------------------------*/
 export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders() {
 
+    test.describe.configure({ mode: 'serial' });
+    
     test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
 
         test.beforeAll(async ({ }) => {

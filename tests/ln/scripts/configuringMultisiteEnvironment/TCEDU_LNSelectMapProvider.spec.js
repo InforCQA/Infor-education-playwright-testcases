@@ -18,6 +18,8 @@ export default function TCEDU_LNSelectMapProvider() {
 
     test.describe('TCEDU_LNSelectMapProvider', () => {
         
+        test.describe.configure({ mode: 'serial' });
+        
         test.beforeAll(async ({ }) => {
             await BaseClass.globalSetup();
             await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);

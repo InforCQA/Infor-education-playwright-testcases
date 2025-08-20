@@ -23,9 +23,11 @@ const structureCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-
  * ---------------------------------------------------------------------------------------*/
 export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
 
+    test.describe.configure({ mode: 'serial' });
+
     test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
 
-        test(async ({ }) => {
+        test.beforeAll(async ({ }) => {
 
             // Input Data Returned From Data Mapping
             await GetDataLN_DevelopTheOriginalEnterpriseStructure.getLNDevelopTheOriginalEnterpriseStructureContext(structureCnxt);
