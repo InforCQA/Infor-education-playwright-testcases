@@ -11,7 +11,7 @@ class GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders {
 
         console.log("INFO : ========>>>>> Data mapping for Update Local Business Partner and Create Sales Orders started <<<<<========= ");
 
-        businessCnxt.plannedDate = await DateFunctions.nextWeekDate(WeekDays.MONDAY, DateFormats.MDDYYYY);
+        businessCnxt.plannedDate = await DateFunctions.nextWeekDate(WeekDays.MONDAY, DateFormats.M_D_YYYY);
 
         console.log("INFO : ========>>>>> Data mapping for Update Local Business Partner and Create Sales Orders is successfully completed <<<<<========= ");
     }
