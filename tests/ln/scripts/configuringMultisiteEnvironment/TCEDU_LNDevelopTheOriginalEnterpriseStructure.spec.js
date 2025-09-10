@@ -33,7 +33,7 @@ export default function TCEDU_LNDevelopTheOriginalEnterpriseStructure() {
             await GetDataLN_DevelopTheOriginalEnterpriseStructure.getLNDevelopTheOriginalEnterpriseStructureContext(structureCnxt);
 
             await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
 
         test('Create an address Type the step', async ({ }) => {

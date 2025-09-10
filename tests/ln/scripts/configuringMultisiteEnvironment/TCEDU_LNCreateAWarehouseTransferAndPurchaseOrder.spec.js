@@ -42,7 +42,7 @@ export default function TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder() {
             
             await BaseClass.globalSetup();
             
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
 
         // Create warehouse transfer (by sales center)

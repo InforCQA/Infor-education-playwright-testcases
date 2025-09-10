@@ -23,7 +23,7 @@ export default function TCEDU_LNReviewAndUpdateItemsFromSalesPerspective() {
         
         test.beforeAll(async ({ }) => { 
             await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
 
         test('Review item by site and update purchase price', async ({ }) => {

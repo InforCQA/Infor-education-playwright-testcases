@@ -32,7 +32,7 @@ export default function TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders()
 
             await GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders.getLNBusinessPartnerContext(businessCnxt);
             await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
         
         // 2.4

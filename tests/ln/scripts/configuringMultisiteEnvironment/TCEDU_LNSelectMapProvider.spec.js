@@ -3,6 +3,7 @@ import ProductNames from "../../../commons/constants/ProductNames";
 import CloudSuite from "../../../commons/functions/CloudSuite";
 import BaseClass from "../../../testBase/BaseClass";
 import LNTools from "../../functions/LNTools";
+import config from '../../../plan/LNConfiguringMultisiteEnvironment.spec';
 
 /*---------------------------------------------------------------------------------------
 * Purpose   : Select a map provider
@@ -22,7 +23,7 @@ export default function TCEDU_LNSelectMapProvider() {
         
         test.beforeAll(async ({ }) => {
             await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
         
         test('Select a map provider', async ({ }) => {

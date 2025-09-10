@@ -24,7 +24,7 @@ export default function TCEDU_LNReviewEnterpriseModel() {
 
         test.beforeAll(async () => {
             await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
 
         test('Review the enterprise model in LN CE', async ({ }) => {
