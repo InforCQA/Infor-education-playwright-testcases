@@ -4,6 +4,7 @@ import CloudSuite from "../../../commons/functions/CloudSuite";
 import BaseClass from "../../../testBase/BaseClass";
 import LNMasterData from '../../functions/LNMasterData';
 import GetDataLN_DevelopTheOriginalEnterpriseStructure from '../../dataMapping/configuringMultisiteEnvironment/GetDataLN_DevelopTheOriginalEnterpriseStructure';
+import config from '../../../plan/LNConfiguringMultisiteEnvironment.spec';
 
 // Property data for testcases
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));

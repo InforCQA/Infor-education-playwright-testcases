@@ -3,6 +3,7 @@ import ProductNames from "../../../commons/constants/ProductNames";
 import CloudSuite from "../../../commons/functions/CloudSuite";
 import BaseClass from "../../../testBase/BaseClass";
 import LNMasterData from '../../functions/LNMasterData';
+import config from '../../../plan/LNConfiguringMultisiteEnvironment.spec';
 
 /**---------------------------------------------------------------------------------------
  * Purpose  : Review the enterprise model

@@ -5,6 +5,7 @@ import BaseClass from "../../../testBase/BaseClass";
 import LNCommonFunctions from '../../functions/LNCommonFunctions';
 import LNProcurement from '../../functions/LNProcurement';
 import LNWarehousing from '../../functions/LNWarehousing';
+import config from '../../../plan/LNConfiguringMultisiteEnvironment.spec';
 
 // Property data for testcases
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));

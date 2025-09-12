@@ -6,6 +6,7 @@ import LNMasterData from "../../functions/LNMasterData";
 import LNSales from "../../functions/LNSales";
 import LNCommonFunctions from "../../functions/LNCommonFunctions";
 import GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders from "../../dataMapping/configuringMultisiteEnvironment/GetDataLN_UpdateLocalBusinessPartnerAndCreateSalesOrders";
+import config from "../../../plan/LNConfiguringMultisiteEnvironment.spec";
 
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
 const businessCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/UpdateLocalBusinessPartnerAndCreateSalesOrders.properties.json")));
