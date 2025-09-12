@@ -138,6 +138,19 @@ class BaseClass {
     await value.click();
   }
 
+  // In your base class (e.g., basePage.js)
+  waitForLocator = async (frame, xpath, timeout = 90000) => {
+    const locator = frame.locator(xpath);
+
+    try {
+      await locator.waitFor({ state: 'attached', timeout });
+      return locator;
+    } catch (error) {
+      throw new Error(`Unable to find locator ${xpath}\nOriginal error: ${error.message}`);
+    }
+  };
+
+
 }
 
 export default BaseClass;
