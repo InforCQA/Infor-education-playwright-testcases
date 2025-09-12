@@ -20,9 +20,9 @@ test.describe('TCEDU_LNSelectMapProvider', () => {
    TCEDU_LNSelectMapProvider();
 });
 
-// test.describe('TCEDU_LNReviewEnterpriseModel', () => {
-//    TCEDU_LNReviewEnterpriseModel();
-// });
+test.describe('TCEDU_LNReviewEnterpriseModel', () => {
+   TCEDU_LNReviewEnterpriseModel();
+});
 
 // test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
 //    TCEDU_LNDevelopTheOriginalEnterpriseStructure();
