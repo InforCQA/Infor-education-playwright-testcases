@@ -13,7 +13,7 @@ class BaseClass {
     const extPath = `${process.cwd()}/node_modules/playwright-zoom/dist/lib/zoom-extension`;
 
     this.context = await chromium.launchPersistentContext('', {
-      headless: false,
+      headless: true,
       screenshot: 'only-on-failure',
       video: 'retain-on-failure',
       args: [
