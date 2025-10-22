@@ -1,8 +1,11 @@
 import {test} from '@playwright/test';
 import ProductNames from "../../../commons/constants/ProductNames";
 import CloudSuite from "../../../commons/functions/CloudSuite";
-import BaseClass from "../../../testBase/BaseClass";
+import BaseClass, { log } from "../../../testBase/BaseClass";
 import LNTools from "../../functions/LNTools";
+import config from '../../../plan/LNConfiguringMultisiteEnvironment.spec';
+import fs from 'fs';
+import { createTestLogger } from '../../../../utils/logger.js';
 
 /*---------------------------------------------------------------------------------------
 * Purpose   : Select a map provider
@@ -14,24 +17,23 @@ import LNTools from "../../functions/LNTools";
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
 const mapCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-LNConfiguringMultisiteEnvironment/SelectMapProvider.properties.json")));
 
-export default function TCEDU_LNSelectMapProvider() {
 
-    test.describe('TCEDU_LNSelectMapProvider', () => {
-        
-        test.describe.configure({ mode: 'serial' });
-        
-        test.beforeAll(async ({ }) => {
+export default function TCEDU_LNSelectMapProvider() {
+  
+    BaseClass.describeTest('TCEDU_LNSelectMapProvider', () => {
+
+        test.beforeAll('',async ({ }) => {
             await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
-        
+
         test('Select a map provider', async ({ }) => {
             await CloudSuite.navigateToApplication(ProductNames.LN);
             await LNTools.selectMapProvider(mapCnxt);
         });
 
         test.afterAll(async () => {
-            await BaseClass.page.close();
+            await CloudSuite.logOut();
         });
     })
 }

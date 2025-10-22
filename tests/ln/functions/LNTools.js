@@ -1,4 +1,4 @@
-import BaseClass from "../../testBase/BaseClass";
+import BaseClass, { log } from "../../testBase/BaseClass";
 import LNSessionTabs from "../constants/LNSessionTabs";
 import LNCommon from "./LNCommon";
 import { setBrowserZoom } from 'playwright-zoom';
@@ -24,6 +24,8 @@ class LNTools extends BaseClass {
 	* -----------------------------------------------------------------------------------------*/
     static async selectMapProvider(mapCnxt) {
 
+        log.info("Select a map provider started");
+
         await setBrowserZoom(this.page, 50);
 
         await LNCommon.navigateToLNModule(LNSessionTabs.TOOLS, LNSessionTabs.APPLICATION_CONFIGURATION,
@@ -34,10 +36,14 @@ class LNTools extends BaseClass {
         await LNCommon.clickAndSelectDropdownField(MapProviders_Lbl.DEFAULT_MAP_PROVIDER_DRP,
             MapProviders_Id.DEFAULT_MAP_PROVIDER_DRP, mapCnxt.defaultMapProvider);
 
+        await this.screenshot("Select a map provider");
+
         await LNCommon.clickTextMenuItem(LNSessionCodes.MAP_PROVIDERS, LNMenuActions_Id.OK, LNMenuActions_Lbl.OK);
 
         // Close all LN Modules
         await LNCommon.collapseLNModule(LNSessionTabs.TOOLS);
+
+        log.info("Select a map provider started successful");
     }
 }
 

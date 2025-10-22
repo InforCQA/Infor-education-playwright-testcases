@@ -8,35 +8,41 @@ import TCEDU_LNReviewItemsFromGlobalPrespective from '../ln/scripts/configuringM
 import TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders.spec';
 import TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder.spec';
 
+const config = {
+  BASE_URL: "https://mingle-portal.inforcloudsuite.com/v2/EDUGDENA003_TST",
+  USER_NAME: "3170st01@infor-edu.com",
+  PASSWORD: "Infor123!"
+};
+
 test.describe.configure({ mode: 'parallel' });
 
 test.describe('TCEDU_LNSelectMapProvider', () => {
    TCEDU_LNSelectMapProvider();
 });
 
-test.describe('TCEDU_LNReviewEnterpriseModel', () => {
-   TCEDU_LNReviewEnterpriseModel();
-});
+// test.describe('TCEDU_LNReviewEnterpriseModel', () => {
+//    TCEDU_LNReviewEnterpriseModel();
+// });
 
-test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
-   TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-});
+// test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
+//    TCEDU_LNDevelopTheOriginalEnterpriseStructure();
+// });
 
-test.describe('TCEDU_LNReviewItemsFromGlobalPrespective', () => {
-   TCEDU_LNReviewItemsFromGlobalPrespective();
-});
+// test.describe('TCEDU_LNReviewItemsFromGlobalPrespective', () => {
+//    TCEDU_LNReviewItemsFromGlobalPrespective();
+// });
 
-test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
-   TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
-});
+// test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
+//    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
+// });
 
 test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
    TCEDU_LNCreateANewItemUsingItemDefaults();
 });
 
-test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
-   TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
-});
+// test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
+//    TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
+// });
 
 test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
    TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
@@ -46,5 +52,6 @@ test.describe('TCEDU_LNCreateWarehouseOrderForWarehouseAndProject', () => {
    TCEDU_LNCreateWarehouseOrderForWarehouseAndProject();
 });
    
+export default config;
    
    

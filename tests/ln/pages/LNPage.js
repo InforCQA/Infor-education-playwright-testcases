@@ -115,8 +115,10 @@ class LNPage extends LNCustomActions{
         )};
 
     /* inforMainModules - DynamicLink */
-    inforMainModules = async(param) =>{
-        return await(await this.iframe()).locator(`//label[text()='${param}'][@aria-level='1']`)};
+    inforMainModules = async (param) => {
+        return await this.waitForLocator(await this.iframe(), `//label[text()='${param}'][@aria-level='1']`)
+    };
+        
 
     /* inforLNSubModulesLast - DynamicLink */
     inforLNSubModulesLast = (text) =>

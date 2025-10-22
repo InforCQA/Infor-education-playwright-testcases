@@ -3,6 +3,7 @@ import ProductNames from "../../../commons/constants/ProductNames";
 import CloudSuite from "../../../commons/functions/CloudSuite";
 import BaseClass from "../../../testBase/BaseClass";
 import LNMasterData from '../../functions/LNMasterData';
+import config from '../../../plan/LNConfiguringMultisiteEnvironment.spec';
 
 // Property data for testcases
 const loginData = JSON.parse(JSON.stringify(require("../../../commons/data/productCredentials.json")));
@@ -23,7 +24,7 @@ export default function TCEDU_LNReviewAndUpdateItemsFromSalesPerspective() {
         
         test.beforeAll(async ({ }) => { 
             await BaseClass.globalSetup();
-            await CloudSuite.login(loginData.lnUrl, loginData.lnmultisiteUsername, loginData.lnmultisitePassword);
+            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
 
         test('Review item by site and update purchase price', async ({ }) => {

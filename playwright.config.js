@@ -1,11 +1,12 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  workers: 1,
+  //workers: 1,
   use: {
     browserName: undefined,
     headless: undefined,
     trace: 'on',
+   screenshot: 'only-on-failure'
   },
   globalSetup: './global-setup.js',
   testDir: './tests',
@@ -13,7 +14,7 @@ export default defineConfig({
   timeout: 90000 * 1000,
   projects: [
     {
-      name: 'InforOS',
+      name: 'LN',
       testMatch: 'plan/LNConfiguringMultisiteEnvironment.spec.js',
     },
   ],
