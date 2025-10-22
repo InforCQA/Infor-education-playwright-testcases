@@ -6,6 +6,7 @@ export default defineConfig({
     browserName: undefined,
     headless: undefined,
     trace: 'on',
+   screenshot: 'only-on-failure'
   },
   globalSetup: './global-setup.js',
   testDir: './tests',

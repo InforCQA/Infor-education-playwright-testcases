@@ -1,12 +1,9 @@
 
 import Homepages from '../pages/CommonPage.js';
-import BaseClass from '../../testBase/BaseClass.js';
+import BaseClass, { log, logFiles } from '../../testBase/BaseClass.js';
 import Commons from  '../constants/Commons.js';
 import ElementAttributes from '../constants/ElementAttributes.js';
 import { expect } from '@playwright/test';
-import { log } from 'console';
-import { getLoggerForTestClass } from '../../../utils/logger.js';
-const { getCurrentLogger } = require('../../../utils/logContext.js');
 
 /* --------------------------------------------------------
 	 * Objective : Login to Cloudsuite
@@ -27,7 +24,7 @@ class CloudSuite extends BaseClass {
     static async navigateToApplication(appName) {
         const homePg = new Homepages();
         
-       //log.info("navigation to LN");
+        log.info('navigate to LN.');
         
         let element = null;
         await this.pause(9);
@@ -63,7 +60,15 @@ class CloudSuite extends BaseClass {
 				// Verify that context apps is collapsed
 				expect(await (await homePg.btnV2ContextApps()).getAttribute(ElementAttributes.CLASS)).not.toBe(Commons.IS_ACTIVE);
 			}
-		}
+		} 
+
+        static async logOut() {
+
+            const homePg = new Homepages();
+
+           await homePg.userIcon().click();
+           await homePg.signOut().click();
+        }
 
 }
 

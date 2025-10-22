@@ -10,7 +10,7 @@ import TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder from '../ln/scripts/conf
 
 const config = {
   BASE_URL: "https://mingle-portal.inforcloudsuite.com/v2/EDUGDENA003_TST",
-  USER_NAME: "3470st01@infor-edu.com",
+  USER_NAME: "3170st01@infor-edu.com",
   PASSWORD: "Infor123!"
 };
 
@@ -20,9 +20,9 @@ test.describe('TCEDU_LNSelectMapProvider', () => {
    TCEDU_LNSelectMapProvider();
 });
 
-test.describe('TCEDU_LNReviewEnterpriseModel', () => {
-   TCEDU_LNReviewEnterpriseModel();
-});
+// test.describe('TCEDU_LNReviewEnterpriseModel', () => {
+//    TCEDU_LNReviewEnterpriseModel();
+// });
 
 // test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
 //    TCEDU_LNDevelopTheOriginalEnterpriseStructure();

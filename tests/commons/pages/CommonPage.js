@@ -11,6 +11,8 @@ class Homepages extends BaseClass {
   password = () => this.page.locator("//input[@name='pass']");
   submit = () =>   this.page.locator("//span[text()='Sign in']");
   menuBar = () =>  this.page.locator("//*[contains(@id,'nav-launcher')]");
+  userIcon = () =>  this.page.locator("//*[@id='osp-nav-user-profile']");
+  signOut = () =>  this.page.locator("//*[@ygtrackclick='Sign Out']");
 
   // Application name (V2) 
   appNameV2 = "//*[local-name()='ids-text'][normalize-space()='%s']";
@@ -20,13 +22,7 @@ class Homepages extends BaseClass {
 
   // Close selected toolbar
   closeSelectedToolbar = "//*[contains(@id,'tab') and not(contains(@id,'more')) and contains(@class,'selected')]//*[contains(@data-osp-id,'close')]";
-
-  // User icon
-  userIcon = "//button[@id='rNavUsrBtn']";
-
-  // Sign out link
-  signOut = "//a[@id='usrSignOut']";
-
+  
   // App menu button
   appMenu = "//*[@id='mhdrAppBtn']";
 
