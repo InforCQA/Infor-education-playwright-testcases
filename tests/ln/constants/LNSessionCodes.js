@@ -1882,6 +1882,7 @@ class LNSessionCodes {
     static ACTIVATE_CONTRACTS = "tdsls3205m000";
     static ITEM_ORDERING = "tcibd2600m000";
     static TRANSFER_PURCHASE_ORDER_ADVICE = "whina3212m000";
+    static INTERCOMPANY_TRADE_PARAMETERS = "tcitr0100m000";
 }
 
 export default LNSessionCodes;

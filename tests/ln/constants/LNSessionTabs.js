@@ -3852,6 +3852,10 @@ class LNSessionTabs {
   static GENERATE_SUBCONTRACTING_PURCHASE_DOCUMENTS = "Generate Subcontracting Purchase Documents";
 
   static TRANSFER_PURCHASE_ORDER_ADVICE = "Transfer Purchase Order Advice";
+
+  static INTERCOMPANY_TRADE_PARAMETERS = "Intercompany Trade Parameters";
+
+  static OUTBOUND_ORDER_LINES_PERSONALIZATION = "Outbound Order Lines (Personalization)";
 }
 
 export default LNSessionTabs;

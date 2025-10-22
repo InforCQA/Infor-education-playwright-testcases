@@ -18,6 +18,12 @@ import LNTabs from "../constants/LNTabs";
 import LNPage from "../pages/LNPage";
 import LNCommon from "./LNCommon";
 import LNSessionTabActions from "./LNSessionTabActions";
+import Parameters_Lbl from "../constants/elementLbls/Parameters_Lbl";
+import Parameters_Id from "../constants/elementIds/Parameters_Id";
+import Relationships_Lbl from "../constants/elementLbls/Relationships_Lbl";
+import Relationships_Id from "../constants/elementIds/Relationships_Id";
+import Orders_Lbl from "../constants/elementLbls/Orders_Lbl";
+import Orders_Id from "../constants/elementIds/Orders_Id";
 import { expect } from "@playwright/test";
 
 
@@ -861,7 +867,7 @@ static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCn
   await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
 
   // Clear additional filter if enabled
-  const isClearEnabled = !(await (await commonPg.textMenuWithoutLabel( LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER)).getAttribute('class')).includes(LNCommons.DISABLED);
+  const isClearEnabled = !(await (await commonPg.textMenuWithoutLabel( LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER)).getAttribute(ElementAttributes.CLASS)).includes(LNCommons.DISABLED);
 
   if (isClearEnabled) {
     await LNCommon.clickTextMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER, LNMenuActions_Lbl.CLEAR_ADDITIONAL_FILTER);
@@ -935,6 +941,468 @@ static async reviewIntercompanyTradeOrderSalesByTheDistributionCenter(businessCn
 
   await LNCommon.verifySessionTab(LNSessionTabs.SALES_ORDER);
   console.log("=========>>>>> Review intercompany trade order - sales (by the distribution center) completed successfully <<<<<=========");
+}
+
+/*-------------------------------------------------------------------------------------------
+ * Objective : Support Internal Material Delivery to Project
+ * Workbook	 : LN Cloud: Configuring Multisite Environment
+ * Exercises : 3.4.1
+ * ------------------------------------------------------------------------------------------*/
+static async supportInternalMaterialDeliveryToProject(parameter) {
+  console.log("=========>>>>> Support Internal Material Delivery to Project started <<<<<=========");
+  // Initialising page elements
+  const commonPg = new LNPage(this.page);
+
+  // Navigate to Common --> Intercompany Trade --> Parameters
+  await LNCommon.navigateToLNModule(LNSessionTabs.COMMON, LNSessionTabs.INTERCOMPANY_TRADE, LNSessionTabs.PARAMETERS);
+
+  // Verify Session Tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_PARAMETERS);
+
+  // Filter required record
+  await LNCommon.filterRequiredRecord(Parameters_Lbl.DESCRIPTION_INTERCOMPANY_TRADE_GRID,Parameters_Id.DESCRIPTION_INTERCOMPANY_TRADE_GRID,LNSessionCodes.INTERCOMPANY_TRADE_PARAMETERS,parameter);
+
+  // Select required record and get the row number
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.INTERCOMPANY_TRADE_PARAMETERS,Parameters_Lbl.DESCRIPTION_INTERCOMPANY_TRADE_GRID,Parameters_Id.DESCRIPTION_INTERCOMPANY_TRADE_GRID,parameter);
+
+  // Drilldown on required record by row number
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.INTERCOMPANY_TRADE_PARAMETERS, String(rowNo));
+
+  // Verify Session Tab again after drilldown
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_PARAMETERS);
+
+  // Verify the heading "Order Settings" exists
+  expect(await this.isElementPresent(commonPg.verifyHeader, Parameters_Lbl.ORDER_SETTINGS)).toBeTruthy();
+
+  // Select the checkbox "Support Internal Material Delivery to Project"
+  await LNCommon.selectCheckbox(Parameters_Lbl.SUPPORT_INTERNAL_MATERIAL_DELIVERY_TO_PROJECT_CHK, Parameters_Id.SUPPORT_INTERNAL_MATERIAL_DELIVERY_TO_PROJECT_CHK);
+
+  // Click Save and Close
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_PARAMETERS, LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // Verify Session Tab after saving
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_PARAMETERS);
+
+  // Take a screenshot for evidence
+  await page.screenshot({ path: 'Support_Internal_Material_Delivery_to_Project.png' });
+
+  // Close the Intercompany Trade Parameters tab
+  await LNSessionTabActions.closeTab(LNSessionTabs.INTERCOMPANY_TRADE_PARAMETERS);
+
+  // Collapse the Common LN Module
+  await LNCommon.collapseLNModule(LNSessionTabs.COMMON);
+
+  console.log("=========>>>>> Support Internal Material Delivery to Project completed successfully <<<<<=========");
+}
+/**
+ * Objective : Intercompany trade relations between Boston Enterprise Unit and any US entity
+ * Workbook  : LN Cloud: Configuring Multisite Environment
+ * Exercises : 3.4.3
+ */
+
+static async intercompanyTradeRelationsBetweenBostonEnterpriseUnitAndAnyUSEntity(fromEnterpriseUnit, scenario) {
+  console.log("=========>>>>> Intercompany trade relations between Boston Enterprise Unit and any US entity started <<<<<=========");
+
+  // Initialising page elements
+  const commonPg = new LNPage(this.page);
+  // Navigate to Common --> Intercompany Trade --> Relationships --> Relationships
+  await LNCommon.navigateToLNModule(LNSessionTabs.COMMON, LNSessionTabs.INTERCOMPANY_TRADE, LNSessionTabs.RELATIONSHIPS, LNSessionTabs.RELATIONSHIPS);
+
+  // Verify Session Tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_RELATIONSHIPS);
+
+  // Filter the From Enterprise Unit grid
+  await LNCommon.filterRequiredRecord(Relationships_Lbl.FROM_ENTERPRISE_UNIT_GRID, Relationships_Id.FROM_ENTERPRISE_UNIT_GRID, LNSessionCodes.INTERCOMPANY_TRADE_RELATIONSHIPS, fromEnterpriseUnit);
+
+  // Select the filtered record and get the row number
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.INTERCOMPANY_TRADE_RELATIONSHIPS, Relationships_Lbl.FROM_ENTERPRISE_UNIT_GRID,Relationships_Id.FROM_ENTERPRISE_UNIT_GRID, fromEnterpriseUnit );
+
+  // Drilldown to the record details by row number
+  await LNCommon.drilldownRequiredRecord( LNSessionCodes.INTERCOMPANY_TRADE_RELATIONSHIPS,String(rowNo));
+
+  // Verify Session Tab
+  await LNCommon.verifySessionTab( LNSessionTabs.INTERCOMPANY_TRADE_RELATIONSHIP);
+
+  // Verify the heading "From"
+  const isFromHeaderPresent = await CommonFunctions.isDynamicElementPresent(commonPg.verifyHeader, Relationships_Lbl.FROM);
+  if (!isFromHeaderPresent) throw new Error(`${Relationships_Lbl.FROM} header is not found`);
+
+  // Verify the Enterprise Unit value in "From" tab
+  const enterpriseUnitText = await LNCommon.getTextFieldAttribute(Relationships_Lbl.FROM_ENTERPRISE_UNIT,Relationships_Id.FROM_ENTERPRISE_UNIT,LNSessionCodes.INTER_COMPANY_TRADE_RELATIONSHIP,'value');
+  if (enterpriseUnitText !== fromEnterpriseUnit) {
+    throw new Error(`From Enterprise Unit is not ${fromEnterpriseUnit}, found: ${enterpriseUnitText}`);
+  }
+
+  // Select Agreements tab in the grid tab
+  await LNCommon.selectGridTab(LNTabs.AGREEMENTS, LNSessionCodes.INTER_COMPANY_TRADE_RELATIONSHIP);
+
+  // Click and select the Scenario checkbox in the grid filter
+  await LNCommon.clickAndSelectDropdownFieldGridFilter(Relationships_Id.SCENARIO_GRID,scenario,Relationships_Lbl.SCENARIO_GRID,LNSessionCodes.INTER_COMPANY_TRADE_RELATIONSHIP_LINE);
+
+  // Select the scenario record in grid
+  await LNCommon.selectRequiredRecord(LNSessionCodes.INTER_COMPANY_TRADE_RELATIONSHIP_LINE,Relationships_Lbl.SCENARIO_GRID,Relationships_Id.SCENARIO_GRID,scenario);
+
+  // Navigate to References > Agreement
+  await LNCommon.navigateToLNReferences(LNSessionCodes.INTER_COMPANY_TRADE_RELATIONSHIP_LINE,LNMenuActions_Lbl.AGREEMENT);
+
+  // Verify Agreement session tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_AGREEMENT);
+
+  // Select Agreement header tab to review fields and data
+  await LNCommon.selectHeaderTab(LNTabs.AGREEMENT, LNSessionCodes.INTERCOMPANY_TRADE_AGREEMENT);
+
+  // Take screenshot for evidence
+  await page.screenshot({ path: 'Intercompany_Trade_Relations_Boston_US_Entity.png' });
+
+  // Close the Agreement tab
+  await LNSessionTabActions.closeTab(LNSessionTabs.INTERCOMPANY_TRADE_AGREEMENT);
+
+  // Close the Relationship tab
+  await LNSessionTabActions.closeTab(LNSessionTabs.INTERCOMPANY_TRADE_RELATIONSHIP);
+
+  // Close the Relationships tab
+  await LNSessionTabActions.closeTab(LNSessionTabs.INTERCOMPANY_TRADE_RELATIONSHIPS);
+
+  // Collapse Common LN Module
+  await LNCommon.collapseLNModule(LNSessionTabs.COMMON);
+
+  console.log("=========>>>>> Intercompany trade relations between Boston Enterprise Unit and any US entity completed successfully <<<<<=========");
+}
+
+/*-------------------------------------------------------------------------------------------
+ * Objective : Review intercompany trade order – sales (by warehouse)
+ * Workbook  : LN Cloud: Configuring Multisite Environment
+ * Exercises : 3.4.6
+ * ------------------------------------------------------------------------------------------*/
+static async reviewIntercompanyTradeOrderSalesByWarehouse(warehouseCnxt) {
+  console.info("=========>>>>> Review intercompany trade order – sales (by warehouse) started <<<<<=========");
+
+  // Navigate Common -> Intercompany Trade -> Sales Workbench
+  await LNCommon.navigateToLNModule(LNSessionTabs.COMMON, LNSessionTabs.INTERCOMPANY_TRADE,LNSessionTabs.SALES_WORKBENCH);
+
+  // Verify Session Tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // Click Clear Additional Filter button if enabled
+  const clearFilterElement = await LNCommon.getDynamicElement(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH,LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER);
+
+  if (!(await clearFilterElement.getAttribute(ElementAttributes.CLASS)).includes(LNCommons.DISABLED)) {
+    await LNCommon.clickTextMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH,LNMenuActions_Id.CLEAR_ADDITIONAL_FILTER, LNMenuActions_Lbl.CLEAR_ADDITIONAL_FILTER);
+  }
+
+  // Select General tab (as per your Selenium code)
+  await LNCommon.selectHeaderTab(LNTabs.GENERAL, LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // Verifying the sections and entering enterprise unit fields for two sections:
+  const sections = [SalesWorkbench_Lbl.FINANCIAL_ENTITY, SalesWorkbench_Lbl.INTERCOMPANY_CUSTOMER];
+  const euLabels = [SalesWorkbench_Lbl.ENTERPRISE_UNIT_FINANCIAL_ENTITY,SalesWorkbench_Lbl.ENTERPRISE_UNIT_FINANCIAL_ENTITY];
+  const euIds = [SalesWorkbench_Id.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER,SalesWorkbench_Id.ENTERPRISE_UNIT_INTERCOMPANY_CUSTOMER];
+  const enterpriseUnits = [warehouseCnxt.fromEnterpriseUnit, warehouseCnxt.toEnterpriseUnit];
+
+  for (let i = 0; i < sections.length; i++) {
+    const isPresent = await CommonFunctions.isDynamicElementPresent(page, 'verifyHeader', sections[i]);
+    if (!isPresent) {
+      throw new Error(`${sections[i]} section is not found`);
+    }
+    const inputField = await LNCommon.getTextField(euLabels[i],euIds[i],LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+    await LNCommon.triggerInputField(page, inputField, enterpriseUnits[i]);
+  }
+
+  // Select Additional tab
+  await LNCommon.selectHeaderTab(LNTabs.ADDITIONAL, LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // Verify Scenario header
+  const scenarioPresent = await CommonFunctions.isDynamicElementPresent(page, 'verifyHeader', SalesWorkbench_Lbl.SCENARIO);
+  if (!scenarioPresent) {
+    throw new Error(`${SalesWorkbench_Lbl.SCENARIO} header is not found`);
+  }
+
+  // Enable Internal Material Delivery filter if not selected
+  const internalMaterialDeliveryElement = await LNCommon.getDynamicElement(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,PurchaseWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY);
+
+  if (!(await internalMaterialDeliveryElement.getAttribute(ElementAttributes.CLASS)).includes(LNCommons.STATFIELD_SELECTED)) {
+    await internalMaterialDeliveryElement.click();
+    await page.waitForTimeout(2000);
+  }
+
+  // Select Orders tab
+  await LNCommon.selectGridTab(LNTabs.ORDERS, LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // Adjust Filter option to Equals
+  await LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,LNCommons.EQUALS);
+
+  // Filter required record by intercompany trade number
+  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID,SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,warehouseCnxt.intercompanyTradeNumSales);
+
+  // Select required record and drilldown
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID,SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,warehouseCnxt.intercompanyTradeNumSales);
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES, String(rowNo));
+
+  // Verify session title Intercompany Trade Order - Sales
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_SALES);
+
+  // Navigate to References > Intercompany Trade Order Details
+  await LNCommon.navigateToLNReferences(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES,LNMenuActions_Lbl.INTERCOMPANY_TRADE_ORDER_DETAILS);
+
+  // Verify session tab again
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_SALES);
+
+  // Verify Intercompany Trade tab: check From Enterprise Unit value
+  await LNCommon.selectHeaderTab(LNTabs.INTERCOMPANY_TRADE, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  const fromEUValue = await LNCommon.getTextFieldValue(SalesWorkbench_Lbl.FROM_ENTERPRISE_UNIT,SalesWorkbench_Id.FROM_ENTERPRISE_UNIT,LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  if (fromEUValue !== warehouseCnxt.fromEnterpriseUnit) {
+    throw new Error(`The From Enterprise Unit is not ${warehouseCnxt.fromEnterpriseUnit}`);
+  }
+
+  // Verify Agreement tab presence
+  await LNCommon.selectHeaderTab(LNTabs.AGREEMENT, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  const tpRulesPresent = await CommonFunctions.isDynamicElementPresent(page, 'verifyHeader', SalesWorkbench_Lbl.TRANSFER_PRICING_RULES);
+  if (!tpRulesPresent) {
+    throw new Error(`${SalesWorkbench_Lbl.TRANSFER_PRICING_RULES} section is not found`);
+  }
+
+  // Verify Financial tab presence
+  await LNCommon.selectHeaderTab(LNTabs.FINANCIAL, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL);
+  const estimatedAmountsPresent = await CommonFunctions.isDynamicElementPresent(page, 'verifyHeader', SalesWorkbench_Lbl.ESTIMATED_AMOUNTS);
+  if (!estimatedAmountsPresent) {
+    throw new Error(`${SalesWorkbench_Lbl.ESTIMATED_AMOUNTS} section is not found`);
+  }
+
+  // Screenshot
+  await page.screenshot({ path: 'Review_intercompany_trade_order_sales_by_warehouse.png', fullPage: true });
+
+  // Click Save Changes and Exit buttons to navigate back
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES_DETAIL, LNMenuActions_Id.SAVE_AND_EXIT);
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_SALES);
+
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_SALES, LNMenuActions_Id.SAVE_AND_EXIT);
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.SAVE_AND_EXIT);
+
+  // Optional: Close LN Module
+  await LNCommon.collapseLNModule(LNSessionTabs.COMMON);
+
+  console.info("=========>>>>> Review intercompany trade order – sales (by warehouse) completed successfully <<<<<=========");
+}
+
+/*-------------------------------------------------------------------------------------------
+ * Objective : Invoice intercompany trade order transaction line (by Warehouse)
+ * Workbook  : LN Cloud: Configuring Multisite Environment
+ * Exercises : 3.4.9
+ * ------------------------------------------------------------------------------------------*/
+static async invoiceIntercompanyTradeOrderTransactionLineByWarehouse(warehouseCnxt) {
+
+  // Assuming LNCommon, CommonFunctions, LNSessionTabs, SalesWorkbench_Lbl, etc. are imported and usable
+
+  console.info("=========>>>>> Invoice intercompany trade order transaction line (by Warehouse) started <<<<<=========");
+
+  // 1. Navigate Common > Intercompany Trade > Sales Workbench
+  await LNCommon.navigateToLNModule(LNSessionTabs.COMMON,LNSessionTabs.INTERCOMPANY_TRADE,LNSessionTabs.SALES_WORKBENCH);
+
+  // 2. Verify Session Tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // 3. Select Transaction Lines tab
+  await LNCommon.selectGridTab(LNTabs.TRANSACTION_LINES, LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // 4. Filter From Enterprise Unit
+  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.FROM_ENTERPRISE_UNIT_GRID,SalesWorkbench_Id.FROM_ENTERPRISE_UNIT_GRID,LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,warehouseCnxt.fromEnterpriseUnit);
+
+  // 5. Filter To Enterprise Unit
+  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.TO_ENTERPRISE_UNIT_GRID,SalesWorkbench_Id.TO_ENTERPRISE_UNIT_GRID,LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,warehouseCnxt.toEnterpriseUnit);
+
+  // 6. Filter by Intercompany Trade Number
+  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,SalesWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,warehouseCnxt.intercompanyTradeNumSales);
+
+  // 7. Select required record by intercompany trade number and drill down
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,
+    SalesWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,SalesWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,warehouseCnxt.intercompanyTradeNumSales);
+
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_SALES_WORKBENCH,String(rowNo));
+
+  // 8. Verify Session Tab Intercompany Trade Order Transaction Line - Sales
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES);
+
+  // 9. Select COS tab
+  await LNCommon.selectGridTab(LNTabs.COS, LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES);
+
+  // 10. Verify Material costs and Inventory/Warehouse surcharges text present and not empty
+  const cosText = await LNCommon.getDynamicElement(SalesWorkbench_Lbl.COST_OF_SALES_GRID,SalesWorkbench_Id.COST_OF_SALES_GRID,
+    LNSessionCodes.COS_IN_INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES
+  ).then(el => el.innerText());
+
+  expect(cosText.trim().length).toBeGreaterThan(0);
+
+  // 11. Save changes and close Intercompany Trade Order Transaction Line - Sales session
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_SALES,LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // 12. Verify back to Intercompany Trade Sales Workbench session
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // 13. Select Orders tab
+  await LNCommon.selectGridTab(LNTabs.ORDERS, LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH);
+
+  // 14. Update Order filter option to Contains
+  await LNCommon.updateDefaultFilter(SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,LNCommons.CONTAINS);
+
+  // 15. Filter with intercompany trade number
+  await LNCommon.filterRequiredRecord(SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID,SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,warehouseCnxt.intercompanyTradeNumSales);
+
+  // 16. Select required record
+  await LNCommon.selectRequiredRecord(LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,SalesWorkbench_Lbl.ORDER_IN_ORDERS_GRID,SalesWorkbench_Id.ORDER_IN_ORDERS_SEGMENT_TWO_GRID,warehouseCnxt.intercompanyTradeNumSales);
+
+  // 17. Navigate to References > Sales Invoice Information
+  await LNCommon.navigateToLNReferences(LNSessionCodes.ORDERS_IN_INTERCOMPANY_TRADE_SALES,LNMenuActions_Lbl.SALES_INVOICE_INFORMATION);
+
+  // 18. Verify Session Tab Invoicing 360
+  await LNCommon.verifySessionTab(LNSessionTabs.INVOICING_360);
+
+  // 19. Select Billable Lines tab
+  await LNCommon.selectGridTab(LNTabs.BILLABLE_LINES, LNSessionCodes.INVOICING_360);
+
+  // 20. Select required record by intercompany trade number in Source Document column
+  await LNCommon.selectRequiredRecord(LNSessionCodes.BILLABLE_LINES,SalesWorkbench_Lbl.SOURCE_DOCUMENT_GRID,SalesWorkbench_Id.SOURCE_DOCUMENT_GRID,warehouseCnxt.intercompanyTradeNumSales);
+
+  // 21. Click Create Invoice button
+  await LNCommon.clickTextMenuItem(LNSessionCodes.BILLABLE_LINES,LNMenuActions_Id.CREATE_INVOICE,LNMenuActions_Lbl.CREATE_INVOICE_BILLABLE_LINES);
+
+  // 22. Handle confirmation popup - click Yes
+  await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.INVOICES_WILL_BE_CREATED_AND_POSTED, LNCommons.YES);
+
+  // 23. Pause 10 seconds for processing
+  await page.waitForTimeout(10000);
+
+  // 24. Screenshot Posting Batches Created Report
+  await page.screenshot({ path: 'Posting_Batches_Created_Report.png', fullPage: true });
+
+  // 25. Close Posting Batches Created tab
+  await LNSessionTabActions.closeTab(LNSessionTabs.POSTING_BATCHES_CREATED);
+
+  // 26. Handle OK popup
+  await LNCommon.validateMessageAndHandlePopUp(LNPopupMsg.BILLABLE_LINES_OK_POPUP, LNCommons.OK);
+
+  // 27. Verify Invoicing 360 session tab again
+  await LNCommon.verifySessionTab(LNSessionTabs.INVOICING_360);
+
+  // 28. Switch to Invoice report tab and wait
+  const currentTabElement = await LNCommon.getDynamicElement(page, 'currentTab', LNSessionTabs.INVOICE);
+  await currentTabElement.click();
+  await page.waitForTimeout(5000);
+
+  // 29. Screenshot Invoice Report
+  await page.screenshot({ path: 'Invoice_Report.png', fullPage: true });
+
+  // 30. Close Invoice report tab
+  await LNSessionTabActions.closeTab(LNSessionTabs.INVOICE);
+
+  // 31. Verify Invoicing 360 session tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INVOICING_360);
+
+  // 32. Screenshot final state
+  await page.screenshot({ path: 'Invoice_intercompany_trade_order_transaction_line_by_warehouse.png', fullPage: true });
+
+  // 33. Save changes and close Invoicing 360 session
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INVOICING_360, LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // 34. Save changes and close Intercompany Trade Sales Workbench session
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_SALES_WORKBENCH, LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // 35. Close Common LN Module
+  await LNCommon.collapseLNModule(LNSessionTabs.COMMON);
+
+  console.info("=========>>>>> Invoice intercompany trade order transaction line (by Warehouse) completed successfully <<<<<=========");
+}
+/*-------------------------------------------------------------------------------------------
+ * Objective : Create intercompany trade purchase invoice (by PROJECT)
+ * Workbook  : LN Cloud: Configuring Multisite Environment
+ * Exercises : 3.4.10
+ * ------------------------------------------------------------------------------------------*/
+static async createIntercompanyTradePurchaseInvoiceByProject(warehouseCnxt) {
+  console.info("=========>>>>> Create intercompany trade purchase invoice (by PROJECT) started <<<<<=========");
+
+  // Navigate to Common > Intercompany Trade > Purchase Workbench
+  await LNCommon.navigateToLNModule(LNSessionTabs.COMMON,LNSessionTabs.INTERCOMPANY_TRADE,LNSessionTabs.PURCHASE_WORKBENCH);
+
+  // Verify Session Tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH);
+
+  // Select Additional tab and enable Internal Material Delivery filter if not selected
+  await LNCommon.selectHeaderTab(LNTabs.ADDITIONAL, LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH);
+
+  const internalMaterialDeliveryElement = await LNCommon.getDynamicElement(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,PurchaseWorkbench_Lbl.INTERNAL_MATERIAL_DELIVERY);
+
+  const classAttr = await internalMaterialDeliveryElement.getAttribute(ElementAttributes.CLASS);
+  if (!classAttr.includes(LNCommons.STATFIELD_SELECTED)) {
+    await internalMaterialDeliveryElement.click();
+    await page.waitForTimeout(2000);
+  }
+
+  // Select Transaction Lines tab
+  await LNCommon.selectGridTab(LNTabs.TRANSACTION_LINES, LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH);
+
+  // Filter Status dropdown to "Released"
+  await LNCommon.clickAndSelectDropdownFieldGridFilter(PurchaseWorkbench_Id.STATUS_IN_TRANSACTION_LINES_DRP_GRID,LNCommons.RELEASED,PurchaseWorkbench_Lbl.STATUS_IN_TRANSACTION_LINES_DRP_GRID,LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_ORDER_PURCHASE);
+
+  // Filter by intercompany trade number
+  await LNCommon.filterRequiredRecord(PurchaseWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,PurchaseWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_ORDER_PURCHASE,warehouseCnxt.intercompanyTradeNumSales);
+
+  // Select required transaction line and drill down
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_ORDER_PURCHASE,
+                PurchaseWorkbench_Lbl.ORDER_IN_TRANSACTION_LINES_GRID,PurchaseWorkbench_Id.ORDER_IN_TRANSACTION_LINES_SEGEMNT_TWO_GRID,warehouseCnxt.intercompanyTradeNumSales);
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.TRANSACTION_LINES_IN_INTERCOMPANY_TRADE_ORDER_PURCHASE, String(rowNo));
+
+  // Verify Session Tab
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_PURCHASE);
+
+  // Navigate to Actions > Generate Purchase Invoice
+  await LNCommon.navigateToLNActions(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_PURCHASE, LNMenuActions_Lbl.GENERATE_PURCHASE_INVOICE);
+
+  // Verify Session Tab
+  await LNCommon.verifySessionTab(LNSessionTabs.GENERATE_INTERCOMPANY_TRADE_PURCHASE_INVOICES);
+
+  // Click Generate button
+  await LNCommon.clickTextMenuItem(LNSessionCodes.GENERATE_INTERCOMPANY_TRADE_PURCHASE_INVOICES,LNMenuActions_Id.GENERATES,LNMenuActions_Lbl.GENERATE);
+
+  // Handle Device dialog - may appear multiple times
+  do {
+    await LNCommon.handleDevice(page);
+    await page.waitForTimeout(3000);
+  } while (await CommonFunctions.isElementPresent(page, 'device'));
+
+  await page.waitForTimeout(5000);
+
+  // Verify Process Report session, screenshot and close
+  await LNCommon.verifySessionTab(LNSessionTabs.PROCESS_REPORT);
+  await page.screenshot({ path: 'Process_Report.png', fullPage: true });
+  await LNSessionTabActions.closeTab(LNSessionTabs.PROCESS_REPORT);
+
+  // Switch to Internal Invoice (Detailed) tab, wait and screenshot
+  const internalInvoiceTab = await LNCommon.getDynamicElement(page, 'currentTab', LNSessionTabs.INTERNAL_INVOICE_DETAILED);
+  await internalInvoiceTab.click();
+  await page.waitForTimeout(5000);
+
+  // Verify Internal Invoice Detailed session, screenshot and close
+  await LNCommon.verifySessionTab(LNSessionTabs.INTERNAL_INVOICE_DETAILED);
+  await page.screenshot({ path: 'Internal_Invoice_Detailed_Report.png', fullPage: true });
+  await LNSessionTabActions.closeTab(LNSessionTabs.INTERNAL_INVOICE_DETAILED);
+
+  // Screenshot final state
+  await page.screenshot({ path: 'Create_intercompany_trade_purchase_invoice_by_PROJECT.png', fullPage: true });
+
+  // Close Generate Intercompany Trade Purchase Invoices session
+  await LNCommon.clickTextMenuItem(LNSessionCodes.GENERATE_INTERCOMPANY_TRADE_PURCHASE_INVOICES,LNMenuActions_Id.CLOSE,LNMenuActions_Lbl.CLOSE);
+
+  // Close Intercompany Trade Order Transaction Line – Purchase session
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_ORDER_TRANSACTION_LINE_PURCHASE,LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // Close Intercompany Trade Purchase Workbench session
+  await LNCommon.clickMainMenuItem(LNSessionCodes.INTERCOMPANY_TRADE_PURCHASE_WORKBENCH,LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // Collapse Common LN module
+  await LNCommon.collapseLNModule(LNSessionTabs.COMMON);
+
+  console.info("=========>>>>> Create intercompany trade purchase invoice (by PROJECT) completed successfully <<<<<=========");
 }
 
 }

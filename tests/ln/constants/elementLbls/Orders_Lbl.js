@@ -173,6 +173,9 @@ class Orders_Lbl {
   static ORDER_TYPE_GRID = "Order Type";
   static HEADER_STATUS_GRID_DRP = "Header Status";
   static PRINT_GOODS_RECEIVED_NOTE = "Print Goods Received Note";
+  static TO_COST_COMPONENT_GRID = "To Cost Component";
+  static TRANSACTION_TYPE_DRP = "Transaction Type";
+  static COST_COMPONENT_ZOOM_GRID = "Cost Component";
 }
 
 export default Orders_Lbl;

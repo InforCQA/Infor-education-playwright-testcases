@@ -30,17 +30,21 @@ test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
 });
 
-// test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
-//     TCEDU_LNCreateANewItemUsingItemDefaults();
-// });
+test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
+   TCEDU_LNCreateANewItemUsingItemDefaults();
+});
 
 test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
    TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
 });
 
-// test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
-   // TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
-// });
+test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
+   TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
+});
+
+test.describe('TCEDU_LNCreateWarehouseOrderForWarehouseAndProject', () => {
+   TCEDU_LNCreateWarehouseOrderForWarehouseAndProject();
+});
    
    
    

@@ -1,0 +1,30 @@
+{
+  "parameter": "Actual set",
+  "item": "MS200",
+  "fromEnterpriseUnit": "BOSTON",
+  "scenario": "Internal Material Delivery",
+  "orderNo": "SLO000003",
+  "orderLine": "10",
+  "personalizeColumms": [
+    "From Activity  (fact)",
+    "From Activity  (cact.dsca)",
+    "To Activity  (tact)",
+    "To Activity  (cact.dsca)",
+    "From Cost Component  (ccco.dsca)",
+    "From Cost Component  (fcco)",
+    "To Cost Component  (ccco.dsca)",
+    "To Cost Component  (tcco)"
+  ],
+  "orders": "Project (Manual)",
+  "transactionType": "Issue",
+  "shipFrWhs": [
+    "BOS",
+    "WHBO"
+  ],
+  "shipToWhs": "Chair Frame",
+  "orderedQty": 1,
+  "activity": 10,
+  "costComponent": 100,
+  "toEnterpriseUnit": "CHICAG",
+  "transactionLine": 1
+}

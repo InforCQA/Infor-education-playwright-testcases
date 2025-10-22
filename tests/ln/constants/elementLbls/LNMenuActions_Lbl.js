@@ -702,6 +702,7 @@ class LNMenuActions_Lbl {
   static GENERATE_SUBCONTRACTING_PURCHASE_DOCUMENTS = "Generate Subcontracting Purchase Documents...";
   static ACTIVATE_WITH_DOTS                  = "Activate...";
   static TRANSFER_PURCHASE_ORDER_ADVICE      = "Transfer Purchase Order Advice...";
+  static PERSONALIZE_FORM                    = "Personalize Form...";
 }
 
 export default LNMenuActions_Lbl;

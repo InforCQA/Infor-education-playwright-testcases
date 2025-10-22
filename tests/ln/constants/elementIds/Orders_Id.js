@@ -189,6 +189,8 @@ class Orders_Id {
   static HEADER_STATUS_GRID_DRP = "whinh200.hsta";
   static HEADER_STATUS = "whinh200.hsta";
   static FINISHED_PRINT_GOODS_RECEIVED_NOTE = "done";
+  static TRANSACTION_TYPE_DRP = "whinh010.ittp";
+  static COST_COMPONENT_ZOOM_GRID = "tcmcs048.cpcp";
 }
 
 export default Orders_Id;

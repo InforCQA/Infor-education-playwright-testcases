@@ -2089,6 +2089,79 @@ static async updateLocalBusinessPartnerCustomerData(businessCnxt) {
     console.log('=========>>>>> Update local business partner (customer) data completed successfully <<<<<=========');
   }
 
+  /**
+ * Objective : Create Project Data
+ * Workbook  : LN Cloud: Configuring Multisite Environment
+ * Exercises : 3.4.2
+ */
+static async createProjectData(itemNo) {
+  console.log("=========>>>>> Create Project Data started <<<<<=========");
+
+  // Intialize the page
+  const commonPg = new LNPage(this.page);
+
+  // Navigate to Master Data --> Items --> Items
+  await LNCommon.navigateToLNModule(LNSessionTabs.MASTER_DATA, LNSessionTabs.ITEMS, LNSessionTabs.ITEMS);
+
+  // Verify Session Tab "Items" is visible
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEMS);
+
+  // Filter the item in the grid
+  await LNCommon.filterRequiredRecord(Items_Lbl.ITEM_GRID, Items_Id.ITEM_SEG_2_GRID, LNSessionCodes.ITEMS, itemNo);
+
+  // Select the filtered item record and get the row number
+  const rowNo = await LNCommon.selectRequiredRecord(LNSessionCodes.ITEMS, Items_Lbl.ITEM_GRID, Items_Id.ITEM_SEG_2_GRID, itemNo);
+
+  // Drill down into the item details by row number
+  await LNCommon.drilldownRequiredRecord(LNSessionCodes.ITEMS, String(rowNo));
+
+  // Verify Session Tab switched to "Item"
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+  // Verify subentities header is visible
+  const subentitiesVisible = await CommonFunctions.isDynamicElementPresent(commonPg.verifyHeader, Items_Lbl.SUBENTITIES);
+  if (!subentitiesVisible) throw new Error(`${Items_Lbl.SUBENTITIES} header is not found`);
+
+  // Hover/move to Project subentities button and click it
+  const projectBtnLocator = await commonPg.hyperlinkText(Items_Lbl.PROJECT_BTN,Items_Id.PROJECT_BUTTON,LNSessionCodes.ITEM);
+  await projectBtnLocator.hover();
+  await projectBtnLocator.click();
+
+  // Verify the Item - Project dialog opens
+  await LNCommon.verifyDialogBoxWindow(LNSessionTabs.ITEM_PROJECT);
+
+  // Verify important fields in Item - Project session
+  if (!(await CommonFunctions.isDynamicElementPresent(commonPg.verifyHeader, Items_Lbl.PROJECT_PLANNING))) {
+    throw new Error(`${Items_Lbl.PROJECT_PLANNING} is not present`);
+  }
+
+  if (!(await CommonFunctions.isDynamicElementPresent(commonPg.verifyHeader, Items_Lbl.UNIT_COST))) {
+    throw new Error(`${Items_Lbl.UNIT_COST} is not present`);
+  }
+
+  // Click Save and Close in Item - Project session
+  await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM_PROJECT, LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // Verify Session Tab switched back to "Item"
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEM);
+
+  // Click Save and Close in Item session
+  await LNCommon.clickMainMenuItem(LNSessionCodes.ITEM, LNMenuActions_Id.SAVE_AND_CLOSE);
+
+  // Verify Session Tab back to "Items"
+  await LNCommon.verifySessionTab(LNSessionTabs.ITEMS);
+
+  // Close the Items tab
+  await LNSessionTabActions.closeTab(LNSessionTabs.ITEMS);
+
+  // Take screenshot for evidence
+  await page.screenshot({ path: "Create_Project_Data.png" });
+
+  // Collapse Master Data LN module
+  await LNCommon.collapseLNModule(LNSessionTabs.MASTER_DATA);
+
+  console.log("=========>>>>> Create Project Data completed successfully <<<<<=========");
+}
 }
 
 export default LNMasterData;
