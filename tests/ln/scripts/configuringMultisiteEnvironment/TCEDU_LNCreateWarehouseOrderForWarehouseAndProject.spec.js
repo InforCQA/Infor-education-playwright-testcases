@@ -28,11 +28,11 @@ const warehouseCnxt = JSON.parse(JSON.stringify(require("../../../data/ln/TCEDU-
  * ---------------------------------------------------------------------------------------
  */
 
-export default function TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder() {
+export default function TCEDU_LNCreateWarehouseOrderForWarehouseAndProject() {
 
     test.describe.configure({ mode: 'serial' });
     
-    test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
+    test.describe('TCEDU_LNCreateWarehouseOrderForWarehouseAndProject', () => {
 
         test.beforeAll(async ({}) => { 
             await BaseClass.globalSetup();

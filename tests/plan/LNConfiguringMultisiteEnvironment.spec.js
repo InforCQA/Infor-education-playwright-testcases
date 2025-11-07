@@ -6,7 +6,7 @@ import TCEDU_LNReviewAndUpdateItemsFromSalesPerspective from '../ln/scripts/conf
 import TCEDU_LNCreateANewItemUsingItemDefaults from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateANewItemUsingItemDefaults.spec';
 import TCEDU_LNReviewItemsFromGlobalPrespective from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNReviewItemsFromGlobalPrespective.spec';
 import TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders.spec';
-import TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder.spec';
+import TCEDU_LNCreateWarehouseOrderForWarehouseAndProject from '../ln/scripts/configuringMultisiteEnvironment/TCEDU_LNCreateWarehouseOrderForWarehouseAndProject.spec';
 
 const config = {
   BASE_URL: "https://mingle-portal.inforcloudsuite.com/v2/EDUGDENA003_TST",
@@ -16,9 +16,9 @@ const config = {
 
 test.describe.configure({ mode: 'parallel' });
 
-test.describe('TCEDU_LNSelectMapProvider', () => {
-   TCEDU_LNSelectMapProvider();
-});
+// test.describe('TCEDU_LNSelectMapProvider', () => {
+//    TCEDU_LNSelectMapProvider();
+// });
 
 // test.describe('TCEDU_LNReviewEnterpriseModel', () => {
 //    TCEDU_LNReviewEnterpriseModel();
@@ -36,17 +36,17 @@ test.describe('TCEDU_LNSelectMapProvider', () => {
 //    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
 // });
 
-test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
-   TCEDU_LNCreateANewItemUsingItemDefaults();
-});
+// test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
+//    TCEDU_LNCreateANewItemUsingItemDefaults();
+// });
 
 // test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
 //    TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
 // });
 
-test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
-   TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
-});
+// test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
+//    TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
+// });
 
 test.describe('TCEDU_LNCreateWarehouseOrderForWarehouseAndProject', () => {
    TCEDU_LNCreateWarehouseOrderForWarehouseAndProject();
