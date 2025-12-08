@@ -1,0 +1,8 @@
+{
+  "name": "",
+  "description": "",
+  "customGroup": "-NONPO25",
+  "customGpDescr": "Expense Invoices Less Than $25",
+  "condition": "(!PurchaseOrderInvoice) and (InvoiceAmount.CurrencyAmount < 25.00)",
+  "listName": "PayablesInvoiceList"
+}

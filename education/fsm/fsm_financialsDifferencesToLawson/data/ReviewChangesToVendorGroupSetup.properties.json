@@ -1,0 +1,4 @@
+{
+  "corporateCalendar": "USCALENDAR",
+  "invoicePostDateDefaultOptionValues": ["Invoice Date", "Current Date"]
+}

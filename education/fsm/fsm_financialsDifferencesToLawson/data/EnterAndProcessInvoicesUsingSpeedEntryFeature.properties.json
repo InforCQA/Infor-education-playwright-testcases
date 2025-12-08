@@ -1,0 +1,8 @@
+{
+  "vendor": "2",
+  "invoiceType": "Invoice",
+  "invoiceNumbers": ["INV-101", "INV-032"],
+  "invoiceAmts": ["2.00", "8.00"],
+  "costCenter": ["1100", "1100"],
+  "account": ["70150", "70150"]
+}

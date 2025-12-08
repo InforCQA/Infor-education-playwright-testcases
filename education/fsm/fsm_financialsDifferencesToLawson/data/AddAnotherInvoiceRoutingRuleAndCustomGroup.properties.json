@@ -1,0 +1,8 @@
+{
+  "name": "INVOICE<= $500000",
+  "description": "Invoice Amount Less Than or Equal to $500,000",
+  "customGroup": "AMOUNT<=500000",
+  "customGpDescr": "Invoice Amount Less Than or Equal to $500,000",
+  "condition": "(InvoiceAmount.CurrencyAmount <= 500000 and AccountingEntity = %s)",
+  "listName": "PayablesInvoiceList"
+}

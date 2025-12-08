@@ -1,0 +1,8 @@
+{
+  "name": "COMPANY",
+  "description": "Invoice Assignment Rule for Company;",
+  "customGroup": "ALLCOMPANY",
+  "customGpDescr": "All Company",
+  "condition": "Company = ",
+  "listName": "PayablesInvoiceList"
+}

@@ -1,0 +1,19 @@
+{
+  "serviceDefinition": "VendorUpdate",
+  "processDefinition": "RequestNewVendor",
+  "taskName": "VendorFinalApprover",
+  "priority": "Medium",
+  "vendorName": "- Five Star Food",
+  "searchName": "- Five Star",
+  "legalName": "- Five Star Food Suppliers",
+  "notes": "New food vendor",
+  "taxIDType": "USFEDERAL",
+  "taxID": "53-3527986",
+  "country": "US",
+  "streetAddress": "602 First Avenue",
+  "city": "Madison",
+  "stateProvince": "WI",
+  "zipCode": "53705",
+  "task": "Final Approver for Request New Vendor",
+  "vendorClass": "SUP"
+}

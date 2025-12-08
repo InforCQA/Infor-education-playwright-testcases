@@ -1,0 +1,10 @@
+{
+  "customGroup": "INVOICE500AND5000",
+  "description": "Invoice amount over $500 and less than or equal to $5,000",
+  "businessView": "PayablesInvoice",
+  "name": "InvoiceAmount.CurrencyAmount",
+  "conditions": ["Greater than", "Less than or equal to"],
+  "literalValues": ["500", "5000"],
+  "listName": "PayablesInvoiceList",
+  "option": "Enter Value"
+}

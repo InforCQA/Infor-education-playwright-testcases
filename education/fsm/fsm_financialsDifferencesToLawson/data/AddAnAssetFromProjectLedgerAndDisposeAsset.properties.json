@@ -1,0 +1,25 @@
+{
+  "structure": "MASTER",
+  "projects": ["100 CONSTRUCT", "100276", "10027603"],
+  "projectID": "1002760301",
+  "journalControlDescription": "Carpentry",
+  "ledger": "MASTER",
+  "costCenter": "1100",
+  "accounts": ["17800", "17800", "20100"],
+  "amounts": ["25,000.00", "8,000.00", "-33,000.00"],
+  "customGroup": "CARPENTRY",
+  "customGpDescr": "Carpentry Custom Group",
+  "condition": "(FinanceCodeBlock.Project =  \"1002760301\"  and  AccountingEntity =  \"%s\")",
+  "listName": "GLTransactionDetailPrimaryList",
+  "workInProcessAccount": "17800",
+  "assetClearingAccount": "17900",
+  "assetTemplate": "BLDTMP",
+  "assetDescription": "Guard Shack",
+  "itemQty": "1",
+  
+  "companyGroup": "_ALL",
+  "projectGroup": "POSTING",
+  "computeOption": "Yes",
+  "method": "Donated",
+  "fullOrPartial": "Full"
+}

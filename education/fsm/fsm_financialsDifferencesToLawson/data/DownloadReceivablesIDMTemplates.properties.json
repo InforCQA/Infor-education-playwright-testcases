@@ -1,0 +1,20 @@
+{
+  "templateName": [
+    "SampleBasicDunningLetterIDMTemplate.docx",
+    "SampleAdvancedDunningLetterIDMTemplate.docx",
+    "SampleReceivableStatementIDMTemplate.docx",
+    "SamplePaymentRequestNoticeIDMTemplate.docx"
+  ],
+  "names": [
+    "-Basic Dunning Letter",
+    "-Advanced Dunning Letter",
+    "-Receivables Statement",
+    "-Payment Request Notice"
+  ],
+  "descriptions": [
+    "Basic Dunning Letter",
+    "Advanced Dunning Letter",
+    "Receivables Statement",
+    "Payment Request Notice"
+  ]
+}

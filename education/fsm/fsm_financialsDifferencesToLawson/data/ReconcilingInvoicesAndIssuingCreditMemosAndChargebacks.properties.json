@@ -1,0 +1,33 @@
+{
+  "invoiceEntryTemplate": "Match Invoice",
+  "purchaseOrder": ["1001", "1002", "1004", "1006"],
+  "createDetails": ["No", "From Receipt", "From Purchase Order", "From Purchase Order"],
+  "invoiceType": "Invoice",
+  "vendor": ["1", "2", "3", "4"],
+  "invoiceNumber": ["INV801", "INV802", "INV804", "INV806"],
+  "invoiceAmt": ["84.00", "260.00", "5,500.00", "175.00"],
+  "ruleGroup": "MA_IM",
+  "status": "Unreleased",
+  "errorMsg": "Invoice amount 260.00 is not equal to match totals 250.00 which includes tax of 0.00",
+  "unitCost": "1.04",
+  "line": ["1&2", "2"],
+  "quantity": ["5&5", "25"],
+  "matchPreference": "Both",
+  "invoicePreference": "All Invoices",
+  "vendorRangeFrom": "AAA",
+  "vendorRangeTo": "ZZZ",
+  "unitCostAction": "Adjust Cost",
+  "reasonCode": "POP",
+  "commentTitle": "Vendor price correction",
+  "commentType": "Message Comments",
+  "commentText": "Talked with John Jones - vendor price changed. Vendor pricing correct.",
+  "totalCostDiscrepancy": ["1,100.00", "30.00"],
+  "poLines": ["1", "2"],
+  "action": "Approve",
+  "vendorSearchName": [
+    "GENERAL SUPPLIES",
+    "RELIABLE OFFICE",
+    "COMPUTER WORLD",
+    "PRACTICAL PRODUCTS"
+  ]
+}

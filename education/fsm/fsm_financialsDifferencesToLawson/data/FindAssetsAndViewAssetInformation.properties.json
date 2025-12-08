@@ -1,0 +1,16 @@
+{
+  "assets": ["10", "7"],
+  "widgetTitle": [
+    "Summary",
+    "Depreciation to Book Value",
+    "Items",
+    "Repairs",
+    "Books"
+  ],
+  "assetTypesList": [
+    "Asset Companies",
+    "Asset Types",
+    "Assets"
+  ],
+  "assetDescr": "Storage Building"
+}

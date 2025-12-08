@@ -1,0 +1,16 @@
+{
+  "customer": "4",
+  "customerName": "Starlight Systems",
+  "actionsMenuOptions": [
+    "Portal Customer Update Request",
+    "Request Update Customer",
+    "Update Vertex Tax Code"
+  ],
+  "checkDigitType": [
+    "No Check Digit",
+    "MOD 10",
+    "MOD 11",
+    "MOD 11-2",
+    "Ignore"
+  ]
+}

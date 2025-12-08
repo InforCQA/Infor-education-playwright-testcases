@@ -1,4 +1,4 @@
-import BaseClass from './tests/testBase/BaseClass.js'; 
+import BaseClass from './education/testBase/BaseClass.js'; 
 
 export default async () => {
   await BaseClass.globalSetup(); 

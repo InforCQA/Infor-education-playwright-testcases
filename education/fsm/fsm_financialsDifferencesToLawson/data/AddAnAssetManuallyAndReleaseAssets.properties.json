@@ -1,0 +1,22 @@
+{
+  "assetDescription": "Building",
+  "tagNumber": "BUILDING",
+  "category": "Depreciable",
+  "assetTypeOrSubtype": "BUILD",
+  "accountGroup": "AAG",
+  "assetDimensionGroup": "ADG",
+  "location": "CA",
+  "division": "BRANCH1",
+  "itemNumber": "1A",
+  "itemDescription": "First Street Building",
+  "itemQuantity": "1",
+  "itemCost": "60,000",
+  "book": "POSTBK",
+  "bookMethod": "SL",
+  "bookLife": "120",
+  "commentTitle": ["Purchase Documentation", "Appraisal"],
+  "commentType": "Addition",
+  "attachmentFileName": "AutoMatchingReportExample.docx",
+  "attachmentFilePath": "\\\\src\\\\main\\\\java\\\\fsm\\\\courseFiles\\\\TCEDU-FSMFinancialsDifferencesToLawson\\\\ConfiguringAndAdministeringMatching\\\\AutoMatchingReportExample.docx",
+  "comment": "Appraisal was completed in-house"
+}

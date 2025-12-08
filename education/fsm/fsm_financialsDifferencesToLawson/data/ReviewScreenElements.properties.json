@@ -1,0 +1,14 @@
+{
+  "homePgWidgets": [
+    "Invoice Count By Processor",
+    "Invoice Amount By Processor",
+    "Invoice Count By Status",
+    "Invoice Amount By Status",
+    "Invoice Count By Current Approver",
+    "Invoice Aging",
+    "Cash Forecasting",
+    "Overdue Invoices",
+    "Open Invoices By Due Date"
+  ],
+  "vendor": "1"
+}

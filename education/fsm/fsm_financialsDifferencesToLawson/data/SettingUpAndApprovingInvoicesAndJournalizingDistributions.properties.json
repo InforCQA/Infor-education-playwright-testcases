@@ -1,0 +1,68 @@
+{
+  "invoiceApprovalRoles": ["MANAGER", "SUPERVISOR", "DIRECTOR", "VICE PRESIDENT"],
+  "invoiceApprovalRolesDesc": [
+    "Manager for Training",
+    "Supervisor for Training",
+    "Director for Training",
+    "Vice President for Training"
+  ],
+  "priority": ["2", "1"],
+  "financeResources": ["Adams, Charles", "", "Davis, Josie", "Dewit, Janice"],
+  "resourceIDs": ["24", "", "1184", "1195"],
+  "invoiceApprovalCode": "APPROVALCODE",
+  "approvalCodeDesc": "Approval Code",
+  "initialApprovalLevel": "First Approval Level Authorized To Approve Invoice Amount",
+  "finalApprovalLevel": "Last Approval Level",
+  "maxApprovalAmt": ["100,000", "5,000.00", "500,000", "999,999,999"],
+  "invoiceEntryTemplate": "Basic",
+  "vendors": ["1", "2", "3", "1"],
+  "invoiceNumbers": ["IN-736452-01", "445732", "559172", "%s-EXP"],
+  "invoiceAmounts": ["183596.92", "6390.00", "168.00", "1,500"],
+  "distributionAmt": [
+    "183596.92",
+    "2500.00&1500.00&2000.00&390.00",
+    "150.00&18.00",
+    "1500"
+  ],
+  "costCenter": [
+    "1100",
+    "1100&1190&2200&1100",
+    "1100&1100",
+    "1100"
+  ],
+  "account": [
+    "73800",
+    "70160&70160&70160&73200",
+    "70150&70160",
+    "71200"
+  ],
+  "paymentTerms": "NET15",
+  "externalPurchaseOrder": "500",
+  "attachmentFileName": "AutoMatchingReportExample.docx",
+  "attachmentFilePath": "\\src\\main\\java\\fsm\\courseFiles\\TCEDU-FSMFinancialsDifferencesToLawson\\ConfiguringAndAdministeringMatching\\AutoMatchingReportExample.docx",
+  "attachmentDesc": "Invoice",
+  "emailContent": "Need this approved by tomorrow",
+  "toEmail": "@infor-edu.com",
+  "revDistrCostCenter": "3190",
+  "revDistrAccount": "17900",
+  "holdCode": "MPAY",
+  "holdCodeDescr": "Manual payment hold",
+  "emailSubject": "Invoice ",
+  "paymentCode": "SYS",
+  "startingNumber": "101",
+  "printFileNames": ["Electronic Payment Creation", "Payment Close"],
+  "journalizeDistrDescription": "Invoice Distributions",
+  "errorMsg": [
+    "Total distribution amount 0.00 is not equal to invoice amount 183,596.92",
+    "Total distribution amount 0.00 is not equal to invoice amount 6,390.00",
+    "Total distribution amount 0.00 is not equal to invoice amount 168.00",
+    "Total distribution amount 0.00 is not equal to invoice amount 1,500.00"
+  ],
+  "vendorNames": [
+    "GENERAL SUPPLIES",
+    "RELIABLE OFFICE",
+    "COMPUTER WORLD",
+    "GENERAL SUPPLIES"
+  ],
+  "total": "0.00"
+}
