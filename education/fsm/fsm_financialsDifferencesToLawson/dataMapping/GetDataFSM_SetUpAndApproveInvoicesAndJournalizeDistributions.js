@@ -1,7 +1,9 @@
 import DateFormats from "../../../commons/constants/DateFormats";
 import DateFunctions from "../../../commons/functions/DateFunctions";
 import { log } from "../../../testBase/BaseClass";
+import FSMCommon from "../../commons/FSMCommonFunctions";
 import config from "../../plan/FSMFinancialsDifferencesToLawson.spec";
+const { DateTime } = require('luxon');
 
 /**-----------------------------------------------------------------------------------------
  * Purpose : 	This class is mapping the data for Setting up and approving vendor requests
@@ -30,7 +32,7 @@ class GetDataFSM_SetUpAndApproveInvoicesAndJournalizeDistributions {
         processInvCxt.cashCode 						= config.USER_NAME.substring(config.USER_NAME.length - 4);
         processInvCxt.effectiveDate 				= DateFunctions.lastDateInMonth(DateFormats.M_D_YYYY, 0);
         processInvCxt.postThroughDate 				= DateFunctions.getCurrentDate(DateFormats.M_D_YYYY);
-        processInvCxt.description 					= FSMCommon.getCompany() + processInvCxt.description;
+        processInvCxt.description 					= await FSMCommon.getCompany() + processInvCxt.description;
         
 
         log.info("INFO : ========>>>>> Data mapping for SetUpInvoiceApprovalContext and ProcessInvoicesContext is successfully completed <<<<<=========");

@@ -22,8 +22,6 @@ class BaseClass {
 
     this.context = await chromium.launchPersistentContext('', {
       headless: false,
-      screenshot: 'only-on-failure',
-      video: 'retain-on-failure',
       args: [
         `--disable-extensions-except=${extPath}`,
         `--load-extension=${extPath}`
@@ -194,13 +192,32 @@ class BaseClass {
     
   }
 
+  static async switchToWindow(pageTitle) {
+
+    const windows = await this.page.context().pages();
+
+    for (let i = 0; i < windows.length; i++) {
+
+      const activeWindowTitle = await windows[i].title();
+
+      log.info("INFO : ========>>>>> Active window title is " + activeWindowTitle + " <<<<<=========");
+
+      if (activeWindowTitle.toLowerCase() === pageTitle.toLowerCase()) {
+
+        await windows[i].bringToFront();
+        break;
+      }
+    }
+
+  }
+
 }
 
 export function describeTest(testName, callback) {
 
   test.describe.configure({ mode: 'serial' });
 
-    BaseClass.initLogger(testName);
+  BaseClass.initLogger(testName);
 
   test.describe(() => {
     callback();

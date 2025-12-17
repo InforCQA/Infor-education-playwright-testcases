@@ -25,7 +25,7 @@ export default function TCEDU_FSMReviewTheScreenElementsOnPayablesManagerHomepag
             await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
         });
 
-        test('Select a map provider', async ({ }) => {
+        test('Review the screen elements on the Payables Manager homepage', async ({ }) => {
             await CloudSuite.navigateToApplication(ProductNames.FSM);
 
             // Collapse the context apps

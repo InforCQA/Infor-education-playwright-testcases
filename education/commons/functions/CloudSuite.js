@@ -19,7 +19,8 @@ class CloudSuite extends BaseClass {
 	 * Objective : Login to Cloudsuite
      * --------------------------------------------------------*/
     static async login(url, username, password) {
-        const homePg = new Homepages();
+        
+        const homePg = new Homepages(this.page);
 
         await this.page.goto(url);
         await homePg.username().click();
@@ -36,7 +37,7 @@ class CloudSuite extends BaseClass {
 	 * ------------------------------------------------------------------------*/
     static async navigateToApplication(appName) {
 
-        const homePg = new Homepages();    
+        const homePg = new Homepages(this.page);    
 
         let element = null;
         await this.pause(9);
@@ -59,7 +60,7 @@ class CloudSuite extends BaseClass {
 	 * ---------------------------------------------*/
     static async closeActiveWorkspace() {
 
-        const homePg = new Homepages();
+        const homePg = new Homepages(this.page);   
 
         await this.forceClick(await this.getLocator(homePg.closeSelectedToolbar));
     }
@@ -69,7 +70,7 @@ class CloudSuite extends BaseClass {
 	 *-------------------------------------*/
     static async collapseContextApps() {
 
-        const homePg = new Homepages();
+        const homePg = new Homepages(this.page);   
 
         if (await this.isElementPresent(await homePg.btnV2ContextApps())) {
             // Collapse context apps if it is expanded
@@ -89,7 +90,7 @@ class CloudSuite extends BaseClass {
 	 * ---------------------------------------------------------------*/
     static async logOut() {
 
-        const homePg = new Homepages();
+        const homePg = new Homepages(this.page);   
 
         await homePg.userIcon().click();
         await homePg.signOut().click();

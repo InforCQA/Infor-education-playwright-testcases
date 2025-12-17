@@ -17,37 +17,37 @@ const config = {
 
 test.describe.configure({ mode: 'parallel' });
 
-// test.describe('TCEDU_LNSelectMapProvider', () => {
-//    TCEDU_LNSelectMapProvider();
-// });
+test.describe('TCEDU_LNSelectMapProvider', () => {
+   TCEDU_LNSelectMapProvider();
+});
 
-// test.describe('TCEDU_LNReviewEnterpriseModel', () => {
-//    TCEDU_LNReviewEnterpriseModel();
-// });
+test.describe('TCEDU_LNReviewEnterpriseModel', () => {
+   TCEDU_LNReviewEnterpriseModel();
+});
 
-// test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
-//    TCEDU_LNDevelopTheOriginalEnterpriseStructure();
-// });
+test.describe('TCEDU_LNDevelopTheOriginalEnterpriseStructure', () => {
+   TCEDU_LNDevelopTheOriginalEnterpriseStructure();
+});
 
-// test.describe('TCEDU_LNReviewItemsFromGlobalPrespective', () => {
-//    TCEDU_LNReviewItemsFromGlobalPrespective();
-// });
+test.describe('TCEDU_LNReviewItemsFromGlobalPrespective', () => {
+   TCEDU_LNReviewItemsFromGlobalPrespective();
+});
 
-// test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
-//    TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
-// });
+test.describe('TCEDU_LNReviewAndUpdateItemsFromSalesPerspective', () => {
+   TCEDU_LNReviewAndUpdateItemsFromSalesPerspective();
+});
 
-// test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
-//    TCEDU_LNCreateANewItemUsingItemDefaults();
-// });
+test.describe('TCEDU_LNCreateANewItemUsingItemDefaults', () => {
+   TCEDU_LNCreateANewItemUsingItemDefaults();
+});
 
-// test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
-//    TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
-// });
+test.describe('TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders', () => {
+   TCEDU_LNUpdateLocalBusinessPartnerAndCreateSalesOrders();
+});
 
-// test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
-//    TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
-// });
+test.describe('TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder', () => {
+   TCEDU_LNCreateAWarehouseTransferAndPurchaseOrder();
+});
 
 test.describe('TCEDU_LNCreateWarehouseOrderForWarehouseAndProject', () => {
    TCEDU_LNCreateWarehouseOrderForWarehouseAndProject();

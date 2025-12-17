@@ -25,6 +25,12 @@ class FSMMenu {
    static INVOICE_ROUTING_CATEGORIES = "Invoice Routing Categories";
    static PAYABLES_SETUP = "Payables Setup";
    static INVOICE_APPROVAL_CODES = "Invoice Approval Codes";
+   static INVOICE_ROUTING_RULES = "Invoice Routing Rules";
+   static INVOICE_ASSIGNMENT_RULES = "Invoice Assignment Rules";
+   static PROCESS_INVOICES = "Process Invoices";
+   static MANAGE_INVOICES = "Manage Invoices";
+   static PERFORM_CASH_REQUIREMENTS = "Perform Cash Requirements";
+   static CASH_REQUIREMENTS_RESULTS = "Cash Requirements Results";
 }
 
 export default FSMMenu;

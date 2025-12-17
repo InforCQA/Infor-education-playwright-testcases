@@ -4,7 +4,7 @@ import BaseClass from "../../testBase/BaseClass";
 class FSMCommonPage extends BaseClass {
 
      constructor(page) {
-        super(page);
+        super();
         this.page = page;
     }
 

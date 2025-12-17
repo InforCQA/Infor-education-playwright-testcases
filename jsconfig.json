@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "types": ["node", "@playwright/test"]
+  },
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
+}

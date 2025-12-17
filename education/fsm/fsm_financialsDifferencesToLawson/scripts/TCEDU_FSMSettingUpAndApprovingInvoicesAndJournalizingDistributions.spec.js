@@ -7,6 +7,9 @@ import ProductNames from '../../../commons/constants/ProductNames';
 import GetDataFSM_SetUpAndApproveInvoicesAndJournalizeDistributions from '../dataMapping/GetDataFSM_SetUpAndApproveInvoicesAndJournalizeDistributions';
 import GetDataFSM_AddInvoiceRoutingRuleAndCustomGroup from '../dataMapping/GetDataFSM_AddInvoiceRoutingRuleAndCustomGroup';
 import GetDataFSM_CreateInvoiceAssignmentRule from '../dataMapping/GetDataFSM_CreateInvoiceAssignmentRule';
+import GetData_LoginDetails from '../dataMapping/GetData_LoginDetails';
+import WebMailFunctions from '../../../commons/functions/WebMailFunctions';
+import FSMCommon from '../../commons/FSMCommonFunctions';
 
 /**-----------------------------------------------------------------------------------------------
  * Purpose   : 	Setting up invoice approval and assignment, Processing invoices and 
@@ -53,6 +56,7 @@ import GetDataFSM_CreateInvoiceAssignmentRule from '../dataMapping/GetDataFSM_Cr
  * -----------------------------------------------------------------------------------------------*/
 
 // Property data for testcases
+const loginCnt = JSON.parse(JSON.stringify(require("../../../commons/context/LoginContext.json")));
 const processInvCxt = JSON.parse(JSON.stringify(require("../data/SettingUpAndApprovingInvoicesAndJournalizingDistributions.properties.json")));
 const customGrpContext = JSON.parse(JSON.stringify(require("../data/AddInvoiceRoutingRuleAndCustomGroup.properties.json")));
 const customGrpContext_Two = JSON.parse(JSON.stringify(require("../data/AddAnotherInvoiceRoutingRuleAndCustomGroup.properties.json")));
@@ -66,13 +70,14 @@ export default function TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDis
         test.beforeAll('',async ({ }) => {
 
             // Mapping the data
+            await GetData_LoginDetails.getCSLoginDetailsContext();
             await GetDataFSM_SetUpAndApproveInvoicesAndJournalizeDistributions.ProcessInvoicesContext(processInvCxt);
             await GetDataFSM_AddInvoiceRoutingRuleAndCustomGroup.CustomGroupsContext(customGrpContext);
             await GetDataFSM_AddInvoiceRoutingRuleAndCustomGroup.CustomGroupsContext(customGrpContext_Two);
             await GetDataFSM_CreateInvoiceAssignmentRule.CustomGroupsContext(customGrpContext_Three);
 
             await BaseClass.globalSetup();
-            await CloudSuite.login(config.BASE_URL, config.USER_NAME, config.PASSWORD);
+            await CloudSuite.login(loginCnt.BASE_URL, loginCnt.USER_NAME, loginCnt.PASSWORD);
         });
 
         test('Create approval roles', async ({ }) => {
@@ -105,6 +110,190 @@ export default function TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDis
             await PayablesManagerFunctions.createAnInvoiceApprovalCode(processInvCxt, config.USER_NAME.substring(0,4));
         });
 
+        test(' Create invoice approval levels', async ({ }) => {
+
+            await PayablesManagerFunctions.createInvoiceApprovalLevels(processInvCxt, await FSMCommon.getCompany());
+        });
+
+        test('Add an invoice routing rule and custom group', async ({ }) => {
+
+            await PayablesManagerFunctions.addAnInvoiceRoutingRuleAndCustomGroup(customGrpContext.name,
+				config.USER_NAME.substring(0,4), customGrpContext.description, customGrpContext.customGroup,
+				customGrpContext.description, customGrpContext.condition, customGrpContext.listName, null, 0, true);
+        });
+
+        test('Add another invoice routing rule and custom group', async ({ }) => {
+
+     		await PayablesManagerFunctions.addAnInvoiceRoutingRuleAndCustomGroup(customGrpContext_Two.name,
+				config.USER_NAME.substring(0,4), customGrpContext_Two.description, customGrpContext_Two.customGroup,
+				customGrpContext_Two.description, customGrpContext_Two.condition, customGrpContext_Two.listName, null, 1, true);
+        });
+
+        test('Create an invoice assignment rule', async ({ }) => {
+
+            await PayablesManagerFunctions.createInvoiceAssignmentRule(customGrpContext_Three.name[0], config.USER_NAME.substring(0,4),
+				customGrpContext_Three.description[0], customGrpContext_Three.customGroup, customGrpContext_Three.description,
+				customGrpContext_Three.condition, customGrpContext_Three.listName, customGrpContext_Three.resourceName,
+				customGrpContext_Three.resourceID);
+        });
+
+        test('Enter an invoice from General Supplies', async ({ }) => {
+
+            await PayablesManagerFunctions.createInvoice(processInvCxt.invoiceEntryTemplate, processInvCxt.vendors[0],
+				processInvCxt.invoiceNumbers[0], processInvCxt.invoiceDates[0], false, null,
+				processInvCxt.invoiceAmounts[0], processInvCxt.invoiceRoutingCategory,
+				processInvCxt.distributionAmt[0].split("&"), processInvCxt.costCenter[0].split("&"),
+				processInvCxt.account[0].split("&"), false, null, false, null, processInvCxt.errorMsgs[0], 0, null,null, null, null);
+        });
+
+        test('Enter an invoice from Reliable Office', async ({ }) => {
+
+            await PayablesManagerFunctions.createInvoice(processInvCxt.invoiceEntryTemplate, processInvCxt.vendors[1],
+                processInvCxt.invoiceNumbers[1], processInvCxt.invoiceDates[1], false, null,
+                processInvCxt.invoiceAmounts[1], processInvCxt.invoiceRoutingCategory,
+                processInvCxt.distributionAmt[1].split("&"), processInvCxt.costCenter[1].split("&"),
+                processInvCxt.account[1].split("&"), false, null, false, null, processInvCxt.errorMsgs[1], 0, null,
+                null, null, null);
+        });
+
+        test('Enter an invoice from Computer World', async ({ }) => {
+
+            	await PayablesManagerFunctions.createInvoice(processInvCxt.invoiceEntryTemplate, processInvCxt.vendors[2],
+				processInvCxt.invoiceNumbers[2], processInvCxt.invoiceDates[2], false, null,
+				processInvCxt.invoiceAmounts[2], processInvCxt.invoiceRoutingCategory,
+				processInvCxt.distributionAmt[2].split("&"), processInvCxt.costCenter[2].split("&"),
+				processInvCxt.account[2].split("&"), true, processInvCxt.paymentTerms, true,
+				processInvCxt.externalPurchaseOrder, processInvCxt.errorMsgs[2], 0, null, null, null, null);
+        });
+
+        test('Enter a second invoice from General Supplies', async ({ }) => {
+
+            await PayablesManagerFunctions.createInvoice(processInvCxt.invoiceEntryTemplate, processInvCxt.vendors[3],
+				processInvCxt.invoiceNumbers[3], processInvCxt.invoiceDates[3], true, processInvCxt.dueDate,
+				processInvCxt.invoiceAmounts[3], processInvCxt.invoiceRoutingCategory,
+				processInvCxt.distributionAmt[3].split("&"), processInvCxt.costCenter[3].split("&"),
+				processInvCxt.account[3].split("&"), false, null, false, null, processInvCxt.errorMsgs[3], 0, null,
+				null, null, null);
+        });
+
+        test('Reassign an invoice to another Payables Invoice Processor', async ({ }) => {
+
+            await PayablesManagerFunctions.reassignInvoiceToAnotherPayablesInvoiceProcessor(
+				processInvCxt.invoiceNumbers[1], processInvCxt.vendorNames[1], processInvCxt.invoiceAmounts[1], 1,
+				);
+        });
+
+        test('Attach a document and Review the attachment', async ({ }) => {
+
+            await PayablesManagerFunctions.attachDocumentToAnInvoiceAndReviewTheAttachment(processInvCxt,
+				processInvCxt.invoiceNumbers[0], processInvCxt.vendorNames[0]);
+        });
+
+        test('Review invoices', async ({ }) => {
+
+            await PayablesManagerFunctions.reviewInvoices(0, processInvCxt.invoiceNumbers[3],
+				processInvCxt.invoiceNumbers[0]);
+        });
+
+        test('Submit an invoice for approval', async ({ }) => {
+
+            await PayablesManagerFunctions.submitInvoiceForApproval(processInvCxt.invoiceApprovalCode, null,
+				null, 0, processInvCxt.invoiceNumbers[3], processInvCxt.invoiceNumbers[0]);
+        });
+
+        test('Auto approve the Computer World Invoice for $168', async ({ }) => {
+
+            await PayablesManagerFunctions.autoApproveAnInvoice(processInvCxt.invoiceNumbers[2],
+				processInvCxt.vendorNames[2], processInvCxt.invoiceAmounts[2], null, 0);
+        });
+
+        test('Send an email message to the current approver', async ({ }) => {
+
+            await PayablesManagerFunctions.sendAnEmailMessageToTheCurrentApprover(processInvCxt.invoiceNumbers[3],
+				processInvCxt.emailContent, processInvCxt.vendorNames[3], processInvCxt.invoiceAmounts[3]);
+
+            /*------------------------------------------------------------------------------
+         *  Here, we need to login as instructor for Exercise 5.1 : Approve an invoice
+         *-----------------------------------------------------------------------------*/
+            // Logout from Cloud Suite
+            CloudSuite.logOut();
+        });
+
+        
+        test('Approve an invoice', async ({ }) => {
+
+
+            await CloudSuite.login(loginCnt.BASE_URL, loginCnt.INSTRUCTOR, loginCnt.PASSWORD);
+
+            await CloudSuite.navigateToApplication(ProductNames.FSM);
+
+            await PayablesManagerFunctions.approveAnInvoice(processInvCxt.invoiceNumbers[3]);
+
+            /*-----------------------------------------------------------------------------
+            *  Here, we need to login back as employee to proceed with remaining exercises
+            *-----------------------------------------------------------------------------*/
+            // Logout from Cloud Suite
+            await CloudSuite.logOut();
+        });
+
+        test('Reassign an approval level', async ({ }) => {
+
+            // Login to Cloud Suite
+            await CloudSuite.login(loginCnt.BASE_URL, loginCnt.USER_NAME, loginCnt.PASSWORD);
+
+            // Navigate to Infor Financials & Supply Management
+            await CloudSuite.navigateToApplication(ProductNames.FSM);
+
+            await PayablesManagerFunctions.reassignAnApprovalLevel(processInvCxt.invoiceNumbers[0],
+				processInvCxt.invoiceApprovalRoles[3]);
+        });
+
+        test('Manually approve an invoice', async ({ }) => {
+
+
+            await PayablesManagerFunctions.manuallyApproveAnInvoice(processInvCxt.invoiceNumbers[3],
+                processInvCxt.vendorNames[3]);
+        });
+
+        test('Email Invoice', async ({ }) => {
+
+
+            await PayablesManagerFunctions.emailInvoice(processInvCxt.invoiceNumbers[3], processInvCxt.toEmail,
+                processInvCxt.vendorNames[3]);
+
+            await WebMailFunctions.reviewWebMailSubject(processInvCxt.toEmail, loginCnt.PASSWORD,
+                processInvCxt.emailSubject + processInvCxt.invoiceNumbers[3]);
+        });
+
+        
+        test('Maintain released invoices', async ({ }) => {
+
+
+            // Navigate to Infor Financials & Supply Management
+		    await CloudSuite.navigateToApplication(ProductNames.FSM);
+
+            await PayablesManagerFunctions.maintainReleasedInvoices(processInvCxt);
+        });
+
+        
+        test('Place an invoice on hold and Take an invoice off hold', async ({ }) => {
+
+            await PayablesManagerFunctions.placeAnInvoiceOnHoldAndTakeItOffHold(processInvCxt.invoiceNumbers[0],
+				processInvCxt.holdCode, processInvCxt.holdCodeDescr);
+        });
+
+                
+        test('Generate a Cash Requirements report', async ({ }) => {
+
+            await PayablesManagerFunctions.generateCashRequirementsReport(processInvCxt, await FSMCommon.getCompanyGroup());
+
+        });
+
+        test('Review the Cash Requirements Resultss', async ({ }) => {
+
+            await PayablesManagerFunctions.reviewCashRequirementsResults(processInvCxt.payGroup);
+
+        });
 
         test.afterAll(async () => {
             await CloudSuite.logOut();

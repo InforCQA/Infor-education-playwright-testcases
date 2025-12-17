@@ -15,6 +15,11 @@ class Constants {
         static CANCEL = "Cancel";
         static IS_CHECKED = "is-checked";
         static OK = "Ok";
+        static DONE_EDITING = "Done Editing";
+        static COMMA = ",";
+        static SUBMIT = "Submit";
+        static STATUS_COMPLETED = "Completed";
+        static STATUS_UNRELEASED = "Unreleased";
 }
 
 export default Constants;

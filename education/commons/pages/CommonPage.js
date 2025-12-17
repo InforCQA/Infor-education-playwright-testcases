@@ -2,9 +2,9 @@ import BaseClass from '../../testBase/BaseClass.js';
 
 class Homepages extends BaseClass {
 
-  constructor() {
+  constructor(page) {
     super();
-    this.page = BaseClass.page;
+    this.page = page;
   }
 
   username = () => this.page.locator("//input[@name='username']");
@@ -36,8 +36,10 @@ class Homepages extends BaseClass {
   cloudIdentities = "//label[text()='Cloud Identities']";
 
   // User icon (Ln variant)
-  userIconLn = "//*[@id='osp-nav-user-profile']";
-
+  userIconLn = async () => {
+    return this.page.locator(`//*[@id='osp-nav-user-profile']`);
+  };
+  
   // Sign out option (Ln variant)
   signOutLn = "//*[@ygtrackclick='Sign Out']";
 

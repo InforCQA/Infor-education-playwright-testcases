@@ -25,6 +25,21 @@ class FSMPageTitles {
     static INVOICE_ROUTING_CATEGORY = "Invoice Routing Category: %s - %s";
     static INVOICE_APPROVAL_CODES = "Invoice Approval Codes";
     static CREATE_INVOICE_APPROVAL_CODE = "Create Invoice Approval Code";
+    static INVOICE_APPROVAL_LEVEL = "Invoice Approval Level";
+    static INVOICE_APPROVAL_CODE = "Invoice Approval Code: %s - %s";
+    static INVOICE_ROUTING_RULES = "Invoice Routing Rules";
+    static INVOICE_ROUTING_RULE = "Invoice Routing Rule";
+    static PAYABLES_INVOICES = "Payables Invoices";
+    static INVOICE_ASSIGNMENT_RULES = "Invoice Assignment Rules";
+    static INVOICE_ASSIGNMENT_RULE = "Invoice Assignment Rule";
+    static CREATE_INVOICE = "Create Invoice";
+    static CREATE_INVOICE_DISTRIBUTION = "Create Invoice Distribution";
+    static PROCESS_INVOICES = "Process Invoices";
+    static INVOICE_FOR_VENDOR = "Invoice %s for %s";
+    static RELATED_DOCUMENT = "Related Document";
+    static INVOICE_APPROVAL = "Invoice Approval";
+    static CASH_REQUIREMENTS_RESULT = "Cash Requirements Result";
+    static INVOICE_APPROVAL_ASSIGNMENT = "Invoice Approval Assignment";
 }
 
 export default FSMPageTitles;

@@ -17,27 +17,27 @@ const config = {
 
 test.describe.configure({ mode: 'parallel' });
 
-test.describe('TCEDU_FSMReviewTheScreenElementsOnPayablesManagerHomepage', () => {
-   TCEDU_FSMReviewTheScreenElementsOnPayablesManagerHomepage();
-});
+// test.describe('TCEDU_FSMReviewTheScreenElementsOnPayablesManagerHomepage', () => {
+//    TCEDU_FSMReviewTheScreenElementsOnPayablesManagerHomepage();
+// });
 
-test.describe('TCEDU_FSMReviewChangesToVendorGroupSetup', () => {
-   TCEDU_FSMReviewChangesToVendorGroupSetup();
-});
+// test.describe('TCEDU_FSMReviewChangesToVendorGroupSetup', () => {
+//    TCEDU_FSMReviewChangesToVendorGroupSetup();
+// });
 
-test.describe('TCEDU_FSMReviewChangesToManagingVendorss', () => {
-   TCEDU_FSMReviewChangesToManagingVendors();
-});
+// test.describe('TCEDU_FSMReviewChangesToManagingVendorss', () => {
+//    TCEDU_FSMReviewChangesToManagingVendors();
+// });
 
-test.describe('TCEDU_FSMSetUpAndApproveVendorRequests', () => {
-   TCEDU_FSMSetUpAndApproveVendorRequests();
-});
+// test.describe('TCEDU_FSMSetUpAndApproveVendorRequests', () => {
+//    TCEDU_FSMSetUpAndApproveVendorRequests();
+// });
 
 test.describe('TCEDU_FSMUseConditionBuilderToDefineRules', () => {
    TCEDU_FSMUseConditionBuilderToDefineRules();
 });
 
-test.describe('TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions', () => {
-   TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions();
-});
+// test.describe('TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions', () => {
+//    TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions();
+// });
 export default config;

@@ -22,6 +22,19 @@ class FSMTableTitles {
     static INVOICE_APPROVAL_ASSIGNMENTS = "Invoice Approval Assignments";
     static RESOURCES = "Resources";
     static INVOICE_APPROVAL_ROLES = "Invoice Approval Roles";
+    static INVOICE_APPROVAL_LEVELS = "Invoice Approval Levels";
+    static CUSTOM_GROUPS = "Custom Groups";
+    static INVOICE_APPROVAL_CODES = "Invoice Approval Codes";
+    static WARNINGS_AND_ERRORS = "Warnings and Errors";
+    static DISTRIBUTIONS = "Distributions";
+    static DOCUMENTS = "Documents";
+    static INVOICES_PENDING_APPROVAL = "Invoices Pending Approval";
+    static RELEASED_INVOICES = "Released Invoices";
+    static INVOICE_HOLD_CODES = "Invoice Hold Codes";
+    static INVOICES_ON_HOLD = "Invoices On Hold";
+    static PAY_GROUPS = "Pay Groups";
+    static CASH_CODES = "Cash Codes";
+    static CURRENT_CASH_REQUIREMENTS_RESULTS = "Current Cash Requirements Results";
 }
 
 export default FSMTableTitles;

@@ -1,14 +1,14 @@
-import { expect } from "allure-playwright";
+import {expect } from '@playwright/test';
 import ElementAttributes from "../../commons/constants/ElementAttributes";
 import BaseClass, { log } from "../../testBase/BaseClass";
 import FSMCommonPage from "./FSMCommonPage";
 import Constants from "./Constants";
 import { setBrowserZoom } from "playwright-zoom";
-import PayablesManager_Vendors_Lbl from "../fsm_financialsDifferencesToLawson/constants/elementLbls/PayablesManager_Vendors_Lbl";
-import PayablesManager_Vendors_Id from "../fsm_financialsDifferencesToLawson/constants/elementIDs/PayablesManager_Vendors_Id";
 import FSMMenu from "./FSMMenu";
 import FSMPageTitles from "./PageTitles";
 import FSMTabs from "./Tabs";
+import Homepages from "../../commons/pages/CommonPage";
+const loginCnt = JSON.parse(JSON.stringify(require("../../commons/context/LoginContext.json")));
 
 class FSMCommon extends BaseClass {
 
@@ -85,7 +85,7 @@ class FSMCommon extends BaseClass {
             if (!(await ((await commonPg.btnMoreHeaderTabs()).getAttribute(ElementAttributes.CLASS)).includes(Constants.IS_OPEN))) {
                 await (await commonPg.btnMoreHeaderTabs()).click();
             }
-            await (await commonPg.lnkMoreTabs(tabName, tabName)).click();
+            await (await commonPg.lnkMoreTabs(tabName)).click();
         }
 
         log.info("INFO : =========>>>>> Clicked on " + tabName + " tab <<<<<=========");
@@ -609,7 +609,7 @@ class FSMCommon extends BaseClass {
         ).toContain(message.toLowerCase());
 
         // Force close the confirmation message
-        await commonPg.btnClose().click({ force: true });
+        await (await commonPg.btnClose()).click({ force: true });
 
         log.info(`INFO : =========>>>>> Verified message : ${message} <<<<<=========`);
     }
@@ -866,7 +866,7 @@ class FSMCommon extends BaseClass {
 		return await commonPg.radioButton(id, lbl.toLowerCase());
 	}
 	
-    	/*----------------------------------------------------------
+    /*----------------------------------------------------------
 	 * Objective : To get unlabeled textbox element
 	 *----------------------------------------------------------*/
 	static async getUnlabeledTextField(id) {
@@ -875,6 +875,130 @@ class FSMCommon extends BaseClass {
 
 		return await (await commonPg.unlabeledTextField(id));
 	}
+
+    static async getRequiredValueFromTheGrid(id, columnName, rowNo) {
+
+		const commonPg = new FSMCommonPage(this.page);
+
+        // Collapse toggle menu
+        await this.collapseToggleMenu();
+
+		// Required column
+		const columnID = await (await commonPg.thColumn(columnName, id)).getAttribute(ElementAttributes.ID);
+
+		const reqValue = await (await commonPg.getCellValue(String(rowNo), columnID)).getAttribute(ElementAttributes.INNER_TEXT);
+
+        log.info(`INFO : =========>>>>> Retreived ${reqValue} from row : ${rowNo} of column columnName <<<<<=========`);
+
+        return reqValue;
+    }
+
+    static async actionsMenuOption(elementID, ...text) {
+
+        const commonPg = new FSMCommonPage(this.page);
+
+        try {
+            await (await commonPg.actionMenuBtn(text)).click({force:true});
+
+        } catch (exception) {
+
+            await (await commonPg.btnAction(elementID)).click();
+
+            for (let i = 0; i < text.length; i++) {
+
+                 await (await commonPg.actionMenuOptions(text[i])).hover();
+                 await (await commonPg.actionMenuOptions(text[i])).click();
+            }
+        }
+
+        log.info(`INFO : =========>>>>> Selected ${text.toString()} from actions <<<<<=========`);
+    }
+
+    /*--------------------------------------------------------
+	 * Objective : To get assigned employee name
+	 *--------------------------------------------------------*/
+	static async getAssignedEmployeeName() {
+
+		const homepage = new Homepages(this.page);
+
+		return (await (await homepage.userIconLn()).getAttribute(ElementAttributes.INNER_TEXT)).split("\\R")[1];
+	}
+
+    /*--------------------------------------------------------
+	 * Objective : To get assigned company
+	 *--------------------------------------------------------*/
+    static async getCompany() {
+
+		const username = loginCnt.USER_NAME;
+		const company = username.substring(username.length() - 4);
+
+        return company;
+    }
+
+    /*--------------------------------------------------------
+	 * Objective : To get assigned company group
+	 *--------------------------------------------------------*/
+	static async getCompanyGroup() {
+
+		const username = loginCnt.USER_NAME;
+		const cmpGroup = username.substring(0, 4);
+
+		return cmpGroup;
+	}
+
+    static async selectTabWithPartialText(tabName) {
+        const commonPg = new FSMCommonPage(this.page);
+
+        try {
+            await (await commonPg.lnkTabsPartial(tabName)).hover();
+            await (await commonPg.lnkTabsPartial(tabName)).click();
+        } catch (error) {
+            if (!(await (await commonPg.btnMoreHeaderTabs())
+                .getAttribute(ElementAttributes.CLASS)
+            ).includes(Constants.IS_OPEN)
+            ) {
+                await (await commonPg.btnMoreHeaderTabs()).click({ force: true });
+            }
+
+            await (await commonPg.lnkMoreTabs(tabName)).click();
+        }
+
+        await this.screenshot(`Clicked on ${tabName} tab`);
+
+        log.info(`INFO : =========>>>>> Clicked on ${tabName} tab <<<<<=========`);
+    }
+
+    static async enterDataInGridCell(id, columnName, rowNo, ...valueToType) {
+
+        const commonPg = new FSMCommonPage(this.page);
+
+        // Collapse toggle menu
+        await this.collapseToggleMenu();
+
+        // Get required column ID
+        const columnID = await (await commonPg
+            .thColumn(columnName, id))
+            .getAttribute(ElementAttributes.ID);
+
+        // Click the cell
+        await (await commonPg.gridCellClick(rowNo, columnID)).click();
+
+        // Clear the cell
+        await (await commonPg.gridCellType(rowNo, columnID)).fill('');
+
+        // Click again to activate
+        await (await commonPg.gridCellClick(rowNo, columnID)).click();
+
+        // Type value
+        await (await commonPg.gridCellType(rowNo, columnID)).type(valueToType.join(''));
+
+        // Press TAB
+        await this.page.keyboard.press('Tab');
+
+        log.info(`INFO : =========>>>>> Entered ${valueToType} in row : ${rowNo} of column ${columnName} <<<<<=========`);
+    }
+
+
 
 }
 
