@@ -46,8 +46,8 @@ class WebMailPage extends BaseClass {
         return await this.page.locator(`//a[normalize-space()='Download']`)
     };
 
-    usefulLinksMenu = async () => {
-        return await (await this.iframe()).locator(`//a[normalize-space()='Download']`)
+    usefulLinksMenu = async (text) => {
+        return await (await this.iframe()).locator(`//div[contains(@class,'custom-menu')]//li[contains(@class,'item')][normalize-space()='${text}']`)
     };
 }
 

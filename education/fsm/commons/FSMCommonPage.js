@@ -288,11 +288,6 @@ class FSMCommonPage extends BaseClass {
         return await (await this.iframe()).locator(`//tr[@aria-rowindex='${row}']/td[@aria-describedby='${colId}']//input/following-sibling::button`);
     };
 
-    // lookupBtn -- Dynamic button
-    lookupBtn = async (row, colId) => {
-        return await (await this.iframe()).locator(`//tr[@aria-rowindex='${row}']/td[@aria-describedby='${colId}']//input/following-sibling::button`);
-    };
-
     // Item Field in lookup -- Input
     itemInLookup = async () => {
         return await (await this.iframe()).locator("//input[@id='ItemSearchForm_Item']");

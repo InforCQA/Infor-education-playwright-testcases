@@ -7,6 +7,8 @@ class Homepages extends BaseClass {
     this.page = page;
   }
 
+  iframe = () => this.page.frameLocator("//iframe[contains(@name,'homepages')]");
+
   username = () => this.page.locator("//input[@name='username']");
   password = () => this.page.locator("//input[@name='pass']");
   submit = () =>   this.page.locator("//span[text()='Sign in']");
@@ -101,8 +103,9 @@ class Homepages extends BaseClass {
   bookMark = "//div[contains(@class,'bookmark-items')]//span[contains(@class,'bookmark-item-name')][text()='%s']";
 
   // Widget title (V2)
-  widgetTitleV2 = "//*[contains(@class,'widget-title')][normalize-space()='%s']";
-
+  widgetTitleV2 = async (text) => {
+        return await (await this.iframe()).locator(`//*[contains(@class,'widget-title')][normalize-space()='${text}']`)
+    };
   // Popup message
   popupMsg = "//div[@aria-labelledby='message-title']//div[@class='message']";
 
@@ -110,7 +113,9 @@ class Homepages extends BaseClass {
   yesBtn = "//button[normalize-space()='Yes']";
 
   // Widget title
-  widgetTitle = "//*[contains(@class,'widget-title')][normalize-space()='%s']";
+   widgetTitle = async (text) => {
+        return await this.page.locator(`//*[contains(@class,'widget-title')][normalize-space()='${text}']`)
+    };
 
   // Workspace name
   workSpaceName = "//*[local-name()='ids-layout-flex'][contains(@class,'workspace')][contains(normalize-space(),'%s')]";
