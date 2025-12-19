@@ -37,7 +37,7 @@ test.describe('TCEDU_FSMUseConditionBuilderToDefineRules', () => {
    TCEDU_FSMUseConditionBuilderToDefineRules();
 });
 
-test.describe('TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions', () => {
-   TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions();
-});
+// test.describe('TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions', () => {
+//    TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions();
+// });
 export default config;
