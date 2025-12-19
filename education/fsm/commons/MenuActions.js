@@ -22,6 +22,7 @@ class FSMActionsMenu {
     static REVERSE_DISTRIBUTION_FOR_UPDATE = "Reverse Distribution For Update";
     static PUT_INVOICE_ON_HOLD = "Put Invoice On Hold";
     static TAKE_OFF_HOLD = "Take Off Hold";
+    static NEXT = "Next";
 }
 
 export default FSMActionsMenu;

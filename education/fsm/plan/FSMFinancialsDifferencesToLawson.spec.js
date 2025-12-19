@@ -29,15 +29,15 @@ test.describe.configure({ mode: 'parallel' });
 //    TCEDU_FSMReviewChangesToManagingVendors();
 // });
 
-// test.describe('TCEDU_FSMSetUpAndApproveVendorRequests', () => {
-//    TCEDU_FSMSetUpAndApproveVendorRequests();
-// });
+test.describe('TCEDU_FSMSetUpAndApproveVendorRequests', () => {
+   TCEDU_FSMSetUpAndApproveVendorRequests();
+});
 
 test.describe('TCEDU_FSMUseConditionBuilderToDefineRules', () => {
    TCEDU_FSMUseConditionBuilderToDefineRules();
 });
 
-// test.describe('TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions', () => {
-//    TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions();
-// });
+test.describe('TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions', () => {
+   TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDistributions();
+});
 export default config;

@@ -40,6 +40,10 @@ class FSMPageTitles {
     static INVOICE_APPROVAL = "Invoice Approval";
     static CASH_REQUIREMENTS_RESULT = "Cash Requirements Result";
     static INVOICE_APPROVAL_ASSIGNMENT = "Invoice Approval Assignment";
+    static CURRENT_CASH_REQUIREMENTS_RESULTS = "Current Cash Requirements Results";
+    static PAYMENT_OUTPUT_FILES = "Payment Output Files";
+    static PAYMENT_OUTPUT_FILE = "Payment Output File";
+    static PAYMENT_OUTPUT_FILE_DETAIL = "Payment Output File Detail";
 }
 
 export default FSMPageTitles;

@@ -51,6 +51,12 @@ import Payables_Invoices_Id from "../constants/elementIDs/Payables_Invoices_Id";
 import Payables_CurrentCashRequirementsResults_Lbl from "../constants/elementLbls/Payables_CurrentCashRequirementsResults_Lbl";
 import PayablesManager_PerformCashRequirements_Id from "../constants/elementIDs/PayablesManager_PerformCashRequirements_Id";
 import PayablesManager_CashRequirementsResults_Lbl from "../constants/elementLbls/PayablesManager_CashRequirementsResults_Lbl";
+import Payables_CreateElectronicPayments_Lbl from "../constants/elementLbls/Payables_CreateElectronicPayments_Lbl";
+import Payables_CreateElectronicPayments_Id from "../constants/elementIDs/Payables_CreateElectronicPayments_Id";
+import Payables_PaymentOutputFiles_Lbl from "../constants/elementLbls/Payables_PaymentOutputFiles_Lbl";
+import Payables_PaymentOutputFiles_Id from "../constants/elementIDs/Payables_PaymentOutputFiles_Id";
+import Payables_PaymentCloseOld_Lbl from "../constants/elementLbls/Payables_PaymentCloseOld_Lbl";
+import Payables_PaymentCloseOld_Id from "../constants/elementIDs/Payables_PaymentCloseOld_Id";
 
 class PayablesManagerFunctions extends BaseClass {
 
@@ -3421,9 +3427,351 @@ class PayablesManagerFunctions extends BaseClass {
         log.info("INFO : =========>>>>> Review the Cash Requirements Results successful <<<<<=========");
     }
 
+    /*------------------------------------------------------------------------------------------
+	 * Objective : Run Electronic Payment Creation for your pay group, payment code, and cash 
+	 * 			   code to generate the system checks and verify their accuracy
+	 * Workbook  : IFSM_FinancialsDifferencesToLawson_Workbook
+	 * Exercise  : 7.1.3
+	 * ------------------------------------------------------------------------------------------*/
+    static async runElectronicPaymentCreationToGenerateSystemChecksAndVerifyAccuracy(processInvCxt, vendorGroup) {
 
+        const commonPg = new FSMCommonPage(this.page);
+
+        log.info(
+            'INFO : =========>>>>> Run Electronic Payment Creation to generate the system checks and verify their accuracy started <<<<<========='
+        );
+
+        await FSMCommon.switchRoles(FSMApplicationRoles.PAYABLES_MANAGER);
+
+        await FSMCommon.menuNavigation(
+            FSMMenu.RUN_PROCESSES,
+            FSMMenu.PROCESS_PAYMENTS,
+            FSMMenu.ELECTRONIC_PAYMENT_CREATION
+        );
+
+        await FSMCommon.verifyDlgTitle(FSMDialogBoxTitles.ELECTRONIC_PAYMENT_FILE_CREATION);
+
+        // Verify vendor group
+    expect(
+            await (
+                await FSMCommon.getTextField(
+                    Payables_CreateElectronicPayments_Lbl.VENDOR_GROUP,
+                    Payables_CreateElectronicPayments_Id.VENDOR_GROUP
+                )
+            ).getAttribute('value')
+        ).toBe(vendorGroup);
+
+        // Select pay group
+        await (
+            await FSMCommon.getTextboxLookUpIcon(
+                Payables_CreateElectronicPayments_Lbl.PAY_GROUP,
+                Payables_CreateElectronicPayments_Id.PAY_GROUP
+            )
+        ).click();
+
+        await FSMCommon.enterDataInFilterField(
+            FSMTableTitles.PAY_GROUPS,
+            Payables_CreateElectronicPayments_Lbl.VENDOR_GROUP_GRID,
+            vendorGroup
+        );
+
+        await FSMCommon.enterDataInFilterField(
+            FSMTableTitles.PAY_GROUPS,
+            Payables_CreateElectronicPayments_Lbl.PAY_GROUP_GRID,
+            processInvCxt.payGroup
+        );
+
+        await FSMCommon.clickRowInDialogBox(
+            FSMTableTitles.PAY_GROUPS,
+            Payables_CreateElectronicPayments_Lbl.VENDOR_GROUP_GRID,
+            vendorGroup,
+            Payables_CreateElectronicPayments_Lbl.PAY_GROUP_GRID,
+            processInvCxt.payGroup
+        );
+
+         expect(
+            await (
+                await FSMCommon.getTextField(
+                    Payables_CreateElectronicPayments_Lbl.PAY_GROUP,
+                    Payables_CreateElectronicPayments_Id.PAY_GROUP
+                )
+            ).getAttribute('value')).toBe(processInvCxt.payGroup);
+
+        // Select payment code
+        await (
+            await FSMCommon.getTextboxLookUpIcon(
+                Payables_CreateElectronicPayments_Lbl.PAYMENT_CODE,
+                Payables_CreateElectronicPayments_Id.PAYMENT_CODE
+            )
+        ).click();
+
+        await FSMCommon.enterDataInFilterField(
+            FSMTableTitles.CASH_PAYMENTS,
+            Payables_CreateElectronicPayments_Lbl.TRANSACTION_CODE_GRID,
+            processInvCxt.paymentCode
+        );
+
+        await FSMCommon.clickRowInDialogBox(
+            FSMTableTitles.CASH_PAYMENTS,
+            Payables_CreateElectronicPayments_Lbl.TRANSACTION_CODE_GRID,
+            processInvCxt.paymentCode
+        );
+
+        expect(
+            await (
+                await FSMCommon.getTextField(
+                    Payables_CreateElectronicPayments_Lbl.PAYMENT_CODE,
+                    Payables_CreateElectronicPayments_Id.PAYMENT_CODE
+                )
+            ).inputValue()
+        ).toBe(processInvCxt.paymentCode);
+
+        // Select cash code
+        await (
+            await FSMCommon.getTextboxLookUpIcon(
+                Payables_CreateElectronicPayments_Lbl.CASH_CODE,
+                Payables_CreateElectronicPayments_Id.CASH_CODE
+            )
+        ).click();
+
+        await FSMCommon.enterDataInFilterField(
+            FSMTableTitles.CASH_CODES,
+            Payables_CreateElectronicPayments_Lbl.CASH_CODE_GRID,
+            processInvCxt.cashCode
+        );
+
+        await FSMCommon.clickRowInDialogBox(
+            FSMTableTitles.CASH_CODES,
+            Payables_CreateElectronicPayments_Lbl.CASH_CODE_GRID,
+            processInvCxt.cashCode
+        );
+
+        expect(
+            await (
+                await FSMCommon.getTextField(
+                    Payables_CreateElectronicPayments_Lbl.CASH_CODE,
+                    Payables_CreateElectronicPayments_Id.CASH_CODE
+                )
+            ).inputValue()
+        ).toBe(processInvCxt.cashCode);
+
+        await this.type(await FSMCommon.getTextField(Payables_CreateElectronicPayments_Lbl.PAYMENT_DATE,
+            Payables_CreateElectronicPayments_Id.PAYMENT_DATE),
+            processInvCxt.paymentDate
+        );
+
+        await this.type(await FSMCommon.getTextField(Payables_CreateElectronicPayments_Lbl.EFFECTIVE_DATE,
+            Payables_CreateElectronicPayments_Id.EFFECTIVE_DATE),
+            processInvCxt.effectiveDate);
+
+        await this.type(await FSMCommon.getTextField(Payables_CreateElectronicPayments_Lbl.STARTING_NUMBER,
+            Payables_CreateElectronicPayments_Id.STARTING_NUMBER),
+            processInvCxt.startingNumber
+        );
+
+        // Submit
+        await FSMCommon.toHandleButtons(Constants.SUBMIT);
+        await FSMCommon.validateConfirmationMessages();
+
+        expect(await (await commonPg.pageTitle()).innerText()).toContain(
+                FSMPageTitles.CASH_REQUIREMENTS_RESULT);
+
+        await this.screenshot(
+            'Run Electronic Payment Creation to generate the system checks and verify their accuracy');
+
+        log.info(
+            'INFO : =========>>>>> Run Electronic Payment Creation to generate the system checks and verify their accuracy successful <<<<<========='
+        );
+    }
+
+    	/*----------------------------------------------------------------------------------------------------------
+	 * Objective : Review the report
+	 * Workbook  : IFSM_FinancialsDifferencesToLawson_Workbook
+	 * Exercise  : 7.1.4
+	 * --------------------------------------------------------------------------------------------------------*/
+    static async reviewReportInYourPrintFiles(fileName) {
+
+        log.info(`INFO : =========>>>>> Review the report started <<<<<=========`);
+
+        // Initializing page objects
+        const commonPg = new FSMCommonPage(this.page);
+
+        // Click User account --> My Print Files
+        await FSMCommon.clickBtnInUserAccount(FSMMenu.MY_PRINT_FILES);
+
+        // Refresh the grid
+        await FSMCommon.toolbarIcons(await FSMCommon.getTableID(FSMTableTitles.COMPLETED),
+            FSMActionsMenu.REFRESH);
+
+        // Select records per page
+        await FSMCommon.selectRecordsPerPage(await FSMCommon.getTableID(FSMTableTitles.COMPLETED),
+            Constants.RECORDS_10);
+
+        // Click View link and wait for new tab
+        await (await commonPg.printFileLink(fileName)).click()
+
+        const allPages = this.context.pages();
+        const secondTab = allPages[1];
+        await secondTab.bringToFront();
+
+        // Review the report
+        await this.screenshot(`Review the report`);
+
+        await secondTab.close();
+        
+        log.info(`INFO : =========>>>>> Review the report : ${fileName} completed successfully <<<<<=========`);
+
+    }
+
+ /*--------------------------------------------------------------------------------------------
+ * Objective : View the payment output files
+ * Workbook  : IFSM_FinancialsDifferencesToLawson_Workbook
+ * Exercise  : 7.1.5
+ * --------------------------------------------------------------------------------------------*/
+    static async viewPaymentOutputFiles(cashCode, paymentCode, transNumber) {
+
+        log.info('INFO : =========>>>>> View the payment output files started <<<<<=========');
+
+        // Switch role to Payables Manager
+        await FSMCommon.switchRoles(FSMApplicationRoles.PAYABLES_MANAGER);
+        await FSMCommon.clickHome();
+        await FSMCommon.verifyPageTitle(FSMPageTitles.MANAGE_PAYABLES);
+
+        // Navigate: Run Processes → Process Payments → Payment Output Files
+        await FSMCommon.menuNavigation(
+            FSMMenu.RUN_PROCESSES,
+            FSMMenu.PROCESS_PAYMENTS,
+            FSMMenu.PAYMENT_OUTPUT_FILES);
+
+        await FSMCommon.verifyPageTitle(FSMPageTitles.PAYMENT_OUTPUT_FILES);
+
+        // Open payment output file
+        await FSMCommon.rightClickOnRowAndPerformAnAction(
+            await FSMCommon.getPageID(),
+            Payables_PaymentOutputFiles_Lbl.CASH_CODE_GRID,
+            cashCode,
+            FSMActionsMenu.OPEN
+        );
+
+        await FSMCommon.verifyPageTitle(FSMPageTitles.PAYMENT_OUTPUT_FILE);
+
+        // Open payment output file details
+        await FSMCommon.rightClickOnRowAndPerformAnAction(
+            await FSMCommon.getDialogBoxTableID(FSMTableTitles.PAYMENT_OUTPUT_FILE_DETAILS),
+            Payables_PaymentOutputFiles_Lbl.BANK_TRANSACTION_CODE_GRID,
+            paymentCode,
+            FSMActionsMenu.OPEN
+        );
+
+        await FSMCommon.verifyPageTitle(FSMPageTitles.PAYMENT_OUTPUT_FILE_DETAIL);
+
+        // Validation section
+        if (transNumber !== null) {
+            for (let i = 0; i < 2; i++) {
+
+
+                expect(await (
+                    await FSMCommon.getTextData(
+                        Payables_PaymentOutputFiles_Lbl.CASH_CODE,
+                        Payables_PaymentOutputFiles_Id.CASH_CODE
+                    )
+                ).textContent()).toBe(await FSMCommon.getCompany());
+
+
+                expect(await (
+                    await FSMCommon.getTextData(
+                        Payables_PaymentOutputFiles_Lbl.VENDOR_GROUP,
+                        Payables_PaymentOutputFiles_Id.VENDOR_GROUP
+                    )
+                ).textContent()).toBe(await FSMCommon.getCompany());
+
+                // Navigate to next record
+                if (i === 1) {
+                    await FSMCommon.toolbarIcons(
+                        await FSMCommon.getPageID(),
+                        FSMActionsMenu.NEXT
+                    );
+                }
+            }
+        }
+
+        // Screenshot
+        await this.screenshot('View the payment output files');
+
+        // Back navigation if transaction number is null
+        if (transNumber === null) {
+            await this.page.goBack();
+            await FSMCommon.verifyPageTitle(FSMPageTitles.PAYMENT_OUTPUT_FILE);
+        }
+
+        log.info('INFO : =========>>>>> View the payment output files successful <<<<<=========');
+    }
+    
+    /*--------------------------------------------------------------------------------------------
+	 * Objective : Run Payment Closing for your pay group to post the payments to Global Ledger
+	 * Workbook  : IFSM_FinancialsDifferencesToLawson_Workbook
+	 * Exercise  : 7.1.6
+	 * --------------------------------------------------------------------------------------------*/
+    static async runPaymentClosingToPostPaymentsToGlobalLedger(payGroup, vendorGroup) {
+
+        log.info("INFO : =========>>>>> Run Payment Closing for your pay group to post the payments to Global Ledger started <<<<<=========");
+
+        await FSMCommon.switchRoles(FSMApplicationRoles.PAYABLES_MANAGER);
+
+        // Click Payments
+        await FSMCommon.menuNavigation(FSMMenu.RUN_PROCESSES, FSMMenu.PROCESS_PAYMENTS, FSMMenu.CLOSE);
+    
+
+        await FSMCommon.verifyDlgTitle(FSMDialogBoxTitles.PAYMENT_CLOSING);
+
+        // Verify the vendor group
+        await expect(await (await FSMCommon.getTextField(
+                    Payables_PaymentCloseOld_Lbl.VENDOR_GROUP,
+                    Payables_PaymentCloseOld_Id.VENDOR_GROUP)).inputValue()
+        ).toBe(vendorGroup);
+
+        // Select pay group
+        await (await FSMCommon
+            .getTextboxLookUpIcon(
+                Payables_PaymentCloseOld_Lbl.PAY_GROUP,
+                Payables_PaymentCloseOld_Id.PAY_GROUP
+            )).click();
+
+        await FSMCommon.enterDataInFilterField(await FSMCommon.getDialogBoxTableID(FSMTableTitles.PAY_GROUPS),
+            Payables_PaymentCloseOld_Lbl.VENDOR_GROUP_GRID, vendorGroup);
+
+        await FSMCommon.enterDataInFilterField(await FSMCommon.getDialogBoxTableID(FSMTableTitles.PAY_GROUPS),
+            Payables_PaymentCloseOld_Lbl.PAY_GROUP_GRID,
+            payGroup);
+
+        await FSMCommon.clickRowInDialogBox(await FSMCommon.getDialogBoxTableID(FSMTableTitles.PAY_GROUPS),
+            Payables_PaymentCloseOld_Lbl.VENDOR_GROUP_GRID,
+            vendorGroup,
+            Payables_PaymentCloseOld_Lbl.PAY_GROUP_GRID,
+            payGroup);
+
+        // Verify the pay group is selected
+        expect(
+            await (await FSMCommon
+                .getTextField(
+                    Payables_PaymentCloseOld_Lbl.PAY_GROUP,
+                    Payables_PaymentCloseOld_Id.PAY_GROUP
+                ))
+                .inputValue()
+        ).toBe(payGroup);
+
+        // Click Submit button
+        await FSMCommon.toHandleButtons(Constants.SUBMIT);
+        await FSMCommon.validateConfirmationMessages();
+
+       
+        await FSMCommon.verifyPageTitle(FSMPageTitles.PAYMENT_OUTPUT_FILE);
+
+        await this.screenshot("Run Payment Closing for your pay group to post the payments to Global Ledger");
+
+        log.info("INFO : =========>>>>> Run Payment Closing for your pay group to post the payments to Global Ledger successful <<<<<=========");
+    }
 
 
 }
-
 export default PayablesManagerFunctions;

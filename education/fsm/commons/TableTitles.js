@@ -35,6 +35,9 @@ class FSMTableTitles {
     static PAY_GROUPS = "Pay Groups";
     static CASH_CODES = "Cash Codes";
     static CURRENT_CASH_REQUIREMENTS_RESULTS = "Current Cash Requirements Results";
+    static CASH_PAYMENTS = "Cash Payments";
+    static COMPLETED = "Completed";
+    static PAYMENT_OUTPUT_FILE_DETAILS = "Payment Output File Details";
 }
 
 export default FSMTableTitles;

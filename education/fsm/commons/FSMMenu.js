@@ -31,6 +31,9 @@ class FSMMenu {
    static MANAGE_INVOICES = "Manage Invoices";
    static PERFORM_CASH_REQUIREMENTS = "Perform Cash Requirements";
    static CASH_REQUIREMENTS_RESULTS = "Cash Requirements Results";
+   static ELECTRONIC_PAYMENT_CREATION = "Electronic Payment Creation";
+   static PAYMENT_OUTPUT_FILES = "Payment Output Files";
+   static CLOSE = "Close";
 }
 
 export default FSMMenu;

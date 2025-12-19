@@ -15,6 +15,8 @@ class FSMDialogBoxTitles {
     static REVERSE_DISTRIBUTION_FOR_UPDATE = "Reverse Distribution For Update";
     static PUT_INVOICE_ON_HOLD = "Put Invoice On Hold";
     static PERFORM_CASH_REQUIREMENTS = "Perform Cash Requirements";
+    static ELECTRONIC_PAYMENT_FILE_CREATION = "Electronic Payment File Creation";
+    static PAYMENT_CLOSING = "Payment Closing";
 }
 
 export default FSMDialogBoxTitles

@@ -10,6 +10,7 @@ import GetDataFSM_CreateInvoiceAssignmentRule from '../dataMapping/GetDataFSM_Cr
 import GetData_LoginDetails from '../dataMapping/GetData_LoginDetails';
 import WebMailFunctions from '../../../commons/functions/WebMailFunctions';
 import FSMCommon from '../../commons/FSMCommonFunctions';
+import FSMPageTitles from '../../commons/PageTitles';
 
 /**-----------------------------------------------------------------------------------------------
  * Purpose   : 	Setting up invoice approval and assignment, Processing invoices and 
@@ -289,11 +290,51 @@ export default function TCEDU_FSMSettingUpAndApprovingInvoicesAndJournalizingDis
 
         });
 
-        test('Review the Cash Requirements Resultss', async ({ }) => {
+        test('Review the Cash Requirements Results', async ({ }) => {
 
             await PayablesManagerFunctions.reviewCashRequirementsResults(processInvCxt.payGroup);
 
         });
+
+        test('Run Electronic Payment Creation for your pay group, payment code, and cash and code to generate the system checks and verify their accuracy', async ({ }) => {
+
+            await PayablesManagerFunctions.runElectronicPaymentCreationToGenerateSystemChecksAndVerifyAccuracy(processInvCxt,
+				await FSMCommon.getCompanyGroup());
+
+        });
+
+        test('Review the documents generated from your payment form creation submission', async ({ }) => {
+
+            await PayablesManagerFunctions.reviewReportInYourPrintFiles(processInvCxt.printFileNames[0]);
+
+        });
+
+        test('View the payment output files', async ({ }) => {
+
+            await PayablesManagerFunctions.viewPaymentOutputFiles(processInvCxt.cashCode, processInvCxt.paymentCode, null);
+
+        });
+
+        test('Run Payment Closing for your pay group to post the payments to Global Ledger', async ({ }) => {
+
+            await PayablesManagerFunctions.runPaymentClosingToPostPaymentsToGlobalLedger(processInvCxt.payGroup,
+				await FSMCommon.getCompanyGroup());
+
+        });
+
+        
+        test('Review the report', async ({ }) => {
+
+            await PayablesManagerFunctions.reviewReportInYourPrintFiles(processInvCxt.printFileNames[1]);
+            await FSMCommon.clickHome();
+		    await FSMCommon.verifyPageTitle(FSMPageTitles.MANAGE_PAYABLES);
+        });
+
+        // test('Journalize distributions', async ({ }) => {
+
+        //     await PayablesManagerFunctions.journalizeDistributions(processInvCxt, 0);
+
+        // });
 
         test.afterAll(async () => {
             await CloudSuite.logOut();

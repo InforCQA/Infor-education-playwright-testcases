@@ -998,7 +998,19 @@ class FSMCommon extends BaseClass {
         log.info(`INFO : =========>>>>> Entered ${valueToType} in row : ${rowNo} of column ${columnName} <<<<<=========`);
     }
 
+    /* ---------------------------------------------------------
+	 * Objective : To select number of records per page 
+	 * ---------------------------------------------------------*/
+	static async selectRecordsPerPage(id, noOfRecords) {
 
+		const commonPg = new FSMCommonPage(this.page);
+
+		if (!((await(await commonPg.pageSizeBtn(id)).getAttribute(ElementAttributes.CLASS))
+				.contains(Constants.IS_OPEN))) {
+			await (await commonPg.pageSizeBtn(id)).click();
+		}
+		await (await commonPg.recordsPerPg(noOfRecords)).click();
+	}
 
 }
 

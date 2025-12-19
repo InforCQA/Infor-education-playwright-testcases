@@ -20,6 +20,7 @@ class Constants {
         static SUBMIT = "Submit";
         static STATUS_COMPLETED = "Completed";
         static STATUS_UNRELEASED = "Unreleased";
+        static RECORDS_10 = "10";
 }
 
 export default Constants;

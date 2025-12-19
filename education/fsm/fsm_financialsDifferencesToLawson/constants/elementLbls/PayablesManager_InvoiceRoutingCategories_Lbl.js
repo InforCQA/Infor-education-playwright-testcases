@@ -11,7 +11,6 @@ class PayablesManager_InvoiceRoutingCategories_Lbl {
     static FINANCE_RESOURCE = "Finance Resource";
     static NAME_GRID = "Name";
     static RESOURCE_ID_GRID = "Resource Id";
-    static INVOICE_APPROVAL_ROLE_GRID = "Invoice Approval Role";
 }
 
 export default PayablesManager_InvoiceRoutingCategories_Lbl;
